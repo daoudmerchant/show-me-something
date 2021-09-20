@@ -36,11 +36,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.getRedditData = void 0;
+exports.getCommentData = exports.getRedditData = void 0;
 var getRedditData = function (_a) {
     var _b = _a === void 0 ? {} : _a, _c = _b.subreddit, subreddit = _c === void 0 ? "all" : _c, _d = _b.limit, limit = _d === void 0 ? 10 : _d, _e = _b.timeframe, timeframe = _e === void 0 ? "day" : _e, _f = _b.filter, filter = _f === void 0 ? "top" : _f;
     return __awaiter(void 0, void 0, void 0, function () {
-        var data, error_1;
+        var data, parsedData, error_1;
         return __generator(this, function (_g) {
             switch (_g.label) {
                 case 0:
@@ -49,7 +49,45 @@ var getRedditData = function (_a) {
                 case 1: return [4 /*yield*/, (_g.sent()).json()];
                 case 2:
                     data = _g.sent();
-                    return [2 /*return*/, data];
+                    console.log(data);
+                    parsedData = data.data.children.map(function (child) { return ({
+                        title: child.data.title,
+                        text: child.data.selftext,
+                        url: "https://www.reddit.com" + child.data.permalink.slice(0, -1),
+                        content: (function () {
+                            switch (child.data.post_hint) {
+                                case "hosted:video":
+                                    return {
+                                        url: child.data.media.reddit_video.fallback_url,
+                                        width: child.data.media.reddit_video.width,
+                                        height: child.data.media.reddit_video.height
+                                    };
+                                case "rich:video":
+                                    if (child.data.media.oembed.provider_name === "Gfycat") {
+                                        return {
+                                            url: child.data.media.oembed.thumbnail_url
+                                                .split("-")[0]
+                                                .concat("-mobile.mp4"),
+                                            width: child.data.media.oembed.thumbnail_width,
+                                            height: child.data.media.oembed.thumbnail_height
+                                        };
+                                    }
+                                    break;
+                                case "image":
+                                    return {
+                                        thumbnail: {
+                                            url: child.data.thumbnail,
+                                            width: child.data.thumbnail_width,
+                                            height: child.data.thumbnail_height
+                                        },
+                                        url: child.data.url
+                                    };
+                                case undefined:
+                                    return null;
+                            }
+                        })()
+                    }); });
+                    return [2 /*return*/, parsedData];
                 case 3:
                     error_1 = _g.sent();
                     console.error(error_1);
@@ -60,3 +98,38 @@ var getRedditData = function (_a) {
     });
 };
 exports.getRedditData = getRedditData;
+var getCommentData = function (url, quantity) { return __awaiter(void 0, void 0, void 0, function () {
+    var data, commentData, comments, i, comment, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                return [4 /*yield*/, fetch(url + ".json")];
+            case 1: return [4 /*yield*/, (_a.sent()).json()];
+            case 2:
+                data = _a.sent();
+                commentData = data[1].data.children;
+                comments = [];
+                for (i = 0; i < quantity; i++) {
+                    comment = commentData[i].data;
+                    comments.push({
+                        content: comment.body,
+                        author: comment.author,
+                        mod: comment.distinguished === "moderator",
+                        isSubmitter: comment.is_submitter,
+                        controversiality: comment.controversiality,
+                        upvotes: comment.ups,
+                        downvotes: comment.downs
+                    });
+                }
+                console.log(comments);
+                return [2 /*return*/, comments];
+            case 3:
+                error_2 = _a.sent();
+                console.log(error_2);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.getCommentData = getCommentData;
