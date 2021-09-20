@@ -1,26 +1,18 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState, useCallback } from "react";
+import "./App.css";
+import { getRedditData } from "./API/reddit";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [response, setResponse] = useState(null);
+  const getResponse = useCallback(async () => {
+    const redditResponse = await getRedditData();
+    console.log(redditResponse);
+    setResponse(redditResponse);
+  }, []);
+  useEffect(() => {
+    getResponse();
+  }, [getResponse]);
+  return <div className="App"></div>;
 }
 
 export default App;
