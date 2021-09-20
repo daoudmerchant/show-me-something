@@ -28,6 +28,9 @@ export const getRedditData = async ({
     const parsedData = data.data.children.map((child: any) => ({
       title: child.data.title,
       text: child.data.selftext,
+      subreddit: child.data.subreddit,
+      id: child.data.id,
+      nsfw: child.data.over_18,
       url: `https://www.reddit.com${child.data.permalink.slice(0, -1)}`,
       content: (() => {
         switch (child.data.post_hint) {
@@ -68,25 +71,20 @@ export const getRedditData = async ({
   }
 };
 
-export const getCommentData = async (url: string, quantity: number) => {
+export const getCommentData = async (url: string) => {
   try {
     const data = await (await fetch(`${url}.json`)).json();
-    const commentData = data[1].data.children;
-    let comments = [];
-    for (let i = 0; i < quantity; i++) {
-      const comment = commentData[i].data;
-      comments.push({
-        content: comment.body,
-        author: comment.author,
-        mod: comment.distinguished === "moderator",
-        isSubmitter: comment.is_submitter,
-        controversiality: comment.controversiality,
-        upvotes: comment.ups,
-        downvotes: comment.downs,
-      });
-    }
-    console.log(comments);
-    return comments;
+    console.log(data);
+    const comments = data[1].data.children;
+    return comments.map((comment) => ({
+      content: comment.data.body,
+      author: comment.data.author,
+      isMod: comment.data.distinguished === "moderator",
+      isSubmitter: comment.data.is_submitter,
+      controversiality: comment.data.controversiality,
+      upvotes: comment.data.ups,
+      downvotes: comment.data.downs,
+    }));
   } catch (error) {
     console.log(error);
   }

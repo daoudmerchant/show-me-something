@@ -53,6 +53,9 @@ var getRedditData = function (_a) {
                     parsedData = data.data.children.map(function (child) { return ({
                         title: child.data.title,
                         text: child.data.selftext,
+                        subreddit: child.data.subreddit,
+                        id: child.data.id,
+                        nsfw: child.data.over_18,
                         url: "https://www.reddit.com" + child.data.permalink.slice(0, -1),
                         content: (function () {
                             switch (child.data.post_hint) {
@@ -98,8 +101,8 @@ var getRedditData = function (_a) {
     });
 };
 exports.getRedditData = getRedditData;
-var getCommentData = function (url, quantity) { return __awaiter(void 0, void 0, void 0, function () {
-    var data, commentData, comments, i, comment, error_2;
+var getCommentData = function (url) { return __awaiter(void 0, void 0, void 0, function () {
+    var data, comments, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -108,22 +111,17 @@ var getCommentData = function (url, quantity) { return __awaiter(void 0, void 0,
             case 1: return [4 /*yield*/, (_a.sent()).json()];
             case 2:
                 data = _a.sent();
-                commentData = data[1].data.children;
-                comments = [];
-                for (i = 0; i < quantity; i++) {
-                    comment = commentData[i].data;
-                    comments.push({
-                        content: comment.body,
-                        author: comment.author,
-                        mod: comment.distinguished === "moderator",
-                        isSubmitter: comment.is_submitter,
-                        controversiality: comment.controversiality,
-                        upvotes: comment.ups,
-                        downvotes: comment.downs
-                    });
-                }
-                console.log(comments);
-                return [2 /*return*/, comments];
+                console.log(data);
+                comments = data[1].data.children;
+                return [2 /*return*/, comments.map(function (comment) { return ({
+                        content: comment.data.body,
+                        author: comment.data.author,
+                        isMod: comment.data.distinguished === "moderator",
+                        isSubmitter: comment.data.is_submitter,
+                        controversiality: comment.data.controversiality,
+                        upvotes: comment.data.ups,
+                        downvotes: comment.data.downs
+                    }); })];
             case 3:
                 error_2 = _a.sent();
                 console.log(error_2);
