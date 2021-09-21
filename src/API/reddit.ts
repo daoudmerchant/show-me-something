@@ -76,6 +76,7 @@ export const getCommentData = async (url: string) => {
     const data = await (await fetch(`${url}.json`)).json();
     console.log(data);
     const comments = data[1].data.children;
+    // @ts-ignore
     return comments.map((comment) => ({
       content: comment.data.body,
       author: comment.data.author,

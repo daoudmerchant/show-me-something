@@ -113,6 +113,7 @@ var getCommentData = function (url) { return __awaiter(void 0, void 0, void 0, f
                 data = _a.sent();
                 console.log(data);
                 comments = data[1].data.children;
+                // @ts-ignore
                 return [2 /*return*/, comments.map(function (comment) { return ({
                         content: comment.data.body,
                         author: comment.data.author,
