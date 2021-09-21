@@ -2,6 +2,10 @@ import { useEffect, useState, useCallback } from "react";
 import "./App.css";
 import { getRedditData, getCommentData } from "./API/reddit";
 
+// components
+import Canvas from "./components/Canvas";
+import ButtonBox from "./components/ButtonBox";
+
 function App() {
   const [response, setResponse] = useState(null);
   const [comments, setComments] = useState(null);
@@ -11,10 +15,12 @@ function App() {
     setResponse(redditResponse);
   }, []);
   const getComments = useCallback(async (url: string) => {
+    let isSubscribed = true;
     const comments = await getCommentData(url);
     console.log(comments);
     // @ts-ignore
-    setComments(comments);
+    if (isSubscribed) setComments(comments);
+    return () => (isSubscribed = false);
   }, []);
   useEffect(() => {
     getResponse();
@@ -32,7 +38,12 @@ function App() {
   }, [comments, getComments, response]);
   //
 
-  return <div className="App"></div>;
+  return (
+    <main className="App">
+      <Canvas />
+      <ButtonBox />
+    </main>
+  );
 }
 
 export default App;
