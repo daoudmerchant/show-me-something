@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const Canvas = () => {
   return <div>Canvas</div>;
 };
