@@ -1,7 +1,12 @@
 import { useState } from "react";
-
-const Canvas = () => {
-  return <div>Canvas</div>;
+const Canvas = ({ content }: { content: any }) => {
+  return (
+    <div>
+      Canvas
+      <br />
+      {content}
+    </div>
+  );
 };
 
 export default Canvas;

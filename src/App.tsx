@@ -13,10 +13,13 @@ import { RedditPostContext } from "./contexts";
 function App() {
   const [buttons, setButtons] = useState([]);
   const [response, setResponse] = useState([]);
-  const getResponse = useCallback(async () => {
-    const redditResponse = await getRedditData();
+  const getResponse = useCallback(async (subreddit) => {
+    const redditResponse = await getRedditData({ subreddit });
     console.log(redditResponse);
-    setResponse(redditResponse);
+    // @ts-ignore
+    setResponse((prevResponse) => {
+      return [...prevResponse, ...redditResponse];
+    });
   }, []);
   const getButtons = useCallback(async () => {
     let isSubscribed = true;
@@ -71,7 +74,12 @@ function App() {
   return (
     <main className="App">
       <RedditPostContext.Provider value={getResponse}>
-        <Canvas />
+        {/*
+        // @ts-ignore */}
+        {!!response.length && (
+          // @ts-ignore
+          <Canvas content={response && response[0].title} />
+        )}
         {/*
       // @ts-ignore */}
         {!!buttons.length && <ButtonBox buttons={buttons} />}

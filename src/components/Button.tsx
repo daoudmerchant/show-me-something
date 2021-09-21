@@ -5,7 +5,14 @@ import { RedditPostContext } from "../contexts";
 const Button = ({ button }) => {
   const getResponse = useContext(RedditPostContext);
   return (
-    <button onClick={() => getResponse(button.subreddits)}>
+    <button
+      onClick={() => {
+        // @ts-ignore
+        button.subreddits.forEach((subreddit) => {
+          getResponse(subreddit);
+        });
+      }}
+    >
       {button.text}
     </button>
   );
