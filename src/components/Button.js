@@ -3,14 +3,12 @@ import { RedditPostContext } from "../contexts";
 
 // @ts-ignore
 const Button = ({ button }) => {
-  const getResponse = useContext(RedditPostContext);
+  const { getNextPost } = useContext(RedditPostContext);
+  console.log(button.subreddits);
   return (
     <button
       onClick={() => {
-        // @ts-ignore
-        button.subreddits.forEach((subreddit) => {
-          getResponse(subreddit);
-        });
+        getNextPost(button.subreddits);
       }}
     >
       {button.text}

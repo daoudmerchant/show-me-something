@@ -1,11 +1,9 @@
 import Button from "./Button";
 
-const ButtonBox = ({ buttons }: { buttons: any }) => {
+const ButtonBox = ({ buttons }) => {
   return (
     <div>
       Box of Buttons
-      {/*
-      // @ts-ignore */}
       {buttons.map((button) => (
         <Button button={button} />
       ))}
