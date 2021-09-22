@@ -2,8 +2,7 @@ import Button from "./Button";
 
 const ButtonBox = ({ buttons }) => {
   return (
-    <div>
-      Box of Buttons
+    <div id="buttonContainer">
       {buttons ? (
         buttons.map((button) => <Button key={button.id} button={button} />)
       ) : (

@@ -4,10 +4,10 @@ import Post from "./Post";
 // import User from "./User";
 // import Welcome from "./Welcome";
 
-const Canvas = ({ welcomed, fetchingPosts, noMorePosts }) => {
+const Canvas = ({ welcomed, fetchingPosts, finishedList }) => {
   if (!welcomed) return <div>Welcome!</div>;
   if (fetchingPosts) return <div>Fetching posts</div>;
-  if (noMorePosts) return <div>Finished!</div>;
+  if (!!finishedList) return <div>Finished!</div>;
   return <Post />;
 };
 

@@ -3,11 +3,13 @@ import { RedditPostContext } from "../contexts";
 
 // @ts-ignore
 const Button = ({ button }) => {
-  const { getNextPost, noMorePosts } = useContext(RedditPostContext);
+  const { getNextPost, finishedList } = useContext(RedditPostContext);
   return (
     <button
+      disabled={finishedList === button.text}
+      style={button.style}
       onClick={() => {
-        if (!noMorePosts) getNextPost(button.subreddits);
+        getNextPost({ subreddits: button.subreddits, category: button.text });
       }}
     >
       {button.text}
