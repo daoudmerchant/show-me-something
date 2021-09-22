@@ -14,10 +14,13 @@ import ButtonBox from "./components/ButtonBox";
 import { RedditPostContext } from "./contexts";
 
 // utils
-import { stringArraysAreIdentical } from "./utils";
+import { stringArraysAreIdentical, shuffleArray } from "./utils";
 
 function App() {
   const [buttons, setButtons] = useState(null);
+  const [fetchingPosts, setFetchingPosts] = useState(false);
+  const [fetchingButtons, setFetchingButtons] = useState(false);
+  const [welcomed, setWelcomed] = useState(false);
   const [currentSubreddits, setCurrentSubreddits] = useState(null);
   const [currentPost, setCurrentPost] = useState(null);
   const [currentRedditList, setCurrentRedditList] = useState(null);
@@ -29,14 +32,12 @@ function App() {
 
   const getNextPost = useCallback(
     async (subreddits) => {
-      console.log("Getting post");
       const refreshRedditList = async (subreddits) => {
         const getRedditPost = async (subreddit) => {
           const redditResponse = await getRedditData({ subreddit });
-          console.log(redditResponse);
           return redditResponse;
         };
-        setCurrentPost(null);
+        if (!welcomed) setWelcomed(true);
         setCurrentSubreddits(subreddits);
         setCurrentIndex(0);
         let subredditLists = [];
@@ -44,37 +45,45 @@ function App() {
           const subredditList = await getRedditPost(subreddits[i]);
           subredditLists = [...subredditLists, ...subredditList];
         }
-        setCurrentRedditList(subredditLists);
+        const randomisedSubredditLists = shuffleArray(subredditLists);
+        setCurrentRedditList(randomisedSubredditLists);
       };
       if (
         !currentSubreddits ||
         !stringArraysAreIdentical(subreddits, currentSubreddits)
       ) {
+        setFetchingPosts(true);
         await refreshRedditList(subreddits);
+        setFetchingPosts(false);
+      } else {
+        incrementIndex();
       }
-      console.log(subreddits);
-      console.log(currentSubreddits);
-      incrementIndex();
     },
-    [currentSubreddits]
+    [currentSubreddits, currentIndex]
   );
 
   useEffect(() => {
     if (!!currentRedditList) {
-      console.log("Let's do this");
-      console.log(currentRedditList[currentIndex]);
       setCurrentPost(currentRedditList[currentIndex]);
     }
-  }, [currentIndex, currentRedditList, incrementIndex]);
+  }, [currentRedditList, currentIndex]);
 
   // context values
-  const RedditContextValue = { getNextPost, currentPost };
+  const noMorePosts =
+    currentRedditList && currentIndex === currentRedditList.length;
+  const RedditContextValue = {
+    getNextPost,
+    currentPost,
+    fetchingPosts,
+    noMorePosts,
+  };
 
   const getButtons = useCallback(async () => {
     let isSubscribed = true;
+    setFetchingButtons(true);
     const defaultButtons = await getDefaultButtons();
-    console.log(defaultButtons);
     if (isSubscribed) setButtons(defaultButtons);
+    setFetchingButtons(false);
     return () => (isSubscribed = false);
   }, []);
 
@@ -124,9 +133,13 @@ function App() {
       <RedditPostContext.Provider value={RedditContextValue}>
         <Router>
           <NavBar />
-          <Canvas />
+          <Canvas
+            welcomed={welcomed}
+            fetchingPosts={fetchingPosts}
+            noMorePosts={noMorePosts}
+          />
         </Router>
-        {buttons && <ButtonBox buttons={buttons} />}
+        <ButtonBox fetchingButtons={fetchingButtons} buttons={buttons} />
       </RedditPostContext.Provider>
     </main>
   );

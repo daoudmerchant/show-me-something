@@ -4,9 +4,11 @@ const ButtonBox = ({ buttons }) => {
   return (
     <div>
       Box of Buttons
-      {buttons.map((button) => (
-        <Button button={button} />
-      ))}
+      {buttons ? (
+        buttons.map((button) => <Button key={button.id} button={button} />)
+      ) : (
+        <div>Loading</div>
+      )}
     </div>
   );
 };
