@@ -27,7 +27,11 @@ function App() {
   const [currentPost, setCurrentPost] = useState(null);
   const [redditLists, setRedditLists] = useState(null);
 
-  const categoryExists = () => !!redditLists && !!redditLists[currentCategory];
+  const categoryExists = useCallback(
+    (category = currentCategory) =>
+      !!currentCategory && !!redditLists && !!redditLists[category],
+    [currentCategory, redditLists]
+  );
 
   // Update State
   // - SYNC
@@ -69,7 +73,8 @@ function App() {
           };
         });
       };
-      if (!currentCategory || category !== currentCategory) {
+      if (category !== currentCategory) setCurrentCategory(category);
+      if (!categoryExists(category)) {
         setFetchingPosts(true);
         await refreshRedditList(subreddits, category);
         setFetchingPosts(false);
@@ -77,7 +82,7 @@ function App() {
         incrementIndex();
       }
     },
-    [currentCategory, incrementIndex, welcomed]
+    [categoryExists, currentCategory, incrementIndex, welcomed]
   );
 
   const setDefaultButtons = useCallback(async () => {
@@ -98,7 +103,7 @@ function App() {
       const currentIndex = redditLists[currentCategory].index;
       setCurrentPost(redditLists[currentCategory].list[currentIndex]);
     }
-  }, [redditLists, currentCategory]);
+  }, [redditLists, currentCategory, categoryExists]);
 
   // CONSTANTS
   const finishedList =
