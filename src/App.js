@@ -32,19 +32,16 @@ function App() {
     [currentCategory, redditLists]
   );
 
+  const listFinished = useCallback(
+    (category = currentCategory) =>
+      redditLists[category].index === redditLists[category].list.length
+        ? category
+        : false,
+    [currentCategory, redditLists]
+  );
+
   // Update State
   // - SYNC
-  const incrementIndex = useCallback(() => {
-    setRedditLists((prevLists) => {
-      return {
-        ...prevLists,
-        [currentCategory]: {
-          ...prevLists[currentCategory],
-          index: prevLists[currentCategory].index + 1,
-        },
-      };
-    });
-  }, [currentCategory]);
 
   // - ASYNC
   const getNextPost = useCallback(
@@ -77,12 +74,23 @@ function App() {
         await refreshRedditList(subreddits, category);
         setFetchingPosts(false);
         setCurrentCategory(category);
-      } else if (categoryExists(category)) {
-        incrementIndex();
+      } else if (categoryExists(category) && !listFinished(category)) {
+        const incrementIndex = (category) => {
+          setRedditLists((prevLists) => {
+            return {
+              ...prevLists,
+              [category]: {
+                ...prevLists[category],
+                index: prevLists[category].index + 1,
+              },
+            };
+          });
+        };
+        incrementIndex(category);
       }
       return () => setFetchingPosts(false);
     },
-    [categoryExists, currentCategory, fetchingPosts, incrementIndex, welcomed]
+    [categoryExists, currentCategory, fetchingPosts, welcomed]
   );
 
   const setDefaultButtons = useCallback(async () => {
@@ -97,19 +105,14 @@ function App() {
     setDefaultButtons();
   }, []);
 
-  // CONSTANTS
-  const finishedList =
-    categoryExists() &&
-    redditLists[currentCategory].index === redditLists[currentCategory].length
-      ? currentCategory
-      : false;
+  // CONTEXT VALUES
   const RedditContextValue = {
     getNextPost,
     currentPost: categoryExists()
       ? redditLists[currentCategory].list[redditLists[currentCategory].index]
       : null,
     fetchingPosts,
-    finishedList,
+    finishedList: categoryExists() && listFinished(),
   };
 
   /*
@@ -154,11 +157,7 @@ function App() {
       <RedditPostContext.Provider value={RedditContextValue}>
         <Router>
           <NavBar />
-          <Canvas
-            welcomed={welcomed}
-            fetchingPosts={fetchingPosts}
-            finishedList={finishedList}
-          />
+          <Canvas welcomed={welcomed} />
         </Router>
         <ButtonBox buttons={buttons} />
       </RedditPostContext.Provider>
