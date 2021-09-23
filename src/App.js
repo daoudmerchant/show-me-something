@@ -24,7 +24,6 @@ function App() {
   const [fetchingPosts, setFetchingPosts] = useState(false);
   const [welcomed, setWelcomed] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
-  const [currentPost, setCurrentPost] = useState(null);
   const [redditLists, setRedditLists] = useState(null);
 
   const categoryExists = useCallback(
@@ -51,15 +50,14 @@ function App() {
   const getNextPost = useCallback(
     async ({ subreddits, category }) => {
       const refreshRedditList = async (subreddits, category) => {
-        const getRedditPost = async (subreddit) => {
+        const getSubredditList = async (subreddit) => {
           const redditResponse = await getRedditData({ subreddit });
           return redditResponse;
         };
         if (!welcomed) setWelcomed(true);
-        setCurrentCategory(category);
         let subredditLists = [];
         for (let i = 0; i < subreddits.length; i++) {
-          const subredditList = await getRedditPost(subreddits[i]);
+          const subredditList = await getSubredditList(subreddits[i]);
           subredditLists = [...subredditLists, ...subredditList];
         }
         const randomisedSubredditLists = shuffleArray(subredditLists);
@@ -74,15 +72,17 @@ function App() {
         });
       };
       if (category !== currentCategory) setCurrentCategory(category);
-      if (!categoryExists(category)) {
+      if (!categoryExists(category) && !fetchingPosts) {
         setFetchingPosts(true);
         await refreshRedditList(subreddits, category);
         setFetchingPosts(false);
-      } else {
+        setCurrentCategory(category);
+      } else if (categoryExists(category)) {
         incrementIndex();
       }
+      return () => setFetchingPosts(false);
     },
-    [categoryExists, currentCategory, incrementIndex, welcomed]
+    [categoryExists, currentCategory, fetchingPosts, incrementIndex, welcomed]
   );
 
   const setDefaultButtons = useCallback(async () => {
@@ -97,14 +97,6 @@ function App() {
     setDefaultButtons();
   }, []);
 
-  // Update current post on index or list change
-  useEffect(() => {
-    if (categoryExists()) {
-      const currentIndex = redditLists[currentCategory].index;
-      setCurrentPost(redditLists[currentCategory].list[currentIndex]);
-    }
-  }, [redditLists, currentCategory, categoryExists]);
-
   // CONSTANTS
   const finishedList =
     categoryExists() &&
@@ -113,7 +105,9 @@ function App() {
       : false;
   const RedditContextValue = {
     getNextPost,
-    currentPost,
+    currentPost: categoryExists()
+      ? redditLists[currentCategory].list[redditLists[currentCategory].index]
+      : null,
     fetchingPosts,
     finishedList,
   };
