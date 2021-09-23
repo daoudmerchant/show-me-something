@@ -16,7 +16,7 @@ import ButtonBox from "./components/ButtonBox";
 import { RedditPostContext } from "./contexts";
 
 // utils
-import { stringArraysAreIdentical, shuffleArray } from "./utils";
+import { shuffleArray } from "./utils";
 
 function App() {
   // STATE
@@ -24,49 +24,60 @@ function App() {
   const [fetchingPosts, setFetchingPosts] = useState(false);
   const [welcomed, setWelcomed] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
-  const [currentSubreddits, setCurrentSubreddits] = useState(null);
   const [currentPost, setCurrentPost] = useState(null);
-  const [currentRedditList, setCurrentRedditList] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [redditLists, setRedditLists] = useState(null);
+
+  const categoryExists = () => !!redditLists && !!redditLists[currentCategory];
 
   // Update State
   // - SYNC
   const incrementIndex = useCallback(() => {
-    setCurrentIndex((prevIndex) => prevIndex + 1);
-  }, []);
+    setRedditLists((prevLists) => {
+      return {
+        ...prevLists,
+        [currentCategory]: {
+          ...prevLists[currentCategory],
+          index: prevLists[currentCategory].index + 1,
+        },
+      };
+    });
+  }, [currentCategory]);
 
   // - ASYNC
   const getNextPost = useCallback(
     async ({ subreddits, category }) => {
-      const refreshRedditList = async (subreddits) => {
+      const refreshRedditList = async (subreddits, category) => {
         const getRedditPost = async (subreddit) => {
           const redditResponse = await getRedditData({ subreddit });
           return redditResponse;
         };
         if (!welcomed) setWelcomed(true);
         setCurrentCategory(category);
-        setCurrentSubreddits(subreddits);
-        setCurrentIndex(0);
         let subredditLists = [];
         for (let i = 0; i < subreddits.length; i++) {
           const subredditList = await getRedditPost(subreddits[i]);
           subredditLists = [...subredditLists, ...subredditList];
         }
         const randomisedSubredditLists = shuffleArray(subredditLists);
-        setCurrentRedditList(randomisedSubredditLists);
+        setRedditLists((prevLists) => {
+          return {
+            ...prevLists,
+            [category]: {
+              list: randomisedSubredditLists,
+              index: 0,
+            },
+          };
+        });
       };
-      if (
-        !currentSubreddits ||
-        !stringArraysAreIdentical(subreddits, currentSubreddits)
-      ) {
+      if (!currentCategory || category !== currentCategory) {
         setFetchingPosts(true);
-        await refreshRedditList(subreddits);
+        await refreshRedditList(subreddits, category);
         setFetchingPosts(false);
       } else {
         incrementIndex();
       }
     },
-    [currentSubreddits, currentIndex]
+    [currentCategory, incrementIndex, welcomed]
   );
 
   const setDefaultButtons = useCallback(async () => {
@@ -83,14 +94,16 @@ function App() {
 
   // Update current post on index or list change
   useEffect(() => {
-    if (!!currentRedditList) {
-      setCurrentPost(currentRedditList[currentIndex]);
+    if (categoryExists()) {
+      const currentIndex = redditLists[currentCategory].index;
+      setCurrentPost(redditLists[currentCategory].list[currentIndex]);
     }
-  }, [currentRedditList, currentIndex]);
+  }, [redditLists, currentCategory]);
 
   // CONSTANTS
   const finishedList =
-    currentRedditList && currentIndex === currentRedditList.length
+    categoryExists() &&
+    redditLists[currentCategory].index === redditLists[currentCategory].length
       ? currentCategory
       : false;
   const RedditContextValue = {
