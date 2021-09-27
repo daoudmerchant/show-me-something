@@ -8,16 +8,9 @@ export const shuffleArray = (array) => {
 };
 
 export const insertLineBreaks = (string) => {
-  let stringWithoutNBS = string.replace("&#x200B;", "");
-  let splitStringArray = stringWithoutNBS.split(/[\n]/);
-  if (splitStringArray.length === 1) return string;
-  return splitStringArray
-    .map((string, i) => {
-      if (!string) return undefined;
-      // if (i === 0) {
-      return <p>{string}</p>;
-      // }
-      // return [<br />, <p>{string}</p>];
-    })
-    .flat();
+  return string
+    .replace(/&#x200B;/g, "")
+    .replace(/\u00A0/g, "")
+    .split(/[\n]/)
+    .filter((string) => !!string & (string !== " "));
 };

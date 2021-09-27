@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { RedditPostContext } from "../contexts";
+import ReactMarkdown from "react-markdown";
 
 // utils
 import { insertLineBreaks } from "../utils";
@@ -7,40 +8,60 @@ import Comments from "./Comments";
 
 const Post = () => {
   const { currentPost } = useContext(RedditPostContext);
-  console.log(currentPost);
-  console.log(insertLineBreaks(currentPost.text));
   const Content = () => {
     if (currentPost.type === "image") {
       return (
-        <img
-          style={{
-            aspectRatio: `${currentPost.content.width} / ${currentPost.content.height}`,
-          }}
-          className="imgpost"
-          srcSet={currentPost.content.images
-            .map((image) => `${image.url} ${image.width}w`)
-            .join(", ")}
-          src={currentPost.content.fallback}
-          alt={currentPost.title}
-        />
+        <div className="mediacontainer forimage">
+          <img
+            style={{
+              aspectRatio: `${currentPost.content.width} / ${currentPost.content.height}`,
+            }}
+            className="imgpost"
+            srcSet={currentPost.content.images
+              .map((image) => `${image.url} ${image.width}w`)
+              .join(", ")}
+            src={currentPost.content.fallback}
+            alt={currentPost.title}
+          />
+        </div>
       );
     }
     if (currentPost.type === "text") {
       return (
-        <div className="textpost">{insertLineBreaks(currentPost.text)}</div>
+        <div className="mediacontainer fortext">
+          {insertLineBreaks(currentPost.text).map((string) => (
+            <ReactMarkdown linkTarget="_blank">{string}</ReactMarkdown>
+          ))}
+        </div>
       );
     }
+    const Iframe = () => (
+      <iframe
+        className={
+          currentPost.type.includes("video") ? "hostedvideo" : "hostedsite"
+        }
+        title={currentPost.title}
+        src={currentPost.content.url}
+        style={{
+          aspectRatio:
+            currentPost.type.includes("video") &&
+            `${currentPost.content.width} / ${currentPost.content.height}`,
+          border: "0",
+        }}
+      ></iframe>
+    );
     if (currentPost.type.includes("video")) {
       return (
-        <iframe
-          style={{
-            aspectRatio: `${currentPost.content.width} / ${currentPost.content.height}`,
-            border: "none",
-          }}
-          className="hostedpost"
-          src={currentPost.content.url}
-          title={currentPost.title}
-        ></iframe>
+        <div className="mediacontainer forvideo">
+          <Iframe />
+        </div>
+      );
+    }
+    if (currentPost.type === "website") {
+      return (
+        <div className="mediacontainer forwebsite">
+          <Iframe />
+        </div>
       );
     }
     return <p>{currentPost.type}</p>;
@@ -54,16 +75,10 @@ const Post = () => {
   };
   return (
     <div id="post">
-      <p className="posttitle">{currentPost.title}</p>
-      <div
-        className={
-          currentPost.type === "image"
-            ? "postcontainer forimage"
-            : currentPost.type === "text"
-            ? "postcontainer fortext"
-            : "postcontainer"
-        }
-      >
+      <div id="postcontainer">
+        <div className="posttitle">
+          <h2>{currentPost.title}</h2>
+        </div>
         <Content />
       </div>
       <Comments />

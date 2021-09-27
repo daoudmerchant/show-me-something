@@ -7,7 +7,7 @@ const Comments = () => {
     <div
       id="comments"
       onClick={toggleClicked}
-      style={{ height: clicked ? "100%" : "20px" }}
+      style={{ height: clicked ? "100%" : "50px" }}
     >
       Comments
     </div>
