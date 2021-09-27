@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { RedditPostContext } from "../contexts";
 
-// @ts-ignore
 const Button = ({ button }) => {
   const { getNextPost, finishedList } = useContext(RedditPostContext);
   return (

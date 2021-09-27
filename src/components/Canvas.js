@@ -7,10 +7,16 @@ import Post from "./Post";
 
 const Canvas = ({ welcomed }) => {
   const { fetchingPosts, finishedList } = useContext(RedditPostContext);
-  if (!welcomed) return <div>Welcome!</div>;
-  if (fetchingPosts) return <div>Fetching posts</div>;
-  if (!!finishedList) return <div>Finished!</div>;
-  return <Post />;
+  return (
+    <div id="canvas">
+      {(() => {
+        if (!welcomed) return <div>Welcome!</div>;
+        if (fetchingPosts) return <div>Fetching posts</div>;
+        if (!!finishedList) return <div>Finished!</div>;
+        return <Post />;
+      })()}
+    </div>
+  );
 };
 
 export default Canvas;

@@ -57,6 +57,7 @@ function App() {
           const subredditList = await getSubredditList(subreddits[i]);
           subredditLists = [...subredditLists, ...subredditList];
         }
+        // randomise list
         const randomisedSubredditLists = shuffleArray(subredditLists);
         setRedditLists((prevLists) => {
           return {
@@ -90,7 +91,7 @@ function App() {
       }
       return () => setFetchingPosts(false);
     },
-    [categoryExists, currentCategory, fetchingPosts, welcomed]
+    [categoryExists, currentCategory, fetchingPosts, listFinished, welcomed]
   );
 
   const setDefaultButtons = useCallback(async () => {
@@ -114,6 +115,8 @@ function App() {
     fetchingPosts,
     finishedList: categoryExists() && listFinished(),
   };
+
+  console.log(RedditContextValue.currentPost);
 
   /*
   
@@ -158,8 +161,8 @@ function App() {
         <Router>
           <NavBar />
           <Canvas welcomed={welcomed} />
+          <ButtonBox buttons={buttons} />
         </Router>
-        <ButtonBox buttons={buttons} />
       </RedditPostContext.Provider>
     </main>
   );

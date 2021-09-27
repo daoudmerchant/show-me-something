@@ -45,7 +45,7 @@ var getRedditData = function (_a) {
             switch (_g.label) {
                 case 0:
                     _g.trys.push([0, 3, , 4]);
-                    return [4 /*yield*/, fetch("https://www.reddit.com/r/" + subreddit + "/" + filter + ".json?limit=" + limit + "&t=" + timeframe)];
+                    return [4 /*yield*/, fetch("https://www.reddit.com/r/" + subreddit + "/" + filter + ".json?limit=" + limit + "&t=" + timeframe + "&raw_json=1")];
                 case 1: return [4 /*yield*/, (_g.sent()).json()];
                 case 2:
                     data = _g.sent();
@@ -54,9 +54,14 @@ var getRedditData = function (_a) {
                         title: child.data.title,
                         text: child.data.selftext,
                         subreddit: child.data.subreddit,
+                        upvotes: child.data.ups,
+                        downvotes: child.data.downs,
+                        controversiality: child.data.upvote_ratio,
                         id: child.data.id,
                         nsfw: child.data.over_18,
                         url: "https://www.reddit.com" + child.data.permalink.slice(0, -1),
+                        type: child.data.post_hint ||
+                            (child.data.url.includes("reddit") ? "text" : "website"),
                         content: (function () {
                             switch (child.data.post_hint) {
                                 case "hosted:video":
@@ -83,10 +88,13 @@ var getRedditData = function (_a) {
                                             width: child.data.thumbnail_width,
                                             height: child.data.thumbnail_height
                                         },
-                                        url: child.data.url
+                                        images: child.data.preview.images[0].resolutions,
+                                        fallback: child.data.url
                                     };
                                 case undefined:
-                                    return null;
+                                    return {
+                                        url: child.data.url
+                                    };
                             }
                         })()
                     }); });

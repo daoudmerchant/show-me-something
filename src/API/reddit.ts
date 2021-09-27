@@ -21,7 +21,7 @@ export const getRedditData = async ({
   try {
     const data = await (
       await fetch(
-        `https://www.reddit.com/r/${subreddit}/${filter}.json?limit=${limit}&t=${timeframe}`
+        `https://www.reddit.com/r/${subreddit}/${filter}.json?limit=${limit}&t=${timeframe}&raw_json=1`
       )
     ).json();
     console.log(data);
@@ -29,9 +29,15 @@ export const getRedditData = async ({
       title: child.data.title,
       text: child.data.selftext,
       subreddit: child.data.subreddit,
+      upvotes: child.data.ups,
+      downvotes: child.data.downs,
+      controversiality: child.data.upvote_ratio,
       id: child.data.id,
       nsfw: child.data.over_18,
       url: `https://www.reddit.com${child.data.permalink.slice(0, -1)}`,
+      type:
+        child.data.post_hint ||
+        (child.data.url.includes("reddit") ? "text" : "website"),
       content: (() => {
         switch (child.data.post_hint) {
           case "hosted:video":
@@ -58,10 +64,13 @@ export const getRedditData = async ({
                 width: child.data.thumbnail_width,
                 height: child.data.thumbnail_height,
               },
-              url: child.data.url,
+              images: child.data.preview.images[0].resolutions,
+              fallback: child.data.url,
             };
           case undefined:
-            return null;
+            return {
+              url: child.data.url,
+            };
         }
       })(),
     }));

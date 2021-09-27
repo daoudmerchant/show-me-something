@@ -1,15 +1,79 @@
 .App {
   text-align: center;
+  display: grid;
+  grid-template-rows: 80px 1fr 200px;
 }
 
 nav {
-  height: 100px;
+  min-height: 80px;
   background-color: lightcoral;
+  display: flex;
+  justify-content: center;
+}
+
+#home {
+  margin-right: auto;
+}
+
+#canvas {
+  flex: 1;
+  overflow: auto;
+}
+
+#post {
+  background-color: lightgoldenrodyellow;
+  position: relative;
+}
+
+.posttitle {
+  background-color: lightseagreen;
+}
+
+.postcontainer {
+  object-fit: contain;
+}
+
+.fortext {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.forimage {
+  /* make image fit */
+  overflow: hidden;
+}
+
+.textpost {
+  text-align: justify;
+  margin: 0 20px;
+  overflow-x: scroll;
+}
+
+.imgpost {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.hostedpost {
+  height: 100%;
+  width: 100%;
+}
+
+#comments {
+  position: absolute;
+  background-color: lightseagreen;
+  bottom: 0;
+  width: 100%;
+  transition: height ease-in-out 0.4s;
 }
 
 #buttonContainer {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  min-height: 100px;
 }
 
 button {
