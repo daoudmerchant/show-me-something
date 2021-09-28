@@ -66,7 +66,8 @@ var getRedditData = function (_a) {
                             switch (child.data.post_hint) {
                                 case "hosted:video":
                                     return {
-                                        url: child.data.media.reddit_video.fallback_url,
+                                        // remove "?source=fallback" from url
+                                        url: child.data.media.reddit_video.fallback_url.slice(0, -16),
                                         width: child.data.media.reddit_video.width,
                                         height: child.data.media.reddit_video.height
                                     };

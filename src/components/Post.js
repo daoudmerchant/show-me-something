@@ -11,7 +11,7 @@ const Post = () => {
   const Content = () => {
     if (currentPost.type === "image") {
       return (
-        <div className="mediacontainer forimage">
+        <div className="mediacontainer">
           <img
             style={{
               aspectRatio: `${currentPost.content.width} / ${currentPost.content.height}`,
@@ -28,59 +28,34 @@ const Post = () => {
     }
     if (currentPost.type === "text") {
       return (
-        <div className="mediacontainer fortext">
+        <div className="textpost">
           {insertLineBreaks(currentPost.text).map((string) => (
             <ReactMarkdown linkTarget="_blank">{string}</ReactMarkdown>
           ))}
         </div>
       );
     }
-    const Iframe = () => (
-      <iframe
-        className={
-          currentPost.type.includes("video") ? "hostedvideo" : "hostedsite"
-        }
-        title={currentPost.title}
-        src={currentPost.content.url}
-        style={{
-          aspectRatio:
-            currentPost.type.includes("video") &&
-            `${currentPost.content.width} / ${currentPost.content.height}`,
-          border: "0",
-        }}
-      ></iframe>
-    );
     if (currentPost.type.includes("video")) {
       return (
-        <div className="mediacontainer forvideo">
-          <Iframe />
+        <div className="mediacontainer">
+          <video className="video" controls>
+            <source src={currentPost.content.url} type="video/mp4" />
+            Sorry, your browser doesn't support embedded videos.
+          </video>
         </div>
       );
     }
     if (currentPost.type === "website") {
-      return (
-        <div className="mediacontainer forwebsite">
-          <Iframe />
-        </div>
-      );
+      return <iframe title={currentPost.title} src={currentPost.content.url} />;
     }
     return <p>{currentPost.type}</p>;
-    // ) : {
-    //   const
-    //   currentPost.type.includes("video") ? (
-    //   <iframe src={currentPost.content.url} title={currentPost.title}></iframe>
-    // ) : (
-    //   <p>Neither text nor video</p>
-    // )};
   };
   return (
     <div id="post">
-      <div id="postcontainer">
-        <div className="posttitle">
-          <h2>{currentPost.title}</h2>
-        </div>
-        <Content />
+      <div className="posttitle">
+        <h2>{currentPost.title}</h2>
       </div>
+      <Content />
       <Comments />
     </div>
   );

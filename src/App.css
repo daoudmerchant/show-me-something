@@ -1,15 +1,24 @@
 .App {
+  font-family: "Cormorant", sans-serif;
   text-align: center;
   display: grid;
-  grid-template-rows: 80px 1fr 200px;
+  grid-template-rows: 50px 1fr 20%;
+}
+
+a {
+  text-decoration: none;
+  color: black;
 }
 
 /* nav styles */
 nav {
-  min-height: 80px;
-  background-color: lightcoral;
+  min-height: 50px;
+  background-color: lightgoldenrodyellow;
   display: flex;
   justify-content: center;
+}
+nav > * {
+  padding: 1rem;
 }
 
 #home {
@@ -20,24 +29,21 @@ nav {
 #canvas {
   flex: 1;
   overflow: auto;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #post {
   background-color: lightgoldenrodyellow;
-  position: relative;
   height: 100%;
+  width: 100%;
   display: grid;
-  grid-template-rows: 1fr 50px;
-}
-
-#postcontainer {
-  display: flex;
-  flex-direction: column;
-  max-height: 100%;
+  grid-template-rows: min-content 1fr 50px;
 }
 
 .posttitle {
-  background-color: lightseagreen;
   margin: 0;
   display: flex;
   justify-content: center;
@@ -45,49 +51,37 @@ nav {
   min-height: min-content;
 }
 
+.posttitle,
+.textpost {
+  padding: 0 20px;
+}
+
 .mediacontainer {
-  flex-grow: 8;
-}
-
-.hostedpost {
+  position: relative;
   height: 100%;
-  max-width: 100%;
 }
 
-.fortext {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex-grow: 1;
-  overflow: scroll;
-}
-
-.forimage {
-  max-height: 100%;
-}
-
-.imgpost {
+video,
+img {
+  height: 100%;
+  width: 100%;
   object-fit: contain;
+  position: absolute;
+  transform: translateX(-50%);
 }
 
 .textpost {
   text-align: justify;
-  margin: 0 20px;
-  overflow-x: scroll;
+  overflow-y: scroll;
 }
 
-.forwebsite {
+iframe {
   width: 100%;
-}
-
-.hostedsite {
-  width: 100%;
-  height: 100%;
 }
 
 #comments {
   position: absolute;
-  background-color: lightseagreen;
+  background-color: whitesmoke;
   bottom: 0;
   width: 100%;
   transition: height ease-in-out 0.4s;
@@ -98,6 +92,7 @@ nav {
 #buttonContainer {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  background-color: lightgoldenrodyellow;
   width: 100%;
   min-height: 100px;
 }
