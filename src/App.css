@@ -90,11 +90,16 @@ iframe {
 /* button styles */
 
 #buttonContainer {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
   background-color: lightgoldenrodyellow;
   width: 100%;
-  min-height: 100px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+#swiper {
+  position: absolute;
+  width: 100%;
 }
 
 button {

@@ -74,7 +74,6 @@ function App() {
         setFetchingPosts(true);
         await refreshRedditList(subreddits, category);
         setFetchingPosts(false);
-        setCurrentCategory(category);
       } else if (categoryExists(category) && !listFinished(category)) {
         const incrementIndex = (category) => {
           setRedditLists((prevLists) => {
