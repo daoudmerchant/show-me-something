@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { RedditPostContext } from "../contexts";
 import ReactMarkdown from "react-markdown";
 
@@ -8,6 +8,29 @@ import Comments from "./Comments";
 
 const Post = () => {
   const { currentPost } = useContext(RedditPostContext);
+  const [galleryIndex, setGalleryIndex] = useState(0);
+
+  useState(() => {
+    setGalleryIndex(0);
+  }, [currentPost]);
+
+  const galleryForward = () => {
+    console.log("Forward");
+    if (galleryIndex + 1 < currentPost.content.images.length) {
+      setGalleryIndex((prev) => prev + 1);
+      return;
+    }
+    setGalleryIndex(0);
+  };
+
+  const galleryBack = () => {
+    console.log("Backward");
+    if (galleryIndex !== 0) {
+      setGalleryIndex((prev) => prev - 1);
+      return;
+    }
+    setGalleryIndex(currentPost.content.images.length - 1);
+  };
 
   const Content = () => {
     if (currentPost.type === "image") {
@@ -24,6 +47,29 @@ const Post = () => {
             src={currentPost.content.fallback}
             alt={currentPost.title}
           />
+        </div>
+      );
+    }
+    if (currentPost.type === "gallery") {
+      return (
+        <div className="mediacontainer">
+          <div className="gallerynav galleryleft" onClick={galleryBack}>
+            ◄
+          </div>
+          <img
+            style={{
+              aspectRatio: `${currentPost.content.images[galleryIndex].width} / ${currentPost.content.images[galleryIndex].height}`,
+            }}
+            className="imgpost"
+            srcSet={currentPost.content.images[galleryIndex]
+              .map((image) => `${image.url} ${image.width}w`)
+              .join(", ")}
+            src={currentPost.content.fallback}
+            alt={currentPost.title}
+          />
+          <div className="gallerynav galleryright" onClick={galleryForward}>
+            ►
+          </div>
         </div>
       );
     }
