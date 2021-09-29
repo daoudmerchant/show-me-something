@@ -3,6 +3,10 @@ import { RedditPostContext } from "../contexts";
 
 const Button = ({ button }) => {
   const { getNextPost, finishedList } = useContext(RedditPostContext);
+  const style = {
+    ...button.style,
+    fontFamily: `'${button.style.font}', Verdana, sans-serif`,
+  };
   return (
     <button
       disabled={finishedList === button.text}

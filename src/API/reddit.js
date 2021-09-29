@@ -65,9 +65,11 @@ var getRedditData = function (_a) {
                         content: (function () {
                             switch (child.data.post_hint) {
                                 case "hosted:video":
+                                    // remove "?source=fallback" from url
+                                    var videoUrl = child.data.media.reddit_video.fallback_url.slice(0, -16);
                                     return {
-                                        // remove "?source=fallback" from url
-                                        url: child.data.media.reddit_video.fallback_url.slice(0, -16),
+                                        videourl: videoUrl,
+                                        audiourl: videoUrl.split("DASH")[0].concat("DASH_audio.mp4"),
                                         width: child.data.media.reddit_video.width,
                                         height: child.data.media.reddit_video.height
                                     };
@@ -92,7 +94,7 @@ var getRedditData = function (_a) {
                                         images: child.data.preview.images[0].resolutions,
                                         fallback: child.data.url
                                     };
-                                case undefined:
+                                default:
                                     return {
                                         url: child.data.url
                                     };
@@ -122,8 +124,9 @@ var getCommentData = function (url) { return __awaiter(void 0, void 0, void 0, f
                 data = _a.sent();
                 console.log(data);
                 comments = data[1].data.children;
-                // @ts-ignore
-                return [2 /*return*/, comments.map(function (comment) { return ({
+                return [2 /*return*/, (comments
+                        // @ts-ignore
+                        .map(function (comment) { return ({
                         content: comment.data.body,
                         author: comment.data.author,
                         isMod: comment.data.distinguished === "moderator",
@@ -131,7 +134,9 @@ var getCommentData = function (url) { return __awaiter(void 0, void 0, void 0, f
                         controversiality: comment.data.controversiality,
                         upvotes: comment.data.ups,
                         downvotes: comment.data.downs
-                    }); })];
+                    }); })
+                        // @ts-ignore
+                        .filter(function (comment) { return !comment.isMod; }))];
             case 3:
                 error_2 = _a.sent();
                 console.log(error_2);

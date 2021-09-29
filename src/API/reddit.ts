@@ -41,9 +41,14 @@ export const getRedditData = async ({
       content: (() => {
         switch (child.data.post_hint) {
           case "hosted:video":
+            // remove "?source=fallback" from url
+            const videoUrl = child.data.media.reddit_video.fallback_url.slice(
+              0,
+              -16
+            );
             return {
-              // remove "?source=fallback" from url
-              url: child.data.media.reddit_video.fallback_url.slice(0, -16),
+              videourl: videoUrl,
+              audiourl: videoUrl.split("DASH")[0].concat("DASH_audio.mp4"),
               width: child.data.media.reddit_video.width,
               height: child.data.media.reddit_video.height,
             };
@@ -68,7 +73,7 @@ export const getRedditData = async ({
               images: child.data.preview.images[0].resolutions,
               fallback: child.data.url,
             };
-          case undefined:
+          default:
             return {
               url: child.data.url,
             };
@@ -86,16 +91,21 @@ export const getCommentData = async (url: string) => {
     const data = await (await fetch(`${url}.json`)).json();
     console.log(data);
     const comments = data[1].data.children;
-    // @ts-ignore
-    return comments.map((comment) => ({
-      content: comment.data.body,
-      author: comment.data.author,
-      isMod: comment.data.distinguished === "moderator",
-      isSubmitter: comment.data.is_submitter,
-      controversiality: comment.data.controversiality,
-      upvotes: comment.data.ups,
-      downvotes: comment.data.downs,
-    }));
+    return (
+      comments
+        // @ts-ignore
+        .map((comment) => ({
+          content: comment.data.body,
+          author: comment.data.author,
+          isMod: comment.data.distinguished === "moderator",
+          isSubmitter: comment.data.is_submitter,
+          controversiality: comment.data.controversiality,
+          upvotes: comment.data.ups,
+          downvotes: comment.data.downs,
+        }))
+        // @ts-ignore
+        .filter((comment) => !comment.isMod)
+    );
   } catch (error) {
     console.log(error);
   }

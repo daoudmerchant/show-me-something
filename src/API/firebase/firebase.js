@@ -1,6 +1,13 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, docs, getDocs } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  docs,
+  getDocs,
+  query,
+  orderBy,
+} from "firebase/firestore";
 import { getAuth, signInWithRedirect, GoogleAuthProvider } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -39,7 +46,8 @@ export const getDefaultButtons = async () => {
   try {
     console.log("Running code");
     const defaultCol = collection(db, "default");
-    const defaultSnap = await getDocs(defaultCol);
+    const defaultOrdered = query(defaultCol, orderBy("index", "asc"));
+    const defaultSnap = await getDocs(defaultOrdered);
     const defaultList = defaultSnap.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,

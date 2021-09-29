@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { RedditPostContext } from "../contexts";
 import ReactMarkdown from "react-markdown";
 
@@ -8,6 +8,18 @@ import Comments from "./Comments";
 
 const Post = () => {
   const { currentPost } = useContext(RedditPostContext);
+
+  // state
+  const [readyToPlay, setReadyToPlay] = useState({});
+
+  // refs
+  const videoElement = useRef(null);
+  const audioElement = useRef(null);
+
+  useEffect(() => {
+    setReadyToPlay({});
+  }, [currentPost]);
+
   const Content = () => {
     if (currentPost.type === "image") {
       return (
@@ -38,15 +50,46 @@ const Post = () => {
     if (currentPost.type.includes("video")) {
       return (
         <div className="mediacontainer">
-          <video className="video" controls>
-            <source src={currentPost.content.url} type="video/mp4" />
+          <video className="video" ref={videoElement}>
+            <source
+              src={currentPost.content.videourl}
+              type="video/mp4"
+              onLoad={() =>
+                setReadyToPlay((prevState) => {
+                  return {
+                    ...prevState,
+                    video: true,
+                  };
+                })
+              }
+            />
             Sorry, your browser doesn't support embedded videos.
           </video>
+          <audio ref={audioElement} style={{ display: "none" }}>
+            <source src={currentPost.content.audiourl} type="audio/mp4" />
+          </audio>
         </div>
       );
     }
-    if (currentPost.type === "website") {
-      return <iframe title={currentPost.title} src={currentPost.content.url} />;
+    if (currentPost.type === "website" || currentPost.type === "link") {
+      return (
+        <iframe
+          title={currentPost.title}
+          src={currentPost.content.url}
+          onLoad={(e) => {
+            try {
+              console.log(e.target.contentWindow.name);
+            } catch (error) {
+              if (
+                error.message.includes("Refused to display") ||
+                error.message.includes("frame-ancestors")
+              ) {
+                alert(error.message);
+              }
+            }
+          }}
+        />
+      );
     }
     return <p>{currentPost.type}</p>;
   };
