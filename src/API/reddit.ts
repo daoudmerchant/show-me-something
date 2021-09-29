@@ -53,16 +53,20 @@ export const getRedditData = async ({
               height: child.data.media.reddit_video.height,
             };
           case "rich:video":
+            let url;
             if (child.data.media.oembed.provider_name === "Gfycat") {
-              return {
-                url: child.data.media.oembed.thumbnail_url
-                  .split("-")[0]
-                  .concat("-mobile.mp4"),
-                width: child.data.media.oembed.thumbnail_width,
-                height: child.data.media.oembed.thumbnail_height,
-              };
+              url = child.data.media.oembed.thumbnail_url
+                .split("-")[0]
+                .concat("-mobile.mp4");
             }
-            break;
+            if (child.data.media.oembed.provider_name === "YouTube") {
+              url = child.data.media.oembed.html.split("\\")[5];
+            }
+            return {
+              videourl: url,
+              width: child.data.media.oembed.thumbnail_width,
+              height: child.data.media.oembed.thumbnail_height,
+            };
           case "image":
             return {
               thumbnail: {
