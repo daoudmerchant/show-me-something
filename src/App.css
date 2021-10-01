@@ -83,8 +83,8 @@ img {
   justify-content: center;
   align-items: center;
   background-color: white;
-  height: 80px;
-  width: 80px;
+  height: 12vw;
+  width: 12vw;
   border-radius: 50%;
   z-index: 10;
   user-select: none;
@@ -115,11 +115,15 @@ iframe {
   transition: height ease-in-out 0.4s;
 }
 
-.commentheader {
+#commentheader {
   display: flex;
+  background-color: white;
   justify-content: center;
   align-items: center;
   height: 50px;
+  position: sticky;
+  top: 0;
+  width: 100%;
 }
 
 /* button styles */

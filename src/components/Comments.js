@@ -12,9 +12,6 @@ const Comments = () => {
   const [comments, setComments] = useState(null);
   console.log(comments);
 
-  // ref
-  const commentTitle = useRef();
-
   // context
   const { currentPost } = useContext(RedditPostContext);
 
@@ -36,7 +33,6 @@ const Comments = () => {
 
   const handleClick = () => {
     if (!comments) getComments();
-    if (clicked) commentTitle.current.scrollIntoView({ behavior: "smooth" });
     toggleClicked();
   };
   return (
@@ -48,14 +44,16 @@ const Comments = () => {
         overflowY: clicked ? "scroll" : "hidden",
       }}
     >
-      <div className="commentheader" ref={commentTitle}>
-        Comments
+      <div id="commentheader">{`Tap to ${
+        clicked ? "close" : "expand"
+      } comments`}</div>
+      <div id="commentcontainer">
+        {comments ? (
+          comments.map((comment) => <p>{comment.content}</p>)
+        ) : (
+          <p>Loading comments...</p>
+        )}
       </div>
-      {comments ? (
-        comments.map((comment) => <p>{comment.content}</p>)
-      ) : (
-        <p>Loading comments...</p>
-      )}
     </div>
   );
 };
