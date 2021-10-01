@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useRef } from "react";
 import { RedditPostContext } from "../contexts";
 import ReactMarkdown from "react-markdown";
 
@@ -9,6 +9,17 @@ import Comments from "./Comments";
 const Post = () => {
   const { currentPost } = useContext(RedditPostContext);
   const [galleryIndex, setGalleryIndex] = useState(0);
+
+  // refs
+  const vidRef = useRef();
+  const audioRef = useRef();
+
+  const playAndPause = () => {
+    const isPlaying = !vidRef.current.paused;
+    const playOrPause = isPlaying ? "pause" : "play";
+    vidRef.current[playOrPause]();
+    audioRef.current[playOrPause]();
+  };
 
   useState(() => {
     setGalleryIndex(0);
@@ -85,18 +96,16 @@ const Post = () => {
     if (currentPost.type.includes("video")) {
       return (
         <div className="mediacontainer">
-          <video
-            className="video"
-            // for now
-            autoPlay
-            //
-          >
+          <video ref={vidRef} className="video">
             <source src={currentPost.content.videourl} type="video/mp4" />
             Sorry, your browser doesn't support embedded videos.
           </video>
-          <audio style={{ display: "none" }} autoPlay>
+          <audio ref={audioRef} style={{ display: "none" }}>
             <source src={currentPost.content.audiourl} type="audio/mp4" />
           </audio>
+          <div id="playpause" onClick={playAndPause}>
+            Play/Pause
+          </div>
         </div>
       );
     }
