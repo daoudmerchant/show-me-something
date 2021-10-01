@@ -1,88 +1,34 @@
-import { useContext, useState, useRef } from "react";
+import { useContext } from "react";
 import { RedditPostContext } from "../contexts";
 import ReactMarkdown from "react-markdown";
 
+// images
+import newwindowicon from "../images/newwindow.png";
+
 // utils
 import { insertLineBreaks } from "../utils";
+
+// components
+import Image from "./mediaPosts/Image";
+import Gallery from "./mediaPosts/Gallery";
+import Video from "./mediaPosts/Video";
+import Website from "./mediaPosts/Website";
 import Comments from "./Comments";
 
 const Post = () => {
   const { currentPost } = useContext(RedditPostContext);
-  const [galleryIndex, setGalleryIndex] = useState(0);
-
-  // refs
-  const vidRef = useRef();
-  const audioRef = useRef();
-
-  const playAndPause = () => {
-    const isPlaying = !vidRef.current.paused;
-    const playOrPause = isPlaying ? "pause" : "play";
-    vidRef.current[playOrPause]();
-    audioRef.current[playOrPause]();
-  };
-
-  useState(() => {
-    setGalleryIndex(0);
-  }, [currentPost]);
-
-  const galleryForward = () => {
-    console.log("Forward");
-    if (galleryIndex + 1 < currentPost.content.images.length) {
-      setGalleryIndex((prev) => prev + 1);
-      return;
-    }
-    setGalleryIndex(0);
-  };
-
-  const galleryBack = () => {
-    console.log("Backward");
-    if (galleryIndex !== 0) {
-      setGalleryIndex((prev) => prev - 1);
-      return;
-    }
-    setGalleryIndex(currentPost.content.images.length - 1);
-  };
 
   const Content = () => {
     if (currentPost.type === "image") {
       return (
-        <div className="mediacontainer">
-          <img
-            style={{
-              aspectRatio: `${currentPost.content.width} / ${currentPost.content.height}`,
-            }}
-            className="imgpost"
-            srcSet={currentPost.content.images
-              .map((image) => `${image.url} ${image.width}w`)
-              .join(", ")}
-            src={currentPost.content.fallback}
-            alt={currentPost.title}
-          />
-        </div>
+        <Image
+          currentImage={currentPost.content}
+          currentTitle={currentPost.title}
+        />
       );
     }
     if (currentPost.type === "gallery") {
-      return (
-        <div className="mediacontainer">
-          <div className="gallerynav galleryleft" onClick={galleryBack}>
-            ◄
-          </div>
-          <img
-            style={{
-              aspectRatio: `${currentPost.content.images[galleryIndex].width} / ${currentPost.content.images[galleryIndex].height}`,
-            }}
-            className="imgpost"
-            srcSet={currentPost.content.images[galleryIndex]
-              .map((image) => `${image.url} ${image.width}w`)
-              .join(", ")}
-            src={currentPost.content.fallback}
-            alt={currentPost.title}
-          />
-          <div className="gallerynav galleryright" onClick={galleryForward}>
-            ►
-          </div>
-        </div>
-      );
+      return <Gallery />;
     }
     if (currentPost.type === "text") {
       return (
@@ -94,47 +40,31 @@ const Post = () => {
       );
     }
     if (currentPost.type.includes("video")) {
-      return (
-        <div className="mediacontainer">
-          <video ref={vidRef} className="video">
-            <source src={currentPost.content.videourl} type="video/mp4" />
-            Sorry, your browser doesn't support embedded videos.
-          </video>
-          <audio ref={audioRef} style={{ display: "none" }}>
-            <source src={currentPost.content.audiourl} type="audio/mp4" />
-          </audio>
-          <div id="playpause" onClick={playAndPause}>
-            Play/Pause
-          </div>
-        </div>
-      );
+      return <Video />;
     }
     if (currentPost.type === "website" || currentPost.type === "link") {
-      return (
-        <iframe
-          title={currentPost.title}
-          src={currentPost.content.url}
-          onLoad={(e) => {
-            try {
-              console.log(e.target.contentWindow.name);
-            } catch (error) {
-              if (
-                error.message.includes("Refused to display") ||
-                error.message.includes("frame-ancestors")
-              ) {
-                alert(error.message);
-              }
-            }
-          }}
-        />
-      );
+      return <Website />;
     }
     return <p>{currentPost.type}</p>;
   };
   return (
     <div id="post">
       <div className="posttitle">
+        <p id="likepercentage">{currentPost.controversiality * 100}%</p>
         <h2>{currentPost.title}</h2>
+        <a
+          id="externallink"
+          href={currentPost.url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span id="newwindowtext">View on Reddit</span>
+          <img
+            id="newwindowicon"
+            src={newwindowicon}
+            alt="open link in a new window"
+          />
+        </a>
       </div>
       <Content />
       <Comments />

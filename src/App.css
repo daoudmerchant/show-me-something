@@ -46,11 +46,44 @@ nav > * {
 
 .posttitle {
   margin: 0;
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 8fr 1fr;
   align-items: center;
   min-height: min-content;
 }
+
+#likepercentage {
+  text-align: left;
+}
+
+#externallink {
+  position: relative;
+}
+
+#externallink > * {
+  position: absolute;
+  transform: translateY(-50%);
+}
+
+#newwindowicon {
+  height: 15px;
+  width: 15px;
+  right: 0;
+}
+
+/* TODO: Improve text disappearance / sizing */
+#newwindowtext {
+  font-size: min(1vw, 1em);
+  display: block;
+  right: 25px;
+}
+
+@media screen and (max-width: 1000px) {
+  #newwindowtext {
+    display: none;
+  }
+}
+/* */
 
 .posttitle,
 .textpost {
@@ -62,8 +95,14 @@ nav > * {
   height: 100%;
 }
 
+#placeholder {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 video,
-img {
+#imgpost {
   height: 100%;
   width: 100%;
   object-fit: contain;
@@ -79,6 +118,21 @@ img {
   height: 5%;
   width: 5%;
   background-color: white;
+}
+
+#volumecontrols {
+  position: absolute;
+  user-select: none;
+  left: 10px;
+  bottom: 10px;
+  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: white;
+}
+#volumecontrols > * {
+  margin: 10px;
 }
 
 .textpost {
