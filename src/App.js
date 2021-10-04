@@ -1,15 +1,21 @@
 import { useEffect, useState, useCallback } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // APIs
 import { getRedditData, getCommentData } from "./API/reddit";
-import { getDefaultButtons } from "./API/firebase/firebase";
+import {
+  getDefaultButtons,
+  getInitStatus,
+  initFirebaseAuth,
+} from "./API/firebase/firebase";
 
 // styles
 import "./App.css";
 
 // components
 import NavBar from "./components/NavBar";
+import About from "./components/About";
 import Canvas from "./components/Canvas";
+import Settings from "./components/Settings";
 import ButtonBox from "./components/ButtonBox";
 
 // contexts
@@ -25,6 +31,19 @@ function App() {
   const [welcomed, setWelcomed] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
   const [redditLists, setRedditLists] = useState(null);
+
+  // LOG IN
+  const [user, setUser] = useState(undefined);
+
+  const authStateObserver = (user) => {
+    user ? setUser(user) : setUser(undefined);
+  };
+
+  const isInitialized = getInitStatus();
+
+  useEffect(() => {
+    if (isInitialized) initFirebaseAuth(authStateObserver);
+  }, [isInitialized]);
 
   const categoryExists = useCallback(
     (category = currentCategory) =>
@@ -158,9 +177,19 @@ function App() {
     <main className="App">
       <RedditPostContext.Provider value={RedditContextValue}>
         <Router>
-          <NavBar />
-          <Canvas welcomed={welcomed} />
-          <ButtonBox buttons={buttons} />
+          <NavBar userState={{ user, setUser }} />
+          <Switch>
+            <Route exact path="/">
+              <Canvas welcomed={welcomed} />
+              <ButtonBox buttons={buttons} />
+            </Route>
+            <Route path="/about">
+              <About />
+            </Route>
+            <Route path="/settings">
+              <Settings />
+            </Route>
+          </Switch>
         </Router>
       </RedditPostContext.Provider>
     </main>

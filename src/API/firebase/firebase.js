@@ -8,7 +8,13 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
-import { getAuth, signInWithRedirect, GoogleAuthProvider } from "firebase/auth";
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signOut,
+  onAuthStateChanged,
+} from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -26,20 +32,36 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+export const getInitStatus = () => !!app;
+
 // Authenticate
 const provider = new GoogleAuthProvider();
 export const signInWithGoogle = async () => {
+  if (!app) {
+    return;
+  }
   try {
-    const result = await signInWithRedirect(getAuth(), provider);
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    const token = credential.accessToken;
-    const user = result.user;
+    await signInWithPopup(getAuth(), provider);
+    // const result = await signInWithPopup(getAuth(), provider);
+    // const credential = GoogleAuthProvider.credentialFromResult(result);
+    // const token = credential.accessToken;
+    // const user = result.user;
   } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;
     const email = error.email;
     const credential = GoogleAuthProvider.credentialFromError(error);
   }
+};
+
+export const signOutWithGoogle = () => {
+  signOut(getAuth());
+};
+
+export const initFirebaseAuth = (observer) => {
+  console.log("initializing");
+  if (!app) return;
+  onAuthStateChanged(getAuth(), observer);
 };
 
 export const getDefaultButtons = async () => {
