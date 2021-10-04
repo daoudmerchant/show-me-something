@@ -2,13 +2,14 @@ import { signOutWithGoogle } from "../API/firebase/firebase";
 
 import { useHistory } from "react-router";
 
-const Settings = () => {
+const Settings = ({ resetAllData }) => {
   const history = useHistory();
   return (
     <div>
       <p>
         <span
           onClick={() => {
+            resetAllData();
             signOutWithGoogle();
             history.push("/");
           }}

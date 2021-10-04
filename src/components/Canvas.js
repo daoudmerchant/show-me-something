@@ -6,13 +6,15 @@ import Post from "./Post";
 // import Welcome from "./Welcome";
 
 const Canvas = ({ welcomed }) => {
-  const { fetchingPosts, finishedList } = useContext(RedditPostContext);
+  const { fetchingPosts, finishedList, currentPost } =
+    useContext(RedditPostContext);
   return (
     <div id="canvas">
       {(() => {
         if (!welcomed) return <div>Welcome!</div>;
         if (fetchingPosts) return <div>Fetching posts</div>;
         if (!!finishedList) return <div>Finished!</div>;
+        if (!currentPost) return <div>Click below to begin</div>;
         return <Post />;
       })()}
     </div>

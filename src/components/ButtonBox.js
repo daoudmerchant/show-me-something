@@ -57,6 +57,10 @@ const ButtonBox = ({ buttons }) => {
     setCurrentButtons([...startButtons, ...endButtons]);
   }, [firstButtonIndex, buttonCount, buttons]);
 
+  useEffect(() => {
+    setFirstButtonIndex(0);
+  }, [buttons]);
+
   return buttons ? (
     <div
       id="buttoncontainer"

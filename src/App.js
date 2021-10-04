@@ -3,9 +3,10 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // APIs
 import { getRedditData, getCommentData } from "./API/reddit";
 import {
-  getDefaultButtons,
-  getInitStatus,
+  getButtons,
+  getUserButtons,
   initFirebaseAuth,
+  getInitStatus,
 } from "./API/firebase/firebase";
 
 // styles
@@ -31,8 +32,15 @@ function App() {
   const [welcomed, setWelcomed] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
   const [redditLists, setRedditLists] = useState(null);
+  const [pullCount, setPullCount] = useState(10);
 
-  // LOG IN
+  const resetAllData = () => {
+    setButtons(null);
+    setRedditLists(null);
+    setCurrentCategory(null);
+  };
+
+  // FIREBASE
   const [user, setUser] = useState(undefined);
 
   const authStateObserver = (user) => {
@@ -41,10 +49,45 @@ function App() {
 
   const isInitialized = getInitStatus();
 
+  // Pass Firebase authStateObserver
   useEffect(() => {
-    if (isInitialized) initFirebaseAuth(authStateObserver);
+    if (isInitialized) {
+      initFirebaseAuth(authStateObserver);
+    }
   }, [isInitialized]);
 
+  // Get default buttons from database
+  const setDefaults = useCallback(async () => {
+    if (!!user) return;
+    resetAllData();
+    let isSubscribed = true;
+    const defaultButtons = await getButtons.defaultButtons();
+    if (isSubscribed) setButtons(defaultButtons);
+    return () => (isSubscribed = false);
+  }, [user]);
+
+  // Set default buttons on mount
+  useEffect(() => {
+    setDefaults();
+  }, [user]);
+
+  // get user buttons from database
+  const setUserState = useCallback(async () => {
+    resetAllData();
+    let isSubscribed = true;
+    const userButtons = await getButtons.userButtons(user.uid);
+    console.log(userButtons);
+    if (isSubscribed) setButtons(userButtons);
+    return () => (isSubscribed = false);
+  }, [user]);
+
+  // set user buttons on sign-in
+  useEffect(() => {
+    if (!user) return;
+    setUserState();
+  }, [user]);
+
+  // REDDIT
   const categoryExists = useCallback(
     (category = currentCategory) =>
       !!currentCategory && !!redditLists && !!redditLists[category],
@@ -58,16 +101,14 @@ function App() {
         : false,
     [currentCategory, redditLists]
   );
-
-  // Update State
-  // - SYNC
-
-  // - ASYNC
   const getNextPost = useCallback(
     async ({ subreddits, category }) => {
       const refreshRedditList = async (subreddits, category) => {
         const getSubredditList = async (subreddit) => {
-          const redditResponse = await getRedditData({ subreddit });
+          const redditResponse = await getRedditData({
+            subreddit,
+            limit: pullCount,
+          });
           return redditResponse;
         };
         if (!welcomed) setWelcomed(true);
@@ -111,18 +152,6 @@ function App() {
     },
     [categoryExists, currentCategory, fetchingPosts, listFinished, welcomed]
   );
-
-  const setDefaultButtons = useCallback(async () => {
-    let isSubscribed = true;
-    const defaultButtons = await getDefaultButtons();
-    if (isSubscribed) setButtons(defaultButtons);
-    return () => (isSubscribed = false);
-  }, []);
-
-  // Set default buttons on mount
-  useEffect(() => {
-    setDefaultButtons();
-  }, []);
 
   // CONTEXT VALUES
   const RedditContextValue = {
@@ -177,7 +206,7 @@ function App() {
     <main className="App">
       <RedditPostContext.Provider value={RedditContextValue}>
         <Router>
-          <NavBar userState={{ user, setUser }} />
+          <NavBar user={user} />
           <Switch>
             <Route exact path="/">
               <Canvas welcomed={welcomed} />
@@ -187,7 +216,7 @@ function App() {
               <About />
             </Route>
             <Route path="/settings">
-              <Settings />
+              <Settings resetAllData={resetAllData} />
             </Route>
           </Switch>
         </Router>

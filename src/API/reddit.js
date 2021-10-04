@@ -35,13 +35,13 @@ export const getRedditData = async ({
             (item) => item.media_id
           );
           return {
-            images: galleryKeys.map((key) =>
-              child.data.media_metadata[key].p.map((img) => ({
+            gallery: galleryKeys.map((key) => ({
+              images: child.data.media_metadata[key].p.map((img) => ({
                 url: img.u,
                 width: img.x,
                 height: img.y,
-              }))
-            ),
+              })),
+            })),
           };
         }
         switch (child.data.post_hint) {

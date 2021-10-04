@@ -3,8 +3,10 @@ import { initializeApp } from "firebase/app";
 import {
   getFirestore,
   collection,
-  docs,
+  getDoc,
   getDocs,
+  setDoc,
+  doc,
   query,
   orderBy,
 } from "firebase/firestore";
@@ -37,9 +39,6 @@ export const getInitStatus = () => !!app;
 // Authenticate
 const provider = new GoogleAuthProvider();
 export const signInWithGoogle = async () => {
-  if (!app) {
-    return;
-  }
   try {
     await signInWithPopup(getAuth(), provider);
     // const result = await signInWithPopup(getAuth(), provider);
@@ -59,23 +58,54 @@ export const signOutWithGoogle = () => {
 };
 
 export const initFirebaseAuth = (observer) => {
-  console.log("initializing");
-  if (!app) return;
   onAuthStateChanged(getAuth(), observer);
 };
 
-export const getDefaultButtons = async () => {
-  try {
-    console.log("Running code");
-    const defaultCol = collection(db, "default");
-    const defaultOrdered = query(defaultCol, orderBy("index", "asc"));
-    const defaultSnap = await getDocs(defaultOrdered);
-    const defaultList = defaultSnap.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
-    return defaultList;
-  } catch (error) {
-    console.error(error);
-  }
-};
+let defaultButtons;
+
+export const getButtons = (() => {
+  let defaultButtonArray;
+  const defaultButtons = async () => {
+    try {
+      const defaultCol = collection(db, "default");
+      const defaultOrdered = query(defaultCol, orderBy("index", "asc"));
+      const defaultSnap = await getDocs(defaultOrdered);
+      const defaultList = defaultSnap.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      defaultButtonArray = defaultList;
+      return defaultList;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const userButtons = async (UID) => {
+    const docRef = doc(db, "users", UID);
+    try {
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        return docSnap.data().buttons;
+      } else {
+        // Would be a Cloud Function if not a free user
+        const defaultUserData = {
+          buttons: defaultButtonArray,
+          settings: {
+            limit: 10,
+            timeframe: "day",
+            filter: "top",
+          },
+        };
+        const usersRef = collection(db, "users");
+        await setDoc(doc(usersRef, UID), defaultUserData);
+        return defaultButtons;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  return {
+    defaultButtons,
+    userButtons,
+  };
+})();

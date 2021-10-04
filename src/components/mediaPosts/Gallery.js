@@ -14,7 +14,7 @@ const Gallery = () => {
 
   const galleryForward = () => {
     console.log("Forward");
-    if (galleryIndex + 1 < currentPost.content.images.length) {
+    if (galleryIndex + 1 < currentPost.content.gallery.length) {
       setGalleryIndex((prev) => prev + 1);
       return;
     }
@@ -27,7 +27,7 @@ const Gallery = () => {
       setGalleryIndex((prev) => prev - 1);
       return;
     }
-    setGalleryIndex(currentPost.content.images.length - 1);
+    setGalleryIndex(currentPost.content.gallery.length - 1);
   };
 
   return (
@@ -36,7 +36,7 @@ const Gallery = () => {
         ◄
       </div>
       <Image
-        currentImage={currentPost.content[galleryIndex]}
+        currentImage={currentPost.content.gallery[galleryIndex]}
         currentTitle={currentPost.title}
       />
       <div className="gallerynav galleryright" onClick={galleryForward}>
