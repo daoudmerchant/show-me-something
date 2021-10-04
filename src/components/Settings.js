@@ -14,10 +14,13 @@ const Settings = ({ resetAllData, uid, userSettings, setUserSettings }) => {
   const [currentSettings, setCurrentSettings] = useState(null);
   const [submitSuccess, setSubmitSuccess] = useState(undefined);
 
+  // set component settings state from current user settings
   useEffect(() => {
     if (!userSettings) return;
     setCurrentSettings(userSettings);
   }, [userSettings]);
+
+  // reset submit success on mount
   useEffect(() => {
     setSubmitSuccess(undefined);
   }, []);
@@ -135,7 +138,7 @@ const Settings = ({ resetAllData, uid, userSettings, setUserSettings }) => {
             <aside>Note: a higher limit may lead to longer loading times</aside>
           </div>
           <div className="setting">
-            <label for="timeframe">Timeframe:</label>
+            <label htmlFor="timeframe">Timeframe:</label>
             <select
               id="timeframeselect"
               name="timeframe"
