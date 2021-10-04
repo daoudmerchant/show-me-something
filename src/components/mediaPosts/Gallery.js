@@ -13,7 +13,6 @@ const Gallery = () => {
   }, [currentPost]);
 
   const galleryForward = () => {
-    console.log("Forward");
     if (galleryIndex + 1 < currentPost.content.gallery.length) {
       setGalleryIndex((prev) => prev + 1);
       return;
@@ -22,7 +21,6 @@ const Gallery = () => {
   };
 
   const galleryBack = () => {
-    console.log("Backward");
     if (galleryIndex !== 0) {
       setGalleryIndex((prev) => prev - 1);
       return;

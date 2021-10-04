@@ -6,6 +6,7 @@ import {
   getDoc,
   getDocs,
   setDoc,
+  updateDoc,
   doc,
   query,
   orderBy,
@@ -57,13 +58,13 @@ export const signOutWithGoogle = () => {
   signOut(getAuth());
 };
 
+export const isSignedIn = () => !!getAuth().currentUser;
+
 export const initFirebaseAuth = (observer) => {
   onAuthStateChanged(getAuth(), observer);
 };
 
-let defaultButtons;
-
-export const getButtons = (() => {
+export const getData = (() => {
   let defaultButtonArray;
   const defaultButtons = async () => {
     try {
@@ -80,12 +81,12 @@ export const getButtons = (() => {
       console.error(error);
     }
   };
-  const userButtons = async (UID) => {
+  const userData = async (UID) => {
     const docRef = doc(db, "users", UID);
     try {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        return docSnap.data().buttons;
+        return docSnap.data();
       } else {
         // Would be a Cloud Function if not a free user
         const defaultUserData = {
@@ -98,7 +99,7 @@ export const getButtons = (() => {
         };
         const usersRef = collection(db, "users");
         await setDoc(doc(usersRef, UID), defaultUserData);
-        return defaultButtons;
+        return defaultUserData;
       }
     } catch (error) {
       console.log(error);
@@ -106,6 +107,24 @@ export const getButtons = (() => {
   };
   return {
     defaultButtons,
-    userButtons,
+    userData,
+  };
+})();
+
+export const updateData = (() => {
+  const userSettings = async (uid, settings) => {
+    const userRef = doc(db, "users", uid);
+    try {
+      await updateDoc(userRef, {
+        settings,
+      });
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+  return {
+    userSettings,
   };
 })();

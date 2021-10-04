@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { getRedditData, getCommentData } from "./API/reddit";
 import {
   getButtons,
-  getUserButtons,
+  getData,
   initFirebaseAuth,
   getInitStatus,
 } from "./API/firebase/firebase";
@@ -42,6 +42,7 @@ function App() {
 
   // FIREBASE
   const [user, setUser] = useState(undefined);
+  const [userSettings, setUserSettings] = useState(undefined);
 
   const authStateObserver = (user) => {
     user ? setUser(user) : setUser(undefined);
@@ -61,7 +62,7 @@ function App() {
     if (!!user) return;
     resetAllData();
     let isSubscribed = true;
-    const defaultButtons = await getButtons.defaultButtons();
+    const defaultButtons = await getData.defaultButtons();
     if (isSubscribed) setButtons(defaultButtons);
     return () => (isSubscribed = false);
   }, [user]);
@@ -75,9 +76,11 @@ function App() {
   const setUserState = useCallback(async () => {
     resetAllData();
     let isSubscribed = true;
-    const userButtons = await getButtons.userButtons(user.uid);
-    console.log(userButtons);
-    if (isSubscribed) setButtons(userButtons);
+    const userData = await getData.userData(user.uid);
+    if (isSubscribed) {
+      setButtons(userData.buttons);
+      setUserSettings(userData.settings);
+    }
     return () => (isSubscribed = false);
   }, [user]);
 
@@ -216,7 +219,12 @@ function App() {
               <About />
             </Route>
             <Route path="/settings">
-              <Settings resetAllData={resetAllData} />
+              <Settings
+                resetAllData={resetAllData}
+                uid={user && user.uid}
+                userSettings={userSettings}
+                setUserSettings={setUserSettings}
+              />
             </Route>
           </Switch>
         </Router>

@@ -12,13 +12,7 @@ const NavBar = ({ user }) => {
       </Link>
       <Link to="/about">About</Link>
       {!user ? (
-        <p
-          onClick={() => {
-            signInWithGoogle();
-          }}
-        >
-          Login
-        </p>
+        <p onClick={signInWithGoogle}>Login</p>
       ) : (
         <Link to="/settings">
           <div id="userbar">

@@ -10,6 +10,11 @@ a {
   color: black;
 }
 
+span {
+  font-weight: bold;
+  cursor: pointer;
+}
+
 /* nav styles */
 nav {
   height: 50px;

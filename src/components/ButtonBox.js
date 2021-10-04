@@ -30,6 +30,7 @@ const ButtonBox = ({ buttons }) => {
     );
   }
   const currentBreakpoint = breakpointQueries.indexOf(false);
+  // TODO: Fix repeating buttons on fewer than breakpoints
   const buttonCount =
     currentBreakpoint === -1 ? breakpoints.length : currentBreakpoint;
 
