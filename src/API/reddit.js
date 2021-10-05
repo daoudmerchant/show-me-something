@@ -108,6 +108,8 @@ export const getRedditData = async ({
             // if (child.data.media.oembed.provider_name === "YouTube") {
             //   url = child.data.media.oembed.html.split("\\")[5];
             // }
+            alert("Rich video " + child.data.media.oembed.provider_name);
+            console.log(child.data);
             return {
               html: child.data.media.oembed.html,
               width: child.data.media.oembed.thumbnail_width,
