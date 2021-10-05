@@ -10,7 +10,7 @@ const Button = ({ button }) => {
   return (
     <button
       disabled={finishedList === button.text}
-      style={button.style}
+      style={style}
       onClick={() => {
         getNextPost({ subreddits: button.subreddits, category: button.text });
       }}

@@ -1,8 +1,8 @@
 export const getRedditData = async ({
-  subreddit = "all",
-  limit = 10,
-  timeframe = "day",
-  filter = "top",
+  subreddit,
+  limit,
+  timeframe,
+  filter,
 }) => {
   try {
     const data = await (

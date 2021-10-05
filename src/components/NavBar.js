@@ -4,7 +4,6 @@ import { signInWithGoogle } from "../API/firebase/firebase";
 import defaultProfilePic from "../images/profile-default.png";
 
 const NavBar = ({ user }) => {
-  console.log(user);
   return (
     <nav>
       <Link to="/" id="home">

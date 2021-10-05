@@ -1,9 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // APIs
-import { getRedditData, getCommentData } from "./API/reddit";
+import { getRedditData } from "./API/reddit";
 import {
-  getButtons,
   getData,
   initFirebaseAuth,
   getInitStatus,
@@ -28,13 +27,15 @@ import { shuffleArray } from "./utils";
 function App() {
   // STATE
   const [buttons, setButtons] = useState(null);
+  const [settings, setSettings] = useState(null);
+  const [defaults, setDefaults] = useState(null);
   const [fetchingPosts, setFetchingPosts] = useState(false);
   const [welcomed, setWelcomed] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
   const [redditLists, setRedditLists] = useState(null);
-  const [pullCount, setPullCount] = useState(10);
 
   const resetAllData = () => {
+    // TODO: Update
     setButtons(null);
     setRedditLists(null);
     setCurrentCategory(null);
@@ -58,19 +59,23 @@ function App() {
   }, [isInitialized]);
 
   // Get default buttons from database
-  const setDefaults = useCallback(async () => {
-    if (!!user) return;
-    resetAllData();
+  const getDefaults = useCallback(async () => {
+    // if (!!user) return;
+    // resetAllData();
     let isSubscribed = true;
-    const defaultButtons = await getData.defaultButtons();
-    if (isSubscribed) setButtons(defaultButtons);
+    const defaultData = await getData.defaults();
+    if (isSubscribed) {
+      setDefaults(defaultData);
+      setButtons(defaultData.buttons);
+      setSettings(defaultData.settings);
+    }
     return () => (isSubscribed = false);
-  }, [user]);
+  }, []);
 
   // Set default buttons on mount
   useEffect(() => {
-    setDefaults();
-  }, [user]);
+    getDefaults();
+  }, []);
 
   // get user buttons from database
   const setUserState = useCallback(async () => {
@@ -88,7 +93,7 @@ function App() {
   useEffect(() => {
     if (!user) return;
     setUserState();
-  }, [user]);
+  }, [setUserState, user]);
 
   // REDDIT
   const categoryExists = useCallback(
@@ -107,10 +112,11 @@ function App() {
   const getNextPost = useCallback(
     async ({ subreddits, category }) => {
       const refreshRedditList = async (subreddits, category) => {
+        console.log(subreddits);
         const getSubredditList = async (subreddit) => {
           const redditResponse = await getRedditData({
+            ...settings,
             subreddit,
-            limit: pullCount,
           });
           return redditResponse;
         };
@@ -153,8 +159,17 @@ function App() {
       }
       return () => setFetchingPosts(false);
     },
-    [categoryExists, currentCategory, fetchingPosts, listFinished, welcomed]
+    [
+      categoryExists,
+      currentCategory,
+      fetchingPosts,
+      listFinished,
+      settings,
+      welcomed,
+    ]
   );
+
+  console.log(redditLists);
 
   // CONTEXT VALUES
   const RedditContextValue = {

@@ -65,18 +65,13 @@ export const initFirebaseAuth = (observer) => {
 };
 
 export const getData = (() => {
-  let defaultButtonArray;
-  const defaultButtons = async () => {
+  let defaultData;
+  const defaults = async () => {
     try {
-      const defaultCol = collection(db, "default");
-      const defaultOrdered = query(defaultCol, orderBy("index", "asc"));
-      const defaultSnap = await getDocs(defaultOrdered);
-      const defaultList = defaultSnap.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      defaultButtonArray = defaultList;
-      return defaultList;
+      const defaultRef = doc(db, "app", "defaults");
+      const defaultSnap = await getDoc(defaultRef);
+      defaultData = defaultSnap.data();
+      return defaultData;
     } catch (error) {
       console.error(error);
     }
@@ -89,24 +84,16 @@ export const getData = (() => {
         return docSnap.data();
       } else {
         // Would be a Cloud Function if not a free user
-        const defaultUserData = {
-          buttons: defaultButtonArray,
-          settings: {
-            limit: 10,
-            timeframe: "day",
-            filter: "top",
-          },
-        };
         const usersRef = collection(db, "users");
-        await setDoc(doc(usersRef, UID), defaultUserData);
-        return defaultUserData;
+        await setDoc(doc(usersRef, UID), defaultData);
+        return defaultData;
       }
     } catch (error) {
       console.log(error);
     }
   };
   return {
-    defaultButtons,
+    defaults,
     userData,
   };
 })();
