@@ -41,11 +41,12 @@ export const getInitStatus = () => !!app;
 const provider = new GoogleAuthProvider();
 export const signInWithGoogle = async () => {
   try {
-    await signInWithPopup(getAuth(), provider);
+    const result = await signInWithPopup(getAuth(), provider);
     // const result = await signInWithPopup(getAuth(), provider);
     // const credential = GoogleAuthProvider.credentialFromResult(result);
     // const token = credential.accessToken;
     // const user = result.user;
+    console.log(result.user);
   } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;
@@ -67,6 +68,7 @@ export const initFirebaseAuth = (observer) => {
 export const getData = (() => {
   let defaultData;
   const defaults = async () => {
+    if (!!defaultData) return defaultData;
     try {
       const defaultRef = doc(db, "app", "defaults");
       const defaultSnap = await getDoc(defaultRef);

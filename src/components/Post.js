@@ -19,7 +19,7 @@ const Post = () => {
   const { currentPost } = useContext(RedditPostContext);
 
   const Content = () => {
-    if (currentPost.type === "image") {
+    if (currentPost.type.media === "image") {
       return (
         <Image
           currentImage={currentPost.content}
@@ -27,10 +27,10 @@ const Post = () => {
         />
       );
     }
-    if (currentPost.type === "gallery") {
+    if (currentPost.type.media === "gallery") {
       return <Gallery />;
     }
-    if (currentPost.type === "text") {
+    if (currentPost.type.media === "text") {
       return (
         <div className="textpost">
           {insertLineBreaks(currentPost.text).map((string) => (
@@ -39,10 +39,10 @@ const Post = () => {
         </div>
       );
     }
-    if (currentPost.type.includes("video")) {
+    if (currentPost.type.media === "video") {
       return <Video />;
     }
-    if (currentPost.type === "website" || currentPost.type === "link") {
+    if (currentPost.type.media === "website") {
       return <Website />;
     }
     return <p>{currentPost.type}</p>;

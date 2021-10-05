@@ -4,6 +4,8 @@ import { RedditPostContext } from "../../contexts";
 const Video = () => {
   const { currentPost } = useContext(RedditPostContext);
 
+  console.log(currentPost);
+
   // refs
   const vidRef = useRef();
   const audioRef = useRef();
@@ -31,24 +33,37 @@ const Video = () => {
 
   return (
     <div className="mediacontainer">
-      <video ref={vidRef} className="video">
-        <source src={currentPost.content.videourl} type="video/mp4" />
-        Sorry, your browser doesn't support embedded videos.
-      </video>
-      <audio ref={audioRef} style={{ display: "none" }}>
-        <source src={currentPost.content.audiourl} type="audio/mp4" />
-      </audio>
-      <div id="playpause" onClick={playAndPause}>
-        Play/Pause
-      </div>
-      <div id="volumecontrols">
-        <div id="volumeup" onClick={volumeUp}>
-          Up
-        </div>
-        <div id="volumedown" onClick={volumeDown}>
-          Down
-        </div>
-      </div>
+      {currentPost.type.local ? (
+        <>
+          <video ref={vidRef} className="video">
+            <source
+              src={currentPost.content.videourl}
+              type={`video/${currentPost.content.format}`}
+            />
+            Sorry, your browser doesn't support embedded videos.
+          </video>
+          <audio ref={audioRef} style={{ display: "none" }}>
+            <source src={currentPost.content.audiourl} type="audio/mp4" />
+          </audio>
+          <div id="playpause" onClick={playAndPause}>
+            Play/Pause
+          </div>
+          <div id="volumecontrols">
+            <div id="volumeup" onClick={volumeUp}>
+              Up
+            </div>
+            <div id="volumedown" onClick={volumeDown}>
+              Down
+            </div>
+          </div>
+        </>
+      ) : (
+        // video from outside Reddit, no choice...
+        <div
+          className="hostedvideo"
+          dangerouslySetInnerHTML={{ __html: currentPost.content.html }}
+        />
+      )}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import Button from "./Button";
-import { useState, useCallback, useEffect } from "react";
+import { useState, memo, useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 
 // constants
@@ -90,4 +90,4 @@ const ButtonBox = ({ buttons }) => {
   );
 };
 
-export default ButtonBox;
+export default memo(ButtonBox);

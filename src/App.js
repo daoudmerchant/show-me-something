@@ -28,7 +28,6 @@ function App() {
   // STATE
   const [buttons, setButtons] = useState(null);
   const [settings, setSettings] = useState(null);
-  const [defaults, setDefaults] = useState(null);
   const [fetchingPosts, setFetchingPosts] = useState(false);
   const [welcomed, setWelcomed] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
@@ -37,15 +36,16 @@ function App() {
   const resetAllData = () => {
     // TODO: Update
     setButtons(null);
+    setSettings(null);
     setRedditLists(null);
     setCurrentCategory(null);
   };
 
   // FIREBASE
   const [user, setUser] = useState(undefined);
-  const [userSettings, setUserSettings] = useState(undefined);
 
   const authStateObserver = (user) => {
+    console.log(user);
     user ? setUser(user) : setUser(undefined);
   };
 
@@ -53,29 +53,27 @@ function App() {
 
   // Pass Firebase authStateObserver
   useEffect(() => {
-    if (isInitialized) {
-      initFirebaseAuth(authStateObserver);
-    }
+    if (!isInitialized) return;
+    initFirebaseAuth(authStateObserver);
   }, [isInitialized]);
 
   // Get default buttons from database
   const getDefaults = useCallback(async () => {
-    // if (!!user) return;
-    // resetAllData();
+    if (!!user) return;
+    resetAllData();
     let isSubscribed = true;
     const defaultData = await getData.defaults();
     if (isSubscribed) {
-      setDefaults(defaultData);
       setButtons(defaultData.buttons);
       setSettings(defaultData.settings);
     }
     return () => (isSubscribed = false);
-  }, []);
+  }, [user]);
 
   // Set default buttons on mount
   useEffect(() => {
     getDefaults();
-  }, []);
+  }, [user]);
 
   // get user buttons from database
   const setUserState = useCallback(async () => {
@@ -84,7 +82,7 @@ function App() {
     const userData = await getData.userData(user.uid);
     if (isSubscribed) {
       setButtons(userData.buttons);
-      setUserSettings(userData.settings);
+      setSettings(userData.settings);
     }
     return () => (isSubscribed = false);
   }, [user]);
@@ -169,8 +167,6 @@ function App() {
     ]
   );
 
-  console.log(redditLists);
-
   // CONTEXT VALUES
   const RedditContextValue = {
     getNextPost,
@@ -180,8 +176,6 @@ function App() {
     fetchingPosts,
     finishedList: categoryExists() && listFinished(),
   };
-
-  console.log(RedditContextValue.currentPost);
 
   /*
   
@@ -237,8 +231,8 @@ function App() {
               <Settings
                 resetAllData={resetAllData}
                 uid={user && user.uid}
-                userSettings={userSettings}
-                setUserSettings={setUserSettings}
+                settings={settings}
+                setSettings={setSettings}
               />
             </Route>
           </Switch>

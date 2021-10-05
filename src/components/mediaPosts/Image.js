@@ -7,6 +7,8 @@ const Image = ({ currentImage, currentTitle }) => {
     setIsLoaded(false);
   }, [currentImage]);
 
+  console.log(currentImage);
+
   return (
     <div className="mediacontainer">
       <img

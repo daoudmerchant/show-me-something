@@ -1,9 +1,11 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import { signInWithGoogle } from "../API/firebase/firebase";
 
 import defaultProfilePic from "../images/profile-default.png";
 
 const NavBar = ({ user }) => {
+  user && console.log(user.photoURL);
   return (
     <nav>
       <Link to="/" id="home">
@@ -16,11 +18,7 @@ const NavBar = ({ user }) => {
         <Link to="/settings">
           <div id="userbar">
             <p>{user.displayName}</p>
-            <img
-              id="userpic"
-              src={user.photoURL || defaultProfilePic}
-              alt="user profile pic"
-            />
+            <img id="userpic" src={user.photoURL} alt="user profile pic" />
           </div>
         </Link>
       )}
@@ -28,4 +26,4 @@ const NavBar = ({ user }) => {
   );
 };
 
-export default NavBar;
+export default memo(NavBar);

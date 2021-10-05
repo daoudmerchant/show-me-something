@@ -8,7 +8,7 @@ import {
 
 import { useHistory } from "react-router";
 
-const Settings = ({ resetAllData, uid, userSettings, setUserSettings }) => {
+const Settings = ({ resetAllData, uid, settings, setSettings }) => {
   const history = useHistory();
 
   const [currentSettings, setCurrentSettings] = useState(null);
@@ -16,9 +16,9 @@ const Settings = ({ resetAllData, uid, userSettings, setUserSettings }) => {
 
   // set component settings state from current user settings
   useEffect(() => {
-    if (!userSettings) return;
-    setCurrentSettings(userSettings);
-  }, [userSettings]);
+    if (!settings) return;
+    setCurrentSettings(settings);
+  }, [settings]);
 
   // reset submit success on mount
   useEffect(() => {
@@ -31,9 +31,9 @@ const Settings = ({ resetAllData, uid, userSettings, setUserSettings }) => {
       setSubmitSuccess(false);
       return;
     }
-    setUserSettings(currentSettings);
+    setSettings(currentSettings);
     setSubmitSuccess(true);
-  }, [currentSettings, setUserSettings, uid]);
+  }, [currentSettings, setSettings, uid]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -156,7 +156,7 @@ const Settings = ({ resetAllData, uid, userSettings, setUserSettings }) => {
           <button
             type="submit"
             id="settingssubmit"
-            disabled={currentSettings === userSettings}
+            disabled={currentSettings === settings}
           >
             Submit
           </button>

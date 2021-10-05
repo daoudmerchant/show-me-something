@@ -127,6 +127,10 @@ video,
   transform: translateX(-50%);
 }
 
+.hostedvideo {
+  height: 100%;
+}
+
 #playpause {
   position: absolute;
   right: 10px;
