@@ -1,12 +1,4 @@
-import { useState, useEffect } from "react";
-
-const Image = ({ currentImage, currentTitle }) => {
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    setIsLoaded(false);
-  }, [currentImage]);
-
+const Image = ({ currentImage, currentTitle, reportLoaded }) => {
   console.log(currentImage);
 
   return (
@@ -14,7 +6,6 @@ const Image = ({ currentImage, currentTitle }) => {
       <img
         style={{
           aspectRatio: currentImage.width / currentImage.height,
-          display: isLoaded ? undefined : "none",
         }}
         id="imgpost"
         srcSet={currentImage.images
@@ -22,7 +13,7 @@ const Image = ({ currentImage, currentTitle }) => {
           .join(", ")}
         src={currentImage.fallback}
         alt={currentTitle}
-        onLoad={() => setIsLoaded(true)}
+        onLoad={reportLoaded}
       />
     </div>
   );

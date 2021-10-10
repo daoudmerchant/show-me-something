@@ -1,7 +1,7 @@
 import { useContext, useRef } from "react";
 import { RedditPostContext } from "../../contexts";
 
-const Video = () => {
+const Video = ({ isLoaded, reportLoaded }) => {
   const { currentPost } = useContext(RedditPostContext);
 
   console.log(currentPost);
@@ -35,7 +35,7 @@ const Video = () => {
     <div className="mediacontainer">
       {currentPost.type.local ? (
         <>
-          <video ref={vidRef} className="video">
+          <video ref={vidRef} className="video" onLoad={reportLoaded}>
             <source
               src={currentPost.content.videourl}
               type={`video/${currentPost.content.format}`}

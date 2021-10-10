@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { RedditPostContext } from "../contexts";
 import ReactMarkdown from "react-markdown";
 
@@ -17,6 +17,13 @@ import Comments from "./Comments";
 
 const Post = () => {
   const { currentPost } = useContext(RedditPostContext);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(false);
+  }, [currentPost]);
+
+  const reportLoaded = () => setIsLoaded(true);
 
   const Content = () => {
     if (currentPost.type.media === "image") {
@@ -66,7 +73,13 @@ const Post = () => {
           />
         </a>
       </div>
-      <Content />
+      {
+        // TODO: Add fetching content
+      }
+      <Content
+        reportLoaded={reportLoaded}
+        style={{ display: isLoaded ? undefined : "none" }}
+      />
       <Comments />
     </div>
   );
