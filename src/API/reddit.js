@@ -159,6 +159,10 @@ export const getRedditData = async ({
             return {
               url: child.data.url,
             };
+          case undefined:
+            return {
+              text: child.data.selftext,
+            };
           default:
             alert(`Untreated case ${child.data.post_hint}!`);
             console.log(child.data);

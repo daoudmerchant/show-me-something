@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import { RedditPostContext } from "../contexts";
-// import { Switch, Route } from "react-router-dom"
+
+// components
 import Post from "./Post";
-// import User from "./User";
-// import Welcome from "./Welcome";
+import Snoo from "./Snoo";
 
 const Canvas = ({ welcomed }) => {
   const { fetchingPosts, finishedList, currentPost } =
@@ -12,7 +12,14 @@ const Canvas = ({ welcomed }) => {
     <div id="canvas">
       {(() => {
         if (!welcomed) return <div>Welcome!</div>;
-        if (fetchingPosts) return <div>Fetching posts</div>;
+        if (fetchingPosts)
+          return (
+            <div className="loading posts">
+              <p>Fetching p</p>
+              <Snoo spinning={true} />
+              <p>sts</p>
+            </div>
+          );
         if (!!finishedList) return <div>Finished!</div>;
         if (!currentPost) return <div>Click below to begin</div>;
         return <Post />;

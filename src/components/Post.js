@@ -33,7 +33,7 @@ const Post = () => {
     if (currentPost.type.media === "text") {
       return (
         <div className="textpost">
-          {insertLineBreaks(currentPost.text).map((string) => (
+          {insertLineBreaks(currentPost.content.text).map((string) => (
             <ReactMarkdown linkTarget="_blank">{string}</ReactMarkdown>
           ))}
         </div>
