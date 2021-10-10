@@ -1,10 +1,14 @@
-import { useContext, useRef } from "react";
+import { useContext, useRef, useState, useEffect } from "react";
 import { RedditPostContext } from "../../contexts";
 
-const Video = ({ isLoaded, reportLoaded }) => {
-  const { currentPost } = useContext(RedditPostContext);
+// components
+import Loading from "../Loading";
 
-  console.log(currentPost);
+const Video = () => {
+  const { currentPost } = useContext(RedditPostContext);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => setIsLoaded(false), [currentPost]);
 
   // refs
   const vidRef = useRef();
@@ -33,9 +37,17 @@ const Video = ({ isLoaded, reportLoaded }) => {
 
   return (
     <div className="mediacontainer">
+      {isLoaded || <Loading type="VIDEO" />}
       {currentPost.type.local ? (
         <>
-          <video ref={vidRef} className="video" onLoad={reportLoaded}>
+          <video
+            ref={vidRef}
+            className="video"
+            style={{ display: isLoaded ? undefined : "none" }}
+            onLoadedData={() => {
+              setIsLoaded(true);
+            }}
+          >
             <source
               src={currentPost.content.videourl}
               type={`video/${currentPost.content.format}`}
@@ -62,6 +74,12 @@ const Video = ({ isLoaded, reportLoaded }) => {
         <div
           className="hostedvideo"
           dangerouslySetInnerHTML={{ __html: currentPost.content.html }}
+          style={{ display: isLoaded ? undefined : "none" }}
+          {// TODO: Check onload function!
+          }
+          onLoad={() => {
+            setIsLoaded(true);
+          }}
         />
       )}
     </div>

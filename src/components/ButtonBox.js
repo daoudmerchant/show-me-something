@@ -2,6 +2,9 @@ import Button from "./Button";
 import { useState, memo, useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 
+// components
+import Loading from "./Loading";
+
 // constants
 // TODO: Adjust and increase breakpoints
 const breakpoints = [0, 720, 850, 1000, 1200, 1400];
@@ -86,7 +89,7 @@ const ButtonBox = ({ buttons }) => {
       )}
     </div>
   ) : (
-    <div>Loading...</div>
+    <Loading type="BUTTONS" />
   );
 };
 

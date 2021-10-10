@@ -14,16 +14,10 @@ import Gallery from "./mediaPosts/Gallery";
 import Video from "./mediaPosts/Video";
 import Website from "./mediaPosts/Website";
 import Comments from "./Comments";
+import Loading from "./Loading";
 
 const Post = () => {
   const { currentPost } = useContext(RedditPostContext);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    setIsLoaded(false);
-  }, [currentPost]);
-
-  const reportLoaded = () => setIsLoaded(true);
 
   const Content = () => {
     if (currentPost.type.media === "image") {
@@ -73,13 +67,7 @@ const Post = () => {
           />
         </a>
       </div>
-      {
-        // TODO: Add fetching content
-      }
-      <Content
-        reportLoaded={reportLoaded}
-        style={{ display: isLoaded ? undefined : "none" }}
-      />
+      <Content />
       <Comments />
     </div>
   );

@@ -3,7 +3,7 @@ import { RedditPostContext } from "../contexts";
 
 // components
 import Post from "./Post";
-import Snoo from "./Snoo";
+import Loading from "./Loading";
 
 const Canvas = ({ welcomed }) => {
   const { fetchingPosts, finishedList, currentPost } =
@@ -12,14 +12,7 @@ const Canvas = ({ welcomed }) => {
     <div id="canvas">
       {(() => {
         if (!welcomed) return <div>Welcome!</div>;
-        if (fetchingPosts)
-          return (
-            <div className="loading posts">
-              <p>Fetching p</p>
-              <Snoo spinning={true} />
-              <p>sts</p>
-            </div>
-          );
+        if (fetchingPosts) return <Loading type="POSTS" />;
         if (!!finishedList) return <div>Finished!</div>;
         if (!currentPost) return <div>Click below to begin</div>;
         return <Post />;

@@ -1,11 +1,20 @@
-const Image = ({ currentImage, currentTitle, reportLoaded }) => {
-  console.log(currentImage);
+import { useState, useEffect } from "react";
+
+// components
+import Loading from "../Loading";
+
+const Image = ({ currentImage, currentTitle }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => setIsLoaded(false), [currentImage]);
 
   return (
     <div className="mediacontainer">
+      {isLoaded || <Loading type="IMAGE" />}
       <img
         style={{
           aspectRatio: currentImage.width / currentImage.height,
+          display: isLoaded ? undefined : "none",
         }}
         id="imgpost"
         srcSet={currentImage.images
@@ -13,7 +22,9 @@ const Image = ({ currentImage, currentTitle, reportLoaded }) => {
           .join(", ")}
         src={currentImage.fallback}
         alt={currentTitle}
-        onLoad={reportLoaded}
+        onLoad={() => {
+          setIsLoaded(true);
+        }}
       />
     </div>
   );
