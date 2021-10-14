@@ -1,5 +1,8 @@
-import { useContext, useCallback, useRef, useState, useEffect } from "react";
+import { useContext, useRef, useState, useEffect } from "react";
 import { RedditPostContext } from "../../contexts";
+
+import PlayPause from "./playpause.png";
+import AudioIcon from "./audio-icon.png";
 
 // components
 import Loading from "../Loading";
@@ -78,16 +81,18 @@ const Video = () => {
               />
             </audio>
           )}
-          <div id="playpause" onClick={playAndPause}>
-            Play/Pause
-          </div>
+          <button id="playpause" onClick={playAndPause}>
+            <img src={PlayPause} alt="Play and pause button" />
+          </button>
           <div id="volumecontrols">
-            <div id="volumeup" onClick={audioVolume.up}>
-              Up
-            </div>
-            <div id="volumedown" onClick={audioVolume.down}>
-              Down
-            </div>
+            <button id="volumeup" onClick={audioVolume.up}>
+              <img src={AudioIcon} alt="Audio icon" />
+              <p>+</p>
+            </button>
+            <button id="volumedown" onClick={audioVolume.down}>
+              <img src={AudioIcon} alt="Audio icon" />
+              <p>-</p>
+            </button>
           </div>
         </>
       ) : (
