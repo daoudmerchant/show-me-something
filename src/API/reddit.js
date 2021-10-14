@@ -51,18 +51,30 @@ export const getRedditData = async ({
                 type: "video",
                 local: true,
                 content: {
-                  videourl: child.data.url.slice(0, -4) + "webm",
+                  videourl: child.data.url.slice(0, -4) + "mp4",
                   width: child.data.thumbnail_width,
                   height: child.data.thumbnail_height,
-                  format: "webm",
+                  format: "mp4",
                 },
               };
             }
             alert(`Untreated Imgur content ${child.data.url}`);
             console.log(child.data);
           }
-          alert(`Untreated link ${child.data.url}`);
-          console.log(child.data);
+          if (child.data.url.includes("wikipedia")) {
+            return {
+              type: "wikipedia",
+              content: {
+                url: child.data.url,
+              },
+            };
+          }
+          return {
+            type: "website",
+            content: {
+              url: child.data.url,
+            },
+          };
         }
         if (child.data.post_hint === "hosted:video") {
           const videoUrl = child.data.media.reddit_video.fallback_url.slice(
@@ -120,24 +132,6 @@ export const getRedditData = async ({
             },
           };
         }
-        if (child.data.post_hint === "website") {
-          return {
-            type: "website",
-            content: {
-              url: child.data.url,
-            },
-          };
-        }
-        if (child.data.post_hint === undefined) {
-          if (child.data.url.includes("reddit")) {
-            return {
-              type: "text",
-              content: {
-                text: child.data.selftext,
-              },
-            };
-          }
-        }
         if (!!child.data.gallery_data) {
           // Reddit image gallery
           const galleryKeys = child.data.gallery_data.items.map(
@@ -156,9 +150,29 @@ export const getRedditData = async ({
             },
           };
         }
-        if (child.data.url.includes("reddit")) {
-          // Reddit text post
-          return { type: "text" };
+        if (child.data.post_hint === undefined) {
+          if (child.data.url.includes("reddit")) {
+            return {
+              type: "text",
+              content: {
+                text: child.data.selftext,
+              },
+            };
+          }
+          if (child.data.url.includes("wikipedia")) {
+            return {
+              type: "wikipedia",
+              content: {
+                url: child.data.url,
+              },
+            };
+          }
+          return {
+            type: "website",
+            content: {
+              url: child.data.url,
+            },
+          };
         }
         alert(`Untreated case ${child.data.post_hint}!`);
         console.log(child.data);

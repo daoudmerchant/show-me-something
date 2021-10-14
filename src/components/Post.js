@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useContext } from "react";
 import { RedditPostContext } from "../contexts";
 import ReactMarkdown from "react-markdown";
 
@@ -12,7 +12,7 @@ import { insertLineBreaks } from "../utils";
 import Image from "./mediaPosts/Image";
 import Gallery from "./mediaPosts/Gallery";
 import Video from "./mediaPosts/Video";
-import Website from "./mediaPosts/Website";
+import Wikipedia from "./mediaPosts/Wikipedia";
 import Comments from "./Comments";
 
 const Post = () => {
@@ -42,8 +42,11 @@ const Post = () => {
     if (currentPost.media.type === "video") {
       return <Video />;
     }
+    if (currentPost.media.type === "wikipedia") {
+      return <Wikipedia />;
+    }
     if (currentPost.media.type === "website") {
-      return <Website />;
+      return <p>TODO: External link to website</p>;
     }
     return <p>{currentPost.type}</p>;
   };
