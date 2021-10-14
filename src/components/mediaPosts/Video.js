@@ -7,8 +7,11 @@ import Loading from "../Loading";
 const Video = () => {
   const { currentPost } = useContext(RedditPostContext);
   const [isLoaded, setIsLoaded] = useState(false);
+  console.log(currentPost);
 
-  useEffect(() => setIsLoaded(false), [currentPost]);
+  useEffect(() => {
+    setIsLoaded(false);
+  }, [currentPost]);
 
   // refs
   const vidRef = useRef();
@@ -38,24 +41,25 @@ const Video = () => {
   return (
     <div className="mediacontainer">
       {isLoaded || <Loading type="VIDEO" />}
-      {currentPost.type.local ? (
+      {!!currentPost.media.local ? (
         <>
           <video
             ref={vidRef}
             className="video"
             style={{ display: isLoaded ? undefined : "none" }}
             onLoadedData={() => {
+              alert("Loaded!");
               setIsLoaded(true);
             }}
           >
             <source
-              src={currentPost.content.videourl}
-              type={`video/${currentPost.content.format}`}
+              src={currentPost.media.content.videourl}
+              type={`video/${currentPost.media.content.format}`}
             />
             Sorry, your browser doesn't support embedded videos.
           </video>
           <audio ref={audioRef} style={{ display: "none" }}>
-            <source src={currentPost.content.audiourl} type="audio/mp4" />
+            <source src={currentPost.media.content.audiourl} type="audio/mp4" />
           </audio>
           <div id="playpause" onClick={playAndPause}>
             Play/Pause
@@ -73,10 +77,9 @@ const Video = () => {
         // video from outside Reddit, no choice...
         <div
           className="hostedvideo"
-          dangerouslySetInnerHTML={{ __html: currentPost.content.html }}
+          dangerouslySetInnerHTML={{ __html: currentPost.media.content.html }}
           style={{ display: isLoaded ? undefined : "none" }}
-          {// TODO: Check onload function!
-          }
+          // TODO: Check onload function!
           onLoad={() => {
             setIsLoaded(true);
           }}

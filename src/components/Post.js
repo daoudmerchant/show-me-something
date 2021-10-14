@@ -14,36 +14,35 @@ import Gallery from "./mediaPosts/Gallery";
 import Video from "./mediaPosts/Video";
 import Website from "./mediaPosts/Website";
 import Comments from "./Comments";
-import Loading from "./Loading";
 
 const Post = () => {
   const { currentPost } = useContext(RedditPostContext);
 
   const Content = () => {
-    if (currentPost.type.media === "image") {
+    if (currentPost.media.type === "image") {
       return (
         <Image
-          currentImage={currentPost.content}
+          currentImage={currentPost.media.content}
           currentTitle={currentPost.title}
         />
       );
     }
-    if (currentPost.type.media === "gallery") {
+    if (currentPost.media.type === "gallery") {
       return <Gallery />;
     }
-    if (currentPost.type.media === "text") {
+    if (currentPost.media.type === "text") {
       return (
         <div className="textpost">
-          {insertLineBreaks(currentPost.content.text).map((string) => (
+          {insertLineBreaks(currentPost.media.content.text).map((string) => (
             <ReactMarkdown linkTarget="_blank">{string}</ReactMarkdown>
           ))}
         </div>
       );
     }
-    if (currentPost.type.media === "video") {
+    if (currentPost.media.type === "video") {
       return <Video />;
     }
-    if (currentPost.type.media === "website") {
+    if (currentPost.media.type === "website") {
       return <Website />;
     }
     return <p>{currentPost.type}</p>;

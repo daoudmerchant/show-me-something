@@ -1,4 +1,5 @@
-import { useState, useCallback, useEffect, useContext, useRef } from "react";
+import { useState, useCallback, useEffect, useContext } from "react";
+import { useMediaQuery } from "react-responsive";
 
 // context
 import { RedditPostContext } from "../contexts";
@@ -10,13 +11,15 @@ const Comments = () => {
   // state
   const [clicked, setClicked] = useState(false);
   const [comments, setComments] = useState(null);
-  console.log(comments);
 
   // context
   const { currentPost } = useContext(RedditPostContext);
 
   // functions
   const toggleClicked = () => setClicked((prevClicked) => !prevClicked);
+
+  // media query
+  const isTouchscreen = useMediaQuery({ query: "(hover: none)" });
 
   const getComments = useCallback(async () => {
     console.log(currentPost.url);
@@ -44,7 +47,7 @@ const Comments = () => {
         overflowY: clicked ? "scroll" : "hidden",
       }}
     >
-      <div id="commentheader">{`Tap to ${
+      <div id="commentheader">{`${isTouchscreen ? "Tap" : "Click"} to ${
         clicked ? "close" : "expand"
       } comments`}</div>
       <div id="commentcontainer">
