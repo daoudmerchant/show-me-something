@@ -52,7 +52,18 @@ const Comments = () => {
       } comments`}</div>
       <div id="commentcontainer">
         {comments ? (
-          comments.map((comment) => <p>{comment.content}</p>)
+          comments.map((comment) => {
+            if (!comment.content || !comment.author) {
+              return;
+            }
+            return (
+              <div className="commentbox">
+                <p>{`"${comment.content}"`}</p>
+                <hr />
+                <p>{`- ${comment.author}`}</p>
+              </div>
+            );
+          })
         ) : (
           <p>Loading comments...</p>
         )}

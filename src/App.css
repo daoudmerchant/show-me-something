@@ -198,6 +198,7 @@ iframe {
   bottom: 0;
   width: 100%;
   transition: height ease-in-out 0.4s;
+  z-index: 10;
 }
 
 #commentheader {
@@ -209,6 +210,23 @@ iframe {
   position: sticky;
   top: 0;
   width: 100%;
+}
+
+.commentbox > *:first-child {
+  text-align: start;
+  font-size: larger;
+}
+
+.commentbox > *:last-child {
+  text-align: end;
+}
+
+.commentbox > * {
+  margin: 0.2em 0;
+}
+
+.commentbox {
+  margin: 2em;
 }
 
 /* button styles */
