@@ -12,10 +12,8 @@ const ButtonSettings = ({ buttons }) => {
   const toggleButtonEdit = (i) => {
     if (buttonsBeingEdited[i]) {
       setCurrentButtons((prevButtons) => {
-        console.log(prevButtons);
-        console.log(buttons);
         const newButtons = [...prevButtons];
-        newButtons[i] = buttons[i];
+        newButtons[i] = { ...buttons[i] };
         return newButtons;
       });
     }
@@ -29,7 +27,8 @@ const ButtonSettings = ({ buttons }) => {
   // Set state on render
   useEffect(() => {
     if (!buttons) return;
-    setCurrentButtons(buttons);
+    const clonedButtons = buttons.map((button) => ({ ...button }));
+    setCurrentButtons(clonedButtons);
     let noButtonsEdited = new Array(buttons.length).fill(false);
     setButtonsBeingEdited(noButtonsEdited);
   }, [buttons]);
@@ -54,11 +53,11 @@ const ButtonSettings = ({ buttons }) => {
           <>
             <Button
               button={currentButton}
-              key={`button${currentButton.id}`}
+              key={`button${currentButton.id}${i}`}
               handleClick={toggleThisButtonEdit}
             />
             <ButtonEditor
-              key={`editor${currentButton.id}`}
+              key={`editor${currentButton.id}${i}`}
               currentButton={currentButton}
               setCurrentButton={setCurrentButton}
               index={i}
