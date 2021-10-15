@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
 // APIs
 import { getRedditData } from "./API/reddit";
 import {
@@ -17,6 +18,7 @@ import About from "./components/About";
 import Canvas from "./components/Canvas";
 import Settings from "./components/Settings";
 import ButtonBox from "./components/ButtonBox";
+import ButtonSettings from "./components/ButtonSettings";
 
 // contexts
 import { RedditPostContext } from "./contexts";
@@ -107,6 +109,7 @@ function App() {
         : false,
     [currentCategory, redditLists]
   );
+
   const getNextPost = useCallback(
     async ({ subreddits, category }) => {
       const refreshRedditList = async (subreddits, category) => {
@@ -177,43 +180,6 @@ function App() {
     finishedList: categoryExists() && listFinished(),
   };
 
-  /*
-  
-  REDDIT TEST
-
-  const [response, setResponse] = useState(null);
-  const [comments, setComments] = useState(null);
-  const getResponse = useCallback(async () => {
-    const redditResponse = await getRedditData();
-    console.log(redditResponse);
-    setResponse(redditResponse);
-  }, []);
-  const getComments = useCallback(async (url: string) => {
-    let isSubscribed = true;
-    const comments = await getCommentData(url);
-    console.log(comments);
-    // @ts-ignore
-    if (isSubscribed) setComments(comments);
-    return () => (isSubscribed = false);
-  }, []);
-  useEffect(() => {
-    getResponse();
-  }, [getResponse]);
-
-  // TEST
-  // set comments
-  useEffect(() => {
-    if (!!response && !comments) {
-      // @ts-ignore
-      const item = response[0].url;
-      console.log(item);
-      getComments(item);
-    }
-  }, [comments, getComments, response]);
-  //
-
-  */
-
   return (
     <main className="App">
       <RedditPostContext.Provider value={RedditContextValue}>
@@ -221,19 +187,24 @@ function App() {
           <NavBar user={user} />
           <Switch>
             <Route exact path="/">
-              <Canvas welcomed={welcomed} />
-              <ButtonBox buttons={buttons} />
+              <div id="appcontainer">
+                <Canvas welcomed={welcomed} />
+                <ButtonBox buttons={buttons} />
+              </div>
             </Route>
             <Route path="/about">
               <About />
             </Route>
             <Route path="/settings">
-              <Settings
-                resetAllData={resetAllData}
-                uid={user && user.uid}
-                settings={settings}
-                setSettings={setSettings}
-              />
+              <div id="settingscontainer">
+                <Settings
+                  resetAllData={resetAllData}
+                  uid={user && user.uid}
+                  settings={settings}
+                  setSettings={setSettings}
+                />
+                <ButtonSettings buttons={buttons} />
+              </div>
             </Route>
           </Switch>
         </Router>

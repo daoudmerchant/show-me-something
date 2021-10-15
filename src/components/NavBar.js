@@ -1,10 +1,11 @@
 import { memo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { signInWithGoogle } from "../API/firebase/firebase";
 
 import defaultProfilePic from "../images/profile-default.png";
 
 const NavBar = ({ user }) => {
+  const { pathname } = useLocation();
   user && console.log(user.photoURL);
   return (
     <nav>
@@ -15,7 +16,12 @@ const NavBar = ({ user }) => {
       {!user ? (
         <p onClick={signInWithGoogle}>Login</p>
       ) : (
-        <Link to="/settings">
+        <Link
+          to={{
+            pathname: "/settings",
+            state: { from: pathname },
+          }}
+        >
           <div id="userbar">
             <p>{user.displayName}</p>
             <img id="userpic" src={user.photoURL} alt="user profile pic" />

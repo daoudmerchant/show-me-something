@@ -1,9 +1,10 @@
-import Button from "./Button";
-import { useState, memo, useEffect } from "react";
+import { useState, memo, useEffect, useContext } from "react";
 import { useMediaQuery } from "react-responsive";
+import { RedditPostContext } from "../contexts";
 
 // components
 import Loading from "./Loading";
+import Button from "./Button";
 
 // constants
 // TODO: Adjust and increase breakpoints
@@ -12,6 +13,8 @@ const breakpoints = [0, 720, 850, 1000, 1200, 1400];
 const ButtonBox = ({ buttons }) => {
   const [firstButtonIndex, setFirstButtonIndex] = useState(0);
   const [currentButtons, setCurrentButtons] = useState(null);
+
+  const { getNextPost, finishedList } = useContext(RedditPostContext);
 
   const handleButtonRight = () => {
     setFirstButtonIndex(
@@ -80,7 +83,17 @@ const ButtonBox = ({ buttons }) => {
         </div>
       )}
       {currentButtons?.map((button) => (
-        <Button key={button.id} button={button} />
+        <Button
+          key={button.id}
+          button={button}
+          isDisabled={finishedList && finishedList === button.text}
+          handleClick={() => {
+            getNextPost({
+              subreddits: button.subreddits,
+              category: button.text,
+            });
+          }}
+        />
       ))}
       {needsNavigation && (
         <div className="buttonnav right" onClick={handleButtonRight}>
