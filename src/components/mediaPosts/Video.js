@@ -10,12 +10,10 @@ import Loading from "../Loading";
 const Video = () => {
   const { currentPost } = useContext(RedditPostContext);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [volume, setVolume] = useState(1);
   console.log(currentPost);
 
   useEffect(() => {
     setIsLoaded(false);
-    setVolume(1);
   }, [currentPost]);
 
   // refs

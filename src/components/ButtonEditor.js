@@ -1,4 +1,10 @@
-const ButtonEditor = ({ currentButton, setCurrentButton, index, visible }) => {
+const ButtonEditor = ({
+  currentButton,
+  setCurrentButton,
+  index,
+  visible,
+  cancel,
+}) => {
   return (
     <form style={{ display: visible ? undefined : "none" }}>
       <div>
@@ -14,7 +20,9 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, visible }) => {
           }}
         />
       </div>
-      <button>Cancel</button>
+      <button type="button" onClick={cancel}>
+        Cancel
+      </button>
       <button type="submit">Confirm</button>
     </form>
   );

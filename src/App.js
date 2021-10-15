@@ -179,6 +179,7 @@ function App() {
     fetchingPosts,
     finishedList: categoryExists() && listFinished(),
   };
+  console.log(buttons);
 
   return (
     <main className="App">

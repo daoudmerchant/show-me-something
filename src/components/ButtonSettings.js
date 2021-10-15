@@ -8,14 +8,25 @@ const ButtonSettings = ({ buttons }) => {
   const [currentButtons, setCurrentButtons] = useState(null);
   const [buttonsBeingEdited, setButtonsBeingEdited] = useState(null);
 
-  const resetButton = (i) => {
-    setCurrentButtons((prevButtons) => {
-      const newButtons = [...prevButtons];
-      newButtons[i] = buttons[i];
-      return newButtons;
+  // Show / hide button editor (reset buttons on hide)
+  const toggleButtonEdit = (i) => {
+    if (buttonsBeingEdited[i]) {
+      setCurrentButtons((prevButtons) => {
+        console.log(prevButtons);
+        console.log(buttons);
+        const newButtons = [...prevButtons];
+        newButtons[i] = buttons[i];
+        return newButtons;
+      });
+    }
+    setButtonsBeingEdited((prevButtonsBeingEdited) => {
+      const newButtonsBeingEdited = [...prevButtonsBeingEdited];
+      newButtonsBeingEdited[i] = !prevButtonsBeingEdited[i];
+      return newButtonsBeingEdited;
     });
   };
 
+  // Set state on render
   useEffect(() => {
     if (!buttons) return;
     setCurrentButtons(buttons);
@@ -23,6 +34,7 @@ const ButtonSettings = ({ buttons }) => {
     setButtonsBeingEdited(noButtonsEdited);
   }, [buttons]);
 
+  // update current buttons on edit
   const setCurrentButton = (i, param, value) => {
     setCurrentButtons((prevButtons) => {
       const newButtons = [...prevButtons];
@@ -30,31 +42,28 @@ const ButtonSettings = ({ buttons }) => {
       return newButtons;
     });
   };
+
   if (!currentButtons) return <p>Loading your buttons...</p>;
 
   return (
     <fieldset id="userbuttonsettings">
       <legend>Button settings</legend>
       {currentButtons.map((currentButton, i) => {
+        const toggleThisButtonEdit = () => toggleButtonEdit(i);
         return (
           <>
             <Button
               button={currentButton}
-              key={currentButton.id}
-              handleClick={() => {
-                setButtonsBeingEdited((prevButtonsBeingEdited) => {
-                  const newButtonsBeingEdited = [...prevButtonsBeingEdited];
-                  newButtonsBeingEdited[i] = !prevButtonsBeingEdited[i];
-                  return newButtonsBeingEdited;
-                });
-              }}
+              key={`button${currentButton.id}`}
+              handleClick={toggleThisButtonEdit}
             />
             <ButtonEditor
+              key={`editor${currentButton.id}`}
               currentButton={currentButton}
               setCurrentButton={setCurrentButton}
-              resetButton={resetButton}
               index={i}
-              visible={buttonsBeingEdited[i]}
+              visible={buttonsBeingEdited && buttonsBeingEdited[i]}
+              cancel={toggleThisButtonEdit}
             />
           </>
         );
