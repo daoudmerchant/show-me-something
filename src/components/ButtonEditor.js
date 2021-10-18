@@ -6,14 +6,26 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
   const [checkingSubreddit, setCheckingSubreddit] = useState(false);
   const [subredditValidity, setSubredditValidity] = useState([]);
   const [edited, setEdited] = useState(false);
+  const [newSubredditAdded, setNewSubredditAdded] = useState(false);
+
+  const lastSubredditRef = useRef();
 
   const isValidButton =
     edited &&
     (!subredditValidity.length ||
       subredditValidity.every((subreddit) => subreddit.exists));
 
-  console.log(isValidButton);
+  // console.log(isValidButton);
 
+  // Focus on last subreddit a new box was just made
+  useEffect(() => {
+    if (!newSubredditAdded || !lastSubredditRef.current) return;
+    lastSubredditRef.current.focus();
+    // reset state only after mount and focus
+    setTimeout(() => setNewSubredditAdded(false), 0);
+  }, [newSubredditAdded, setNewSubredditAdded]);
+
+  // Check if subreddit exists on edit
   useEffect(() => {
     if (
       checkingSubreddit === false ||
@@ -22,7 +34,7 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
       return;
     let isSubscribed = true;
     setSubredditValidity((prevValidity) => {
-      const newValidity = [...prevValidity];
+      let newValidity = [...prevValidity];
       delete newValidity[checkingSubreddit];
       return newValidity;
     });
@@ -39,7 +51,7 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
         );
         if (isSubscribed) {
           setSubredditValidity((prevValidity) => {
-            const newValidity = [...prevValidity];
+            let newValidity = [...prevValidity];
             newValidity[checkingSubreddit] = {
               resolved: true,
               ...subredditIsValid,
@@ -88,7 +100,7 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
         <div className="subredditlist">
           {currentButton.subreddits.map((subreddit, j) => {
             return (
-              <>
+              <div>
                 <input
                   type="text"
                   value={subreddit}
@@ -96,7 +108,14 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
                     setCurrentButton(index, e.target.value, "subreddits", j);
                     setCheckingSubreddit(j);
                   }}
+                  placeholder="Add a subreddit..."
                   required
+                  ref={
+                    newSubredditAdded &&
+                    j === currentButton.subreddits.length - 1
+                      ? lastSubredditRef
+                      : undefined
+                  }
                 />
                 {subredditValidity[j] && (
                   <div className="subreddit-validity">
@@ -115,22 +134,27 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
                     )}
                   </div>
                 )}
-              </>
+              </div>
             );
           })}
           {currentButton.subreddits.length < 3 && (
-            <input
-              type="text"
-              onChange={(e) => {
-                setCurrentButton(
-                  index,
-                  e.target.value,
-                  "subreddits",
-                  currentButton.subreddits.length
-                );
-                setCheckingSubreddit(currentButton.subreddits.length);
-              }}
-            />
+            <div>
+              <input
+                type="text"
+                onChange={(e) => {
+                  setCurrentButton(
+                    index,
+                    e.target.value,
+                    "subreddits",
+                    currentButton.subreddits.length
+                  );
+                  setCheckingSubreddit(currentButton.subreddits.length);
+                  setNewSubredditAdded(true);
+                }}
+                value=""
+                placeholder="Add a subreddit..."
+              />
+            </div>
           )}
         </div>
       </div>
