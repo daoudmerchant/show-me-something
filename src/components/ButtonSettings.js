@@ -27,7 +27,10 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   // Set state on render
   useEffect(() => {
     if (!buttons) return;
-    const clonedButtons = buttons.map((button) => ({ ...button }));
+    const clonedButtons = buttons.map((button) => ({
+      ...button,
+      style: { ...button.style },
+    }));
     setCurrentButtons(clonedButtons);
     const noButtonsEdited = new Array(buttons.length).fill(false);
     setButtonsBeingEdited(noButtonsEdited);

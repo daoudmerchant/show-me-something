@@ -129,6 +129,7 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
                     {subredditValidity[j].exists && (
                       <>
                         <p>{subredditValidity[j].subreddit}</p>
+                        {/* TODO: Hide subtitle if identical to subreddit? */}
                         <p>{subredditValidity[j].subtitle}</p>
                       </>
                     )}

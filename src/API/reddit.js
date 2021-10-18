@@ -12,7 +12,6 @@ export const getRedditData = async ({
     ).json();
     // TODO: Improve error handling on Reddit down
     if (data.error === 404) {
-      alert(`Couldn't retrieve subreddit ${subreddit}`);
       return [];
     }
     //
