@@ -47,7 +47,6 @@ function App() {
   const [user, setUser] = useState(undefined);
 
   const authStateObserver = (user) => {
-    console.log(user);
     user ? setUser(user) : setUser(undefined);
   };
 
@@ -179,8 +178,6 @@ function App() {
     fetchingPosts,
     finishedList: categoryExists() && listFinished(),
   };
-  console.log(buttons);
-
   return (
     <main className="App">
       <Router>

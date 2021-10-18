@@ -1,36 +1,25 @@
-import { useCallback, useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { checkSubredditExists } from "../API/reddit";
 import { updateData } from "../API/firebase/firebase";
 
 const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
-  /*
-    ADDING / MODIFYING SUBREDDITS
-
-    Assuming my form validation is correct, subreddits for current
-    buttons are all VALID
-
-    - On each modified character, it checks it restarts the timer (0.8s-ish)
-    - When the timer finishes, the API is queried
-    - During this time, the user has feedback that Reddit is being consulted
-    - The API returns either
-    {
-      exists: false
-    }
-    or 
-    {
-      exists: true,
-      name,
-      description
-    }
-    
-    The subreddits are 
-
-  */
   const [checkingSubreddit, setCheckingSubreddit] = useState(false);
   const [subredditValidity, setSubredditValidity] = useState([]);
+  const [edited, setEdited] = useState(false);
+
+  const isValidButton =
+    edited &&
+    (!subredditValidity.length ||
+      subredditValidity.every((subreddit) => subreddit.exists));
+
+  console.log(isValidButton);
 
   useEffect(() => {
-    if (checkingSubreddit === false) return;
+    if (
+      checkingSubreddit === false ||
+      currentButton.subreddits[checkingSubreddit] === ""
+    )
+      return;
     let isSubscribed = true;
     setSubredditValidity((prevValidity) => {
       const newValidity = [...prevValidity];
@@ -39,9 +28,6 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
     });
     // small delay to prevent API calls on every character edit!
     const timeout = setTimeout(async () => {
-      console.log(
-        `checking for ${currentButton.subreddits[checkingSubreddit]}`
-      );
       setSubredditValidity((prevValidity) => {
         const newValidity = [...prevValidity];
         newValidity[checkingSubreddit] = { resolved: false };
@@ -62,6 +48,7 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
           });
         }
       } catch (error) {
+        alert(error);
         // TODO: Handle error on Reddit down etc.
       }
     }, 800);
@@ -71,6 +58,13 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
       isSubscribed = false;
     };
   }, [checkingSubreddit, currentButton.subreddits[checkingSubreddit]]);
+
+  /*
+    I thought about catching the user inputting the same values as before
+    and disabling the submit button, but if (for example) they're editing
+    a subreddit because it stopped working, it should check its existence
+    again before allowing a commit
+  */
 
   return (
     <form>
@@ -84,6 +78,8 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
             const value = e.target.value;
             const textValue = value.length === 1 ? value.toUpperCase() : value;
             setCurrentButton(index, textValue, "text");
+            if (edited) return;
+            setEdited(true);
           }}
         />
       </div>
@@ -100,6 +96,7 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
                     setCurrentButton(index, e.target.value, "subreddits", j);
                     setCheckingSubreddit(j);
                   }}
+                  required
                 />
                 {subredditValidity[j] && (
                   <div className="subreddit-validity">
@@ -121,6 +118,20 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
               </>
             );
           })}
+          {currentButton.subreddits.length < 3 && (
+            <input
+              type="text"
+              onChange={(e) => {
+                setCurrentButton(
+                  index,
+                  e.target.value,
+                  "subreddits",
+                  currentButton.subreddits.length
+                );
+                setCheckingSubreddit(currentButton.subreddits.length);
+              }}
+            />
+          )}
         </div>
       </div>
       <div>
@@ -130,6 +141,8 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
           value={currentButton.style.color}
           onInput={(e) => {
             setCurrentButton(index, e.target.value, "style", "color");
+            if (edited) return;
+            setEdited(true);
           }}
         />
       </div>
@@ -140,13 +153,17 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
           value={currentButton.style.backgroundColor}
           onInput={(e) => {
             setCurrentButton(index, e.target.value, "style", "backgroundColor");
+            if (edited) return;
+            setEdited(true);
           }}
         />
       </div>
       <button type="button" onClick={cancel}>
         Cancel
       </button>
-      <button type="submit">Confirm</button>
+      <button type="submit" disabled={!isValidButton}>
+        Confirm
+      </button>
     </form>
   );
 };
