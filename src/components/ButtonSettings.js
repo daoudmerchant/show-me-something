@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Button from "./Button";
 import ButtonEditor from "./ButtonEditor";
 
-const ButtonSettings = ({ buttons }) => {
+const ButtonSettings = ({ uid, buttons, setButtons }) => {
   const [currentButtons, setCurrentButtons] = useState(null);
   const [buttonsBeingEdited, setButtonsBeingEdited] = useState(null);
 
@@ -29,15 +29,22 @@ const ButtonSettings = ({ buttons }) => {
     if (!buttons) return;
     const clonedButtons = buttons.map((button) => ({ ...button }));
     setCurrentButtons(clonedButtons);
-    let noButtonsEdited = new Array(buttons.length).fill(false);
+    const noButtonsEdited = new Array(buttons.length).fill(false);
     setButtonsBeingEdited(noButtonsEdited);
   }, [buttons]);
 
   // update current buttons on edit
-  const setCurrentButton = (i, param, value) => {
+  const setCurrentButton = (i, value, param, subparam) => {
     setCurrentButtons((prevButtons) => {
       const newButtons = [...prevButtons];
-      newButtons[i][param] = value;
+      if (!!subparam) {
+        newButtons[i][param] = {
+          ...newButtons[i][param],
+          [subparam]: value,
+        };
+      } else {
+        newButtons[i][param] = value;
+      }
       return newButtons;
     });
   };

@@ -204,3 +204,14 @@ export const getCommentData = async (url) => {
     console.log(error);
   }
 };
+
+export const checkSubredditExists = async (subreddit) => {
+  try {
+    const data = await (
+      await fetch(`https://www.reddit.com/r/${subreddit}.json`)
+    ).json();
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+};

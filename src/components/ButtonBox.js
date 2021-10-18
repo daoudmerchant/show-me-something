@@ -36,9 +36,10 @@ const ButtonBox = ({ buttons }) => {
     );
   }
   const currentBreakpoint = breakpointQueries.indexOf(false);
-  // TODO: Fix repeating buttons on fewer than breakpoints
-  const buttonCount =
+  const maxButtonCount =
     currentBreakpoint === -1 ? breakpoints.length : currentBreakpoint;
+
+  const buttonCount = buttons && Math.min(maxButtonCount, buttons.length);
 
   /*
     TODO: Replace with %-based solution, e.g.
@@ -82,9 +83,9 @@ const ButtonBox = ({ buttons }) => {
           ◄
         </div>
       )}
-      {currentButtons?.map((button) => (
+      {currentButtons?.map((button, i) => (
         <Button
-          key={button.id}
+          key={`button${button.id}${i}`}
           button={button}
           isDisabled={finishedList && finishedList === button.text}
           handleClick={() => {
