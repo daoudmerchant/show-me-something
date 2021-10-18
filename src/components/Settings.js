@@ -29,6 +29,10 @@ const Settings = ({
     );
   }
 
+  if (!settings || !buttons) return <p>Loading your settings...</p>;
+
+  console.log(buttons);
+
   return (
     <div id="settingscontainer">
       <div className="signout">

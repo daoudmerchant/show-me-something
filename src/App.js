@@ -183,9 +183,9 @@ function App() {
 
   return (
     <main className="App">
-      <RedditPostContext.Provider value={RedditContextValue}>
-        <Router>
-          <NavBar user={user} />
+      <Router>
+        <NavBar user={user} />
+        <RedditPostContext.Provider value={RedditContextValue}>
           <Switch>
             <Route exact path="/">
               <div id="appcontainer">
@@ -197,19 +197,18 @@ function App() {
               <About />
             </Route>
             <Route path="/settings">
-              <div id="settingscontainer">
-                <Settings
-                  resetAllData={resetAllData}
-                  uid={user && user.uid}
-                  settings={settings}
-                  setSettings={setSettings}
-                />
-                <ButtonSettings buttons={buttons} />
-              </div>
+              <Settings
+                resetAllData={resetAllData}
+                uid={user && user.uid}
+                settings={settings}
+                setSettings={setSettings}
+                buttons={buttons}
+                setButtons={setButtons}
+              />
             </Route>
           </Switch>
-        </Router>
-      </RedditPostContext.Provider>
+        </RedditPostContext.Provider>
+      </Router>
     </main>
   );
 }

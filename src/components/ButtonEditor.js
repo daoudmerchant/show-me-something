@@ -1,17 +1,8 @@
-const ButtonEditor = ({
-  currentButton = {
-    text: "",
-    style: {
-      color: "#000000",
-      backgroundColor: "#FFFFFF",
-    },
-    subreddits: [],
-  },
-  setCurrentButton,
-  index,
-  visible,
-  cancel,
-}) => {
+import { useCallback, useState, useEffect } from "react";
+import { checkSubredditExists } from "../API/reddit";
+import { updateData } from "../API/firebase/firebase";
+
+const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
   /*
     ADDING / MODIFYING SUBREDDITS
 
@@ -35,8 +26,54 @@ const ButtonEditor = ({
     The subreddits are 
 
   */
+  const [checkingSubreddit, setCheckingSubreddit] = useState(false);
+  const [subredditValidity, setSubredditValidity] = useState([]);
+
+  useEffect(() => {
+    if (checkingSubreddit === false) return;
+    let isSubscribed = true;
+    setSubredditValidity((prevValidity) => {
+      const newValidity = [...prevValidity];
+      delete newValidity[checkingSubreddit];
+      return newValidity;
+    });
+    // small delay to prevent API calls on every character edit!
+    const timeout = setTimeout(async () => {
+      console.log(
+        `checking for ${currentButton.subreddits[checkingSubreddit]}`
+      );
+      setSubredditValidity((prevValidity) => {
+        const newValidity = [...prevValidity];
+        newValidity[checkingSubreddit] = { resolved: false };
+        return newValidity;
+      });
+      try {
+        const subredditIsValid = await checkSubredditExists(
+          currentButton.subreddits[checkingSubreddit]
+        );
+        if (isSubscribed) {
+          setSubredditValidity((prevValidity) => {
+            const newValidity = [...prevValidity];
+            newValidity[checkingSubreddit] = {
+              resolved: true,
+              ...subredditIsValid,
+            };
+            return newValidity;
+          });
+        }
+      } catch (error) {
+        // TODO: Handle error on Reddit down etc.
+      }
+    }, 800);
+
+    return () => {
+      clearTimeout(timeout);
+      isSubscribed = false;
+    };
+  }, [checkingSubreddit, currentButton.subreddits[checkingSubreddit]]);
+
   return (
-    <form style={{ display: visible ? undefined : "none" }}>
+    <form>
       <div>
         <label>Name:</label>
         <input
@@ -53,16 +90,37 @@ const ButtonEditor = ({
       <div>
         <label>Subreddits:</label>
         <div className="subredditlist">
-          {currentButton.subreddits.map((subreddit) => (
-            <>
-              <input type="text" value={subreddit} />
-              <div className="subreddit-validity">
-                <p>Icon</p>
-                <p>Subreddit name</p>
-                <p>Subreddit description</p>
-              </div>
-            </>
-          ))}
+          {currentButton.subreddits.map((subreddit, j) => {
+            return (
+              <>
+                <input
+                  type="text"
+                  value={subreddit}
+                  onChange={(e) => {
+                    setCurrentButton(index, e.target.value, "subreddits", j);
+                    setCheckingSubreddit(j);
+                  }}
+                />
+                {subredditValidity[j] && (
+                  <div className="subreddit-validity">
+                    <p>
+                      {!subredditValidity[j].resolved
+                        ? "checking"
+                        : subredditValidity[j].exists
+                        ? "exists"
+                        : "doesn't exist"}
+                    </p>
+                    {subredditValidity[j].exists && (
+                      <>
+                        <p>{subredditValidity[j].subreddit}</p>
+                        <p>{subredditValidity[j].subtitle}</p>
+                      </>
+                    )}
+                  </div>
+                )}
+              </>
+            );
+          })}
         </div>
       </div>
       <div>

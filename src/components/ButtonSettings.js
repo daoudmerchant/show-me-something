@@ -35,13 +35,11 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
 
   // update current buttons on edit
   const setCurrentButton = (i, value, param, subparam) => {
+    console.log(subparam);
     setCurrentButtons((prevButtons) => {
       const newButtons = [...prevButtons];
-      if (!!subparam) {
-        newButtons[i][param] = {
-          ...newButtons[i][param],
-          [subparam]: value,
-        };
+      if (subparam !== undefined) {
+        newButtons[i][param][subparam] = value;
       } else {
         newButtons[i][param] = value;
       }
@@ -63,14 +61,15 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
               key={`button${currentButton.id}${i}`}
               handleClick={toggleThisButtonEdit}
             />
-            <ButtonEditor
-              key={`editor${currentButton.id}${i}`}
-              currentButton={currentButton}
-              setCurrentButton={setCurrentButton}
-              index={i}
-              visible={buttonsBeingEdited && buttonsBeingEdited[i]}
-              cancel={toggleThisButtonEdit}
-            />
+            {buttonsBeingEdited && buttonsBeingEdited[i] && (
+              <ButtonEditor
+                key={`editor${currentButton.id}${i}`}
+                currentButton={currentButton}
+                setCurrentButton={setCurrentButton}
+                index={i}
+                cancel={toggleThisButtonEdit}
+              />
+            )}
           </>
         );
       })}
