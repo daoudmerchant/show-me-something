@@ -4,6 +4,16 @@ import { useState, useEffect } from "react";
 import Button from "./Button";
 import ButtonEditor from "./ButtonEditor";
 
+const DEFAULT_BUTTON = {
+  text: "Add New Button...",
+  style: {
+    color: "#000000",
+    backgroundColor: "#FFFFFF",
+    font: "",
+  },
+  subreddits: [],
+};
+
 const ButtonSettings = ({ uid, buttons, setButtons }) => {
   const [currentButtons, setCurrentButtons] = useState(null);
   const [buttonsBeingEdited, setButtonsBeingEdited] = useState(null);
@@ -12,8 +22,14 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   const toggleButtonEdit = (i) => {
     if (buttonsBeingEdited[i]) {
       setCurrentButtons((prevButtons) => {
-        const newButtons = [...prevButtons];
-        newButtons[i] = { ...buttons[i] };
+        let newButtons = [...prevButtons];
+        if (prevButtons.length > buttons.length) {
+          // new button cancelled
+          newButtons[newButtons.length - 1] = DEFAULT_BUTTON;
+        } else {
+          // cancelled edit to existing buttons
+          newButtons[i] = { ...buttons[i] };
+        }
         return newButtons;
       });
     }
@@ -27,10 +43,13 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   // Set state on render
   useEffect(() => {
     if (!buttons) return;
-    const clonedButtons = buttons.map((button) => ({
-      ...button,
-      style: { ...button.style },
-    }));
+    const clonedButtons = [
+      ...buttons.map((button) => ({
+        ...button,
+        style: { ...button.style },
+      })),
+      DEFAULT_BUTTON,
+    ];
     setCurrentButtons(clonedButtons);
     const noButtonsEdited = new Array(buttons.length).fill(false);
     setButtonsBeingEdited(noButtonsEdited);

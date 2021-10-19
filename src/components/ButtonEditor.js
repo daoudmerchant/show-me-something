@@ -12,6 +12,7 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
 
   const isValidButton =
     edited &&
+    !!currentButton.text &&
     (!subredditValidity.length ||
       subredditValidity.every((subreddit) => subreddit.exists));
 
@@ -84,7 +85,9 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
         <label>Name:</label>
         <input
           type="text"
-          value={currentButton.text}
+          value={
+            currentButton.text === "Add New Button..." ? "" : currentButton.text
+          }
           maxLength="12"
           onChange={(e) => {
             const value = e.target.value;
