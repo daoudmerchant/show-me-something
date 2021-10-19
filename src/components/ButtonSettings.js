@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 
+// utils
+import { getNewButtons } from "../utils";
+
 // components
 import Button from "./Button";
 import ButtonEditor from "./ButtonEditor";
@@ -21,11 +24,12 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   // Show / hide button editor (reset buttons on hide)
   const toggleButtonEdit = (i) => {
     if (buttonsBeingEdited[i]) {
+      // closing editor, cancelling edit
       setCurrentButtons((prevButtons) => {
-        let newButtons = [...prevButtons];
-        if (prevButtons.length > buttons.length) {
+        let newButtons = getNewButtons(prevButtons);
+        if (i === buttons.length) {
           // new button cancelled
-          newButtons[newButtons.length - 1] = DEFAULT_BUTTON;
+          newButtons[prevButtons.length - 1] = { ...DEFAULT_BUTTON };
         } else {
           // cancelled edit to existing buttons
           newButtons[i] = { ...buttons[i] };
@@ -43,28 +47,33 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   // Set state on render
   useEffect(() => {
     if (!buttons) return;
-    const clonedButtons = [
-      ...buttons.map((button) => ({
-        ...button,
-        style: { ...button.style },
-      })),
-      DEFAULT_BUTTON,
-    ];
+    const clonedButtons = [...getNewButtons(buttons), { ...DEFAULT_BUTTON }];
     setCurrentButtons(clonedButtons);
     const noButtonsEdited = new Array(buttons.length).fill(false);
     setButtonsBeingEdited(noButtonsEdited);
   }, [buttons]);
 
   // update current buttons on edit
-  const setCurrentButton = (i, value, param, subparam) => {
-    console.log(subparam);
+  const editCurrentButton = (buttonIndex, value, param, subparam) => {
     setCurrentButtons((prevButtons) => {
-      const newButtons = [...prevButtons];
+      let newButtons = getNewButtons(prevButtons);
+      console.log(newButtons);
       if (subparam !== undefined) {
-        newButtons[i][param][subparam] = value;
+        newButtons[buttonIndex][param][subparam] = value;
       } else {
-        newButtons[i][param] = value;
+        newButtons[buttonIndex][param] = value;
       }
+      console.log(newButtons);
+      return newButtons;
+    });
+  };
+
+  const deleteCurrentButtonSubreddit = (buttonIndex, deletedSubreddit) => {
+    setCurrentButtons((prevButtons) => {
+      let newButtons = getNewButtons(prevButtons);
+      newButtons[buttonIndex].subreddits = newButtons[
+        buttonIndex
+      ].subreddits.filter((subreddit) => subreddit !== deletedSubreddit);
       return newButtons;
     });
   };
@@ -78,6 +87,26 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
         const toggleThisButtonEdit = () => toggleButtonEdit(i);
         return (
           <>
+            {currentButton.text !== DEFAULT_BUTTON.text && (
+              <button
+                type="button"
+                onClick={() => {
+                  if (
+                    // A confirm box will do for now
+                    //eslint-disable-next-line
+                    confirm(
+                      `Are you sure you want to delete ${
+                        currentButton.text || "this button"
+                      }?`
+                    )
+                  ) {
+                    // TODO: Handle delete button
+                  }
+                }}
+              >
+                Delete
+              </button>
+            )}
             <Button
               button={currentButton}
               key={`button${currentButton.id}${i}`}
@@ -87,7 +116,8 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
               <ButtonEditor
                 key={`editor${currentButton.id}${i}`}
                 currentButton={currentButton}
-                setCurrentButton={setCurrentButton}
+                editCurrentButton={editCurrentButton}
+                deleteCurrentButtonSubreddit={deleteCurrentButtonSubreddit}
                 index={i}
                 cancel={toggleThisButtonEdit}
               />

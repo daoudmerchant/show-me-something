@@ -14,3 +14,11 @@ export const insertLineBreaks = (string) => {
     .split(/[\n]/)
     .filter((string) => !!string & (string !== " "));
 };
+
+export const getNewButtons = (prevButtons) => {
+  return prevButtons.map((button) => ({
+    ...button,
+    style: { ...button.style },
+    subreddits: [...button.subreddits],
+  }));
+};

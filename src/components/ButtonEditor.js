@@ -2,7 +2,15 @@ import { useState, useEffect, useRef } from "react";
 import { checkSubredditExists } from "../API/reddit";
 import { updateData } from "../API/firebase/firebase";
 
-const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
+const MAX_SUBREDDITS = 3;
+
+const ButtonEditor = ({
+  currentButton,
+  editCurrentButton,
+  deleteCurrentButtonSubreddit,
+  index,
+  cancel,
+}) => {
   const [checkingSubreddit, setCheckingSubreddit] = useState(false);
   const [subredditValidity, setSubredditValidity] = useState([]);
   const [edited, setEdited] = useState(false);
@@ -14,8 +22,26 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
     edited &&
     !!currentButton.text &&
     (!subredditValidity.length ||
-      subredditValidity.every((subreddit) => subreddit.exists));
+      subredditValidity.every((subreddit) => !!subreddit && subreddit.exists));
 
+  const handleDelete = (subreddit, subredditIndex) => {
+    // remove subreddit from currentButton
+    deleteCurrentButtonSubreddit(index, subreddit);
+    // reset last checked subreddit if deleted
+    if (subredditIndex === checkingSubreddit) setCheckingSubreddit(false);
+    // handle delete subreddit while checking another's validity
+    if (checkingSubreddit === false || subredditIndex > checkingSubreddit)
+      return;
+    setCheckingSubreddit((prevCheckingSubreddit) => prevCheckingSubreddit - 1);
+    // remove subreddit from saved validity info
+    setSubredditValidity((prevSubredditValidity) => {
+      return [
+        ...prevSubredditValidity.filter(
+          (subredditValidity) => subredditValidity.attempt !== subreddit
+        ),
+      ];
+    });
+  };
   // console.log(isValidButton);
 
   // Focus on last subreddit a new box was just made
@@ -25,6 +51,8 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
     // reset state only after mount and focus
     setTimeout(() => setNewSubredditAdded(false), 0);
   }, [newSubredditAdded, setNewSubredditAdded]);
+  console.log(subredditValidity);
+  console.log(checkingSubreddit);
 
   // Check if subreddit exists on edit
   useEffect(() => {
@@ -35,15 +63,24 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
       return;
     let isSubscribed = true;
     setSubredditValidity((prevValidity) => {
-      let newValidity = [...prevValidity];
-      delete newValidity[checkingSubreddit];
-      return newValidity;
+      return [
+        ...prevValidity.map((validity, i) => {
+          if (i === checkingSubreddit)
+            return {
+              attempt: null,
+            };
+          return validity;
+        }),
+      ];
     });
     // small delay to prevent API calls on every character edit!
     const timeout = setTimeout(async () => {
       setSubredditValidity((prevValidity) => {
         const newValidity = [...prevValidity];
-        newValidity[checkingSubreddit] = { resolved: false };
+        newValidity[checkingSubreddit] = {
+          attempt: currentButton.subreddits[checkingSubreddit],
+          resolved: false,
+        };
         return newValidity;
       });
       try {
@@ -54,6 +91,7 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
           setSubredditValidity((prevValidity) => {
             let newValidity = [...prevValidity];
             newValidity[checkingSubreddit] = {
+              attempt: currentButton.subreddits[checkingSubreddit],
               resolved: true,
               ...subredditIsValid,
             };
@@ -89,10 +127,11 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
             currentButton.text === "Add New Button..." ? "" : currentButton.text
           }
           maxLength="12"
+          placeholder="Add button text..."
           onChange={(e) => {
             const value = e.target.value;
             const textValue = value.length === 1 ? value.toUpperCase() : value;
-            setCurrentButton(index, textValue, "text");
+            editCurrentButton(index, textValue, "text");
             if (edited) return;
             setEdited(true);
           }}
@@ -104,11 +143,17 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
           {currentButton.subreddits.map((subreddit, j) => {
             return (
               <div>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(subreddit, j)}
+                >
+                  Delete
+                </button>
                 <input
                   type="text"
                   value={subreddit}
                   onChange={(e) => {
-                    setCurrentButton(index, e.target.value, "subreddits", j);
+                    editCurrentButton(index, e.target.value, "subreddits", j);
                     setCheckingSubreddit(j);
                   }}
                   placeholder="Add a subreddit..."
@@ -120,7 +165,7 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
                       : undefined
                   }
                 />
-                {subredditValidity[j] && (
+                {!!subredditValidity[j] && subredditValidity[j].attempt && (
                   <div className="subreddit-validity">
                     <p>
                       {!subredditValidity[j].resolved
@@ -141,12 +186,12 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
               </div>
             );
           })}
-          {currentButton.subreddits.length < 3 && (
+          {currentButton.subreddits.length < MAX_SUBREDDITS && (
             <div>
               <input
                 type="text"
                 onChange={(e) => {
-                  setCurrentButton(
+                  editCurrentButton(
                     index,
                     e.target.value,
                     "subreddits",
@@ -168,7 +213,7 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
           type="color"
           value={currentButton.style.color}
           onInput={(e) => {
-            setCurrentButton(index, e.target.value, "style", "color");
+            editCurrentButton(index, e.target.value, "style", "color");
             if (edited) return;
             setEdited(true);
           }}
@@ -180,7 +225,12 @@ const ButtonEditor = ({ currentButton, setCurrentButton, index, cancel }) => {
           type="color"
           value={currentButton.style.backgroundColor}
           onInput={(e) => {
-            setCurrentButton(index, e.target.value, "style", "backgroundColor");
+            editCurrentButton(
+              index,
+              e.target.value,
+              "style",
+              "backgroundColor"
+            );
             if (edited) return;
             setEdited(true);
           }}
