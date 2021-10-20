@@ -1,14 +1,16 @@
 import { useEffect, useState, useCallback } from "react";
 import { updateData } from "../API/firebase/firebase";
+import _ from "lodash";
 
-const UserSettings = ({ resetAllData, uid, settings, setSettings }) => {
+const UserSettings = ({ uid, settings, setSettings }) => {
   const [currentSettings, setCurrentSettings] = useState(null);
   const [submitSuccess, setSubmitSuccess] = useState(undefined);
 
   // set component settings state from current user settings
   useEffect(() => {
     if (!settings) return;
-    setCurrentSettings(settings);
+    const clonedSettings = _.cloneDeep(settings);
+    setCurrentSettings(clonedSettings);
   }, [settings]);
 
   // reset submit success on mount
@@ -30,6 +32,7 @@ const UserSettings = ({ resetAllData, uid, settings, setSettings }) => {
     e.preventDefault();
     updateUserSettings();
   };
+
   const handleFormChange = (category, value) => {
     setCurrentSettings((prevSettings) => {
       return {
@@ -126,7 +129,7 @@ const UserSettings = ({ resetAllData, uid, settings, setSettings }) => {
           <button
             type="submit"
             id="settingssubmit"
-            disabled={currentSettings === settings}
+            disabled={_.isEqual(currentSettings, settings)}
           >
             Submit
           </button>

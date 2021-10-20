@@ -18,7 +18,7 @@ const ButtonEditor = ({
     Index-based solution for checkingSubreddit, could also refactor
     to use objects with ids and Array.filter-based solution
   */
-  const [checkingSubreddit, setCheckingSubreddit] = useState(false);
+  const [checkingSubreddit, setCheckingSubreddit] = useState(null);
   const [subredditValidity, setSubredditValidity] = useState([]);
   const [edited, setEdited] = useState(false);
   const [newSubredditAdded, setNewSubredditAdded] = useState(false);
@@ -88,7 +88,7 @@ const ButtonEditor = ({
   // Check if subreddit exists on edit
   useEffect(() => {
     if (
-      checkingSubreddit === false ||
+      checkingSubreddit === null ||
       currentButton.subreddits[checkingSubreddit] === ""
     )
       return;
@@ -237,32 +237,34 @@ const ButtonEditor = ({
                         : undefined
                     }
                   />
-                  {!!subredditValidity[j] && subredditValidity[j].attempt && (
-                    <div className="subredditvalidity">
-                      <div className="checkingstatus">
-                        {!subredditValidity[j].resolved ? (
-                          <p>...</p>
-                        ) : !subredditValidity[j].exists ? (
-                          <p>❌</p>
-                        ) : !!subredditValidity[j].icon ? (
-                          <img
-                            className="subredditicon"
-                            src={subredditValidity[j].icon}
-                            alt={subredditValidity[j].subtitle}
-                          />
-                        ) : (
-                          <p>🙂</p>
+                  {!!subredditValidity[j] &&
+                    subredditValidity[j].attempt &&
+                    !!currentButton.text && (
+                      <div className="subredditvalidity">
+                        <div className="checkingstatus">
+                          {!subredditValidity[j].resolved ? (
+                            <p>...</p>
+                          ) : !subredditValidity[j].exists ? (
+                            <p>❌</p>
+                          ) : !!subredditValidity[j].icon ? (
+                            <img
+                              className="subredditicon"
+                              src={subredditValidity[j].icon}
+                              alt={subredditValidity[j].subtitle}
+                            />
+                          ) : (
+                            <p>🙂</p>
+                          )}
+                        </div>
+                        {subredditValidity[j].exists && (
+                          <>
+                            <p>{subredditValidity[j].subreddit}</p>
+                            {/* TODO: Hide subtitle if identical to subreddit? */}
+                            <p>{subredditValidity[j].subtitle}</p>
+                          </>
                         )}
                       </div>
-                      {subredditValidity[j].exists && (
-                        <>
-                          <p>{subredditValidity[j].subreddit}</p>
-                          {/* TODO: Hide subtitle if identical to subreddit? */}
-                          <p>{subredditValidity[j].subtitle}</p>
-                        </>
-                      )}
-                    </div>
-                  )}
+                    )}
                 </div>
               </>
             );
@@ -293,7 +295,7 @@ const ButtonEditor = ({
         <button type="button" onClick={cancel}>
           Cancel
         </button>
-        <button type="button" onClick={() => deleteButton(currentButton.text)}>
+        <button type="button" onClick={() => deleteButton(currentButton.id)}>
           Delete Button
         </button>
         <button type="submit" disabled={!isValidEdit}>

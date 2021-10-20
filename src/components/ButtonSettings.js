@@ -21,6 +21,7 @@ const DEFAULT_BUTTON = {
 };
 
 const ButtonSettings = ({ uid, buttons, setButtons }) => {
+  const [referenceButtons, setReferenceButtons] = useState(null);
   const [currentButtons, setCurrentButtons] = useState(null);
   const [buttonsBeingEdited, setButtonsBeingEdited] = useState(null);
   const [buttonValidity, setButtonValidity] = useState(null);
@@ -31,8 +32,10 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   // Set state on render
   useEffect(() => {
     if (!buttons) return;
-    const clonedButtons = [..._.cloneDeep(buttons), { ...DEFAULT_BUTTON }];
-    setCurrentButtons(clonedButtons);
+    const clonedButtons = _.cloneDeep(buttons);
+    setReferenceButtons(buttons);
+    const firstCurrentButtons = [...clonedButtons, { ...DEFAULT_BUTTON }];
+    setCurrentButtons(firstCurrentButtons);
     const falseArray = new Array(buttons.length).fill(false);
     setButtonsBeingEdited(falseArray);
     setButtonValidity(falseArray);
@@ -58,7 +61,7 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
           newButtons[prevButtons.length - 1] = { ...DEFAULT_BUTTON };
         } else {
           // cancelled edit to existing buttons
-          newButtons[i] = { ...buttons[i] };
+          newButtons[i] = { ...referenceButtons[i] };
         }
         return newButtons;
       });
@@ -89,10 +92,17 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
     });
   };
 
-  const deleteButton = (text) => {
-    setCurrentButtons((prevButtons) =>
-      prevButtons.filter((button) => button.text !== text)
-    );
+  const deleteButton = (id) => {
+    setCurrentButtons((prevButtons) => {
+      const filteredButtons = prevButtons.filter((button) => button.id !== id);
+      if (
+        filteredButtons[filteredButtons.length - 1].text !== DEFAULT_BUTTON.text
+      ) {
+        // Just deleted new button
+        return [...filteredButtons, { ...DEFAULT_BUTTON }];
+      }
+      return filteredButtons;
+    });
   };
 
   const checkForDuplicateButton = (text) => {
