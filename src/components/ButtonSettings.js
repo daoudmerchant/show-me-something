@@ -1,11 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { useMediaQuery } from "react-responsive";
+import _ from "lodash";
 
 // API
 import { updateData } from "../API/firebase/firebase";
-
-// utils
-import { getNewButtons } from "../utils";
 
 // components
 import Button from "./Button";
@@ -19,13 +17,13 @@ const DEFAULT_BUTTON = {
     font: "",
   },
   subreddits: [],
-  // false ID to distinguish from database
   id: false,
 };
 
 const ButtonSettings = ({ uid, buttons, setButtons }) => {
   const [currentButtons, setCurrentButtons] = useState(null);
   const [buttonsBeingEdited, setButtonsBeingEdited] = useState(null);
+  const [buttonValidity, setButtonValidity] = useState(null);
 
   // media query
   const isTouchscreen = useMediaQuery({ query: "(hover: none)" });
@@ -35,7 +33,7 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
     if (buttonsBeingEdited[i]) {
       // closing editor, cancelling edit
       setCurrentButtons((prevButtons) => {
-        let newButtons = getNewButtons(prevButtons);
+        let newButtons = _.cloneDeep(prevButtons);
         if (i === buttons.length) {
           // new button cancelled
           newButtons[prevButtons.length - 1] = { ...DEFAULT_BUTTON };
@@ -56,16 +54,17 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   // Set state on render
   useEffect(() => {
     if (!buttons) return;
-    const clonedButtons = [...getNewButtons(buttons), { ...DEFAULT_BUTTON }];
+    const clonedButtons = [..._.cloneDeep(buttons), { ...DEFAULT_BUTTON }];
     setCurrentButtons(clonedButtons);
-    const noButtonsEdited = new Array(buttons.length).fill(false);
-    setButtonsBeingEdited(noButtonsEdited);
+    const falseArray = new Array(buttons.length).fill(false);
+    setButtonsBeingEdited(falseArray);
+    setButtonValidity(falseArray);
   }, [buttons]);
 
   // update current buttons on edit
   const editCurrentButton = (buttonIndex, value, param, subparam) => {
     setCurrentButtons((prevButtons) => {
-      let newButtons = getNewButtons(prevButtons);
+      let newButtons = _.cloneDeep(prevButtons);
       console.log(newButtons);
       if (subparam !== undefined) {
         newButtons[buttonIndex][param][subparam] = value;
@@ -79,7 +78,7 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
 
   const deleteCurrentButtonSubreddit = (buttonIndex, deletedSubreddit) => {
     setCurrentButtons((prevButtons) => {
-      let newButtons = getNewButtons(prevButtons);
+      let newButtons = _.cloneDeep(prevButtons);
       newButtons[buttonIndex].subreddits = newButtons[
         buttonIndex
       ].subreddits.filter((subreddit) => subreddit !== deletedSubreddit);
@@ -120,6 +119,7 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
       </aside>
       {currentButtons.map((currentButton, i) => {
         const toggleThisButtonEdit = () => toggleButtonEdit(i);
+
         return (
           <div className="editbutton">
             <Button
@@ -127,20 +127,30 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
               key={`button${currentButton.id}${i}`}
               handleClick={toggleThisButtonEdit}
             />
-            {buttonsBeingEdited && buttonsBeingEdited[i] && (
-              <ButtonEditor
-                key={`editor${currentButton.id}${i}`}
-                currentButton={currentButton}
-                editCurrentButton={editCurrentButton}
-                deleteCurrentButtonSubreddit={deleteCurrentButtonSubreddit}
-                deleteButton={deleteButton}
-                index={i}
-                cancel={toggleThisButtonEdit}
-              />
-            )}
+            {buttonsBeingEdited &&
+              buttonsBeingEdited[i] &&
+              (() => {
+                const modified = !_.isEqual(currentButton, buttons[i]);
+                return (
+                  <ButtonEditor
+                    key={`editor${currentButton.id}${i}`}
+                    currentButton={currentButton}
+                    editCurrentButton={editCurrentButton}
+                    deleteCurrentButtonSubreddit={deleteCurrentButtonSubreddit}
+                    deleteButton={deleteButton}
+                    index={i}
+                    cancel={toggleThisButtonEdit}
+                    modified={modified}
+                  />
+                );
+              })()}
           </div>
         );
       })}
+      <div className="formbuttons">
+        <button type="button">Discard all changes</button>
+        <button>Save changes</button>
+      </div>
     </fieldset>
   );
 };

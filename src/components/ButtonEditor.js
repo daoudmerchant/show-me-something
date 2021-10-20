@@ -10,6 +10,7 @@ const ButtonEditor = ({
   deleteButton,
   index,
   cancel,
+  modified,
 }) => {
   /*
     Index-based solution for checkingSubreddit, could also refactor
@@ -19,14 +20,21 @@ const ButtonEditor = ({
   const [subredditValidity, setSubredditValidity] = useState([]);
   const [edited, setEdited] = useState(false);
   const [newSubredditAdded, setNewSubredditAdded] = useState(false);
+  const [isValidEdit, setIsValidEdit] = useState(false);
+
+  // check if valid each render
+  useEffect(() => {
+    if (!modified) {
+      if (!isValidEdit) return;
+      setIsValidEdit(false);
+      return;
+    }
+    setIsValidEdit(true);
+  }, [currentButton, modified, isValidEdit]);
+
+  console.log(currentButton.subreddits);
 
   const lastSubredditRef = useRef();
-
-  const isValidButton =
-    edited &&
-    !!currentButton.text &&
-    (!subredditValidity.length ||
-      subredditValidity.every((subreddit) => !!subreddit && subreddit.exists));
 
   const handleDeleteSubreddit = (subreddit, subredditIndex) => {
     // remove subreddit from currentButton
@@ -179,11 +187,16 @@ const ButtonEditor = ({
               <>
                 <button
                   type="button"
+                  key={`delete${subreddit}`}
                   onClick={() => handleDeleteSubreddit(subreddit, j)}
                 >
                   Delete subreddit
                 </button>
-                <div className="subredditlistitem">
+                <div
+                  className="subredditlistitem"
+                  key={`subreddit${subreddit}`}
+                >
+                  <p>r/</p>
                   <input
                     className="subredditinput"
                     type="text"
@@ -245,7 +258,7 @@ const ButtonEditor = ({
           )}
         </div>
       </fieldset>
-      <div className="buttoneditorformcontrols">
+      <div className="formbuttons">
         <button type="button" onClick={cancel}>
           Cancel
         </button>
@@ -266,7 +279,7 @@ const ButtonEditor = ({
         >
           Delete Button
         </button>
-        <button type="submit" disabled={!isValidButton}>
+        <button type="submit" disabled={!isValidEdit}>
           Confirm
         </button>
       </div>

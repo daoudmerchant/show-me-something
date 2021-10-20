@@ -417,13 +417,14 @@ button {
 
 .subredditlistitem {
   display: grid;
-  grid-template-columns: 2fr 3fr;
+  grid-template-columns: 1fr 6fr 8fr;
   grid-gap: 0;
+  align-items: center;
 }
 
-.subredditlistitem,
+.subredditlistitem input,
 .newsubreddit,
-.buttoneditorformcontrols {
+.formbuttons {
   height: 60px;
 }
 
@@ -454,10 +455,10 @@ button {
   grid-column-start: 2;
 }
 
-.buttoneditorformcontrols {
+.formbuttons {
   display: flex;
 }
 
-.buttoneditorformcontrols > * {
+.formbuttons > * {
   margin: 0.5em;
 }

@@ -29,7 +29,7 @@ const Settings = ({
     );
   }
 
-  if (!settings || !buttons) return <p>Loading your settings...</p>;
+  if (!settings || !buttons || !uid) return <p>Loading your settings...</p>;
 
   return (
     <div id="settingscontainer">

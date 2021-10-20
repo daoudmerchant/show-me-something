@@ -15,6 +15,9 @@ export const insertLineBreaks = (string) => {
     .filter((string) => !!string & (string !== " "));
 };
 
+// manual object utils for known structures, replace
+// with library-based solution if database refactored
+
 export const getNewButtons = (prevButtons) => {
   // deep clone
   return prevButtons.map((button) => ({
@@ -22,4 +25,18 @@ export const getNewButtons = (prevButtons) => {
     style: { ...button.style },
     subreddits: [...button.subreddits],
   }));
+};
+
+export const checkButtonEquality = (prevButton, newButton) => {
+  const _checkParamArrayEquality = (param) => {
+    return prevButton[param].every(
+      (prevItem, i) => prevItem === newButton[param][i]
+    );
+  };
+  return (
+    prevButton.text === newButton.text &&
+    prevButton.id === newButton.id &&
+    _checkParamArrayEquality("style") &&
+    _checkParamArrayEquality("subreddits")
+  );
 };
