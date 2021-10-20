@@ -8,7 +8,6 @@ const ButtonEditor = ({
   editCurrentButton,
   deleteCurrentButtonSubreddit,
   deleteButton,
-  index,
   cancel,
   modified,
   keepChanges,
@@ -58,7 +57,7 @@ const ButtonEditor = ({
 
   const handleDeleteSubreddit = (subreddit, subredditIndex) => {
     // remove subreddit from currentButton
-    deleteCurrentButtonSubreddit(index, subreddit);
+    deleteCurrentButtonSubreddit(currentButton.id, subreddit);
     // update local state
     setCheckingSubreddit(null);
     if (
@@ -167,7 +166,7 @@ const ButtonEditor = ({
               const value = e.target.value;
               const textValue =
                 value.length === 1 ? value.toUpperCase() : value;
-              editCurrentButton(index, textValue, "text");
+              editCurrentButton(currentButton.id, textValue, "text");
               if (edited) return;
               setEdited(true);
             }}
@@ -181,7 +180,12 @@ const ButtonEditor = ({
             type="color"
             value={currentButton.style.color}
             onInput={(e) => {
-              editCurrentButton(index, e.target.value, "style", "color");
+              editCurrentButton(
+                currentButton.id,
+                e.target.value,
+                "style",
+                "color"
+              );
               if (edited) return;
               setEdited(true);
             }}
@@ -194,7 +198,7 @@ const ButtonEditor = ({
             value={currentButton.style.backgroundColor}
             onInput={(e) => {
               editCurrentButton(
-                index,
+                currentButton.id,
                 e.target.value,
                 "style",
                 "backgroundColor"
@@ -225,7 +229,12 @@ const ButtonEditor = ({
                     type="text"
                     value={subreddit}
                     onChange={(e) => {
-                      editCurrentButton(index, e.target.value, "subreddits", j);
+                      editCurrentButton(
+                        currentButton.id,
+                        e.target.value,
+                        "subreddits",
+                        j
+                      );
                       setCheckingSubreddit(j);
                     }}
                     placeholder="Add a subreddit..."
@@ -276,7 +285,7 @@ const ButtonEditor = ({
                 type="text"
                 onChange={(e) => {
                   editCurrentButton(
-                    index,
+                    currentButton.id,
                     e.target.value,
                     "subreddits",
                     currentButton.subreddits.length

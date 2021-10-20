@@ -5,7 +5,7 @@ const Button = ({ button, isDisabled, handleClick }) => {
   };
   return (
     <button style={style} disabled={isDisabled} onClick={handleClick}>
-      {button.text}
+      {button.text || "..."}
     </button>
   );
 };

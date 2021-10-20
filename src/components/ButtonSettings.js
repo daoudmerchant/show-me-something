@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 import _ from "lodash";
 
@@ -36,47 +36,61 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
     setReferenceButtons(buttons);
     const firstCurrentButtons = [...clonedButtons, { ...DEFAULT_BUTTON }];
     setCurrentButtons(firstCurrentButtons);
-    const falseArray = new Array(buttons.length).fill(false);
-    setButtonsBeingEdited(falseArray);
-    setButtonValidity(falseArray);
+
+    const getObjWithFalseIdParams = () => {
+      let obj = {};
+      buttons.forEach((button) => (obj[button.id] = false));
+      return obj;
+    };
+    setButtonsBeingEdited(getObjWithFalseIdParams());
+    setButtonValidity(getObjWithFalseIdParams());
   }, [buttons]);
 
   // Show / hide button editor
-  const toggleButtonBeingEdited = (i) => {
+  const toggleButtonBeingEdited = (id) => {
     setButtonsBeingEdited((prevButtonsBeingEdited) => {
-      let newButtonsBeingEdited = [...prevButtonsBeingEdited];
-      newButtonsBeingEdited[i] = !prevButtonsBeingEdited[i];
+      let newButtonsBeingEdited = { ...prevButtonsBeingEdited };
+      newButtonsBeingEdited[id] = !prevButtonsBeingEdited[id];
       return newButtonsBeingEdited;
     });
   };
 
   // Toggle button edit (reset buttons on hide)
-  const toggleButtonEdit = (i) => {
-    if (buttonsBeingEdited[i]) {
+  const toggleButtonEdit = (id) => {
+    if (buttonsBeingEdited[id]) {
       // closing editor, cancelling edit
       setCurrentButtons((prevButtons) => {
-        let newButtons = _.cloneDeep(prevButtons);
-        if (i === buttons.length) {
-          // new button cancelled
-          newButtons[prevButtons.length - 1] = { ...DEFAULT_BUTTON };
-        } else {
-          // cancelled edit to existing buttons
-          newButtons[i] = { ...referenceButtons[i] };
-        }
+        let newButtons = [...prevButtons];
+        // cancelled edit to existing buttons
+        const buttonIndex = prevButtons.findIndex((button) => button.id === id);
+        newButtons[buttonIndex] = _.cloneDeep(referenceButtons[buttonIndex]);
         return newButtons;
       });
     }
-    toggleButtonBeingEdited(i);
+    toggleButtonBeingEdited(id);
+  };
+
+  const confirmChanges = (id) => {
+    const editedIndex = currentButtons.findIndex((button) => button.id === id);
+    setReferenceButtons((prevButtons) => {
+      let newButtons = [...prevButtons];
+      newButtons[editedIndex] = _.cloneDeep(currentButtons[editedIndex]);
+      return newButtons;
+    });
+    toggleButtonBeingEdited(id);
   };
 
   // update current buttons on edit
-  const editCurrentButton = (buttonIndex, value, param, subparam) => {
+  const editCurrentButton = (id, value, param, subparam) => {
     setCurrentButtons((prevButtons) => {
-      let newButtons = _.cloneDeep(prevButtons);
+      let newButtons = [...prevButtons];
+      let editedButtonIndex = newButtons.findIndex(
+        (button) => button.id === id
+      );
       if (subparam !== undefined) {
-        newButtons[buttonIndex][param][subparam] = value;
+        newButtons[editedButtonIndex][param][subparam] = value;
       } else {
-        newButtons[buttonIndex][param] = value;
+        newButtons[editedButtonIndex][param] = value;
       }
       return newButtons;
     });
@@ -84,7 +98,7 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
 
   const deleteCurrentButtonSubreddit = (buttonIndex, deletedSubreddit) => {
     setCurrentButtons((prevButtons) => {
-      let newButtons = _.cloneDeep(prevButtons);
+      let newButtons = [...prevButtons];
       newButtons[buttonIndex].subreddits = newButtons[
         buttonIndex
       ].subreddits.filter((subreddit) => subreddit !== deletedSubreddit);
@@ -93,16 +107,21 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   };
 
   const deleteButton = (id) => {
-    setCurrentButtons((prevButtons) => {
-      const filteredButtons = prevButtons.filter((button) => button.id !== id);
-      if (
-        filteredButtons[filteredButtons.length - 1].text !== DEFAULT_BUTTON.text
-      ) {
-        // Just deleted new button
-        return [...filteredButtons, { ...DEFAULT_BUTTON }];
-      }
-      return filteredButtons;
-    });
+    const _fireCallbacks = (cb, ...fns) => {
+      fns.forEach((fn) => fn(cb));
+    };
+    // delete button from current and reference
+    const _removeButton = (prevButtons) => {
+      return prevButtons.filter((button) => button.id !== id);
+    };
+    _fireCallbacks(_removeButton, setCurrentButtons, setReferenceButtons);
+    // delete validity check and editor open/closed
+    const _removeIdParam = (prevObj) => {
+      let newObj = { ...prevObj };
+      delete newObj[id];
+      return newObj;
+    };
+    _fireCallbacks(_removeIdParam, setButtonValidity, setButtonsBeingEdited);
   };
 
   const checkForDuplicateButton = (text) => {
@@ -130,19 +149,18 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
         for inspiration for subreddits!
       </aside>
       {currentButtons.map((currentButton, i) => {
-        const toggleThisButtonEdit = () => toggleButtonEdit(i);
-        const keepChanges = () => toggleButtonBeingEdited(i);
+        const keepChanges = () => confirmChanges(currentButton.id);
         return (
           <div className="editbutton">
             <Button
               button={currentButton}
               key={`button${currentButton.id}${i}`}
-              handleClick={toggleThisButtonEdit}
+              handleClick={() => toggleButtonEdit(currentButton.id)}
             />
             {buttonsBeingEdited &&
-              buttonsBeingEdited[i] &&
+              buttonsBeingEdited[currentButton.id] &&
               (() => {
-                const modified = !_.isEqual(currentButton, buttons[i]);
+                const modified = !_.isEqual(currentButton, referenceButtons[i]);
                 return (
                   <ButtonEditor
                     key={`editor${currentButton.id}${i}`}
@@ -150,8 +168,7 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
                     editCurrentButton={editCurrentButton}
                     deleteCurrentButtonSubreddit={deleteCurrentButtonSubreddit}
                     deleteButton={deleteButton}
-                    index={i}
-                    cancel={toggleThisButtonEdit}
+                    cancel={() => toggleButtonEdit(currentButton.id)}
                     modified={modified}
                     keepChanges={keepChanges}
                     isDuplicate={checkForDuplicateButton(currentButton.text)}
