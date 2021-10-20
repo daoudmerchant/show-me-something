@@ -16,6 +16,7 @@ export const insertLineBreaks = (string) => {
 };
 
 export const getNewButtons = (prevButtons) => {
+  // deep clone
   return prevButtons.map((button) => ({
     ...button,
     style: { ...button.style },

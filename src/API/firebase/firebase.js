@@ -101,19 +101,24 @@ export const getData = (() => {
 })();
 
 export const updateData = (() => {
-  const userSettings = async (uid, settings) => {
+  const _updateParam = async (uid, object) => {
     const userRef = doc(db, "users", uid);
     try {
-      await updateDoc(userRef, {
-        settings,
-      });
+      await updateDoc(userRef, object);
       return true;
     } catch (error) {
       console.log(error);
       return false;
     }
   };
+  const userSettings = async (uid, settings) => {
+    return await _updateParam(uid, { settings });
+  };
+  const buttons = async (uid, buttons) => {
+    return await _updateParam(uid, { buttons });
+  };
   return {
     userSettings,
+    buttons,
   };
 })();

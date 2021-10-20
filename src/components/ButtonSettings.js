@@ -1,4 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useMediaQuery } from "react-responsive";
+
+// API
+import { updateData } from "../API/firebase/firebase";
 
 // utils
 import { getNewButtons } from "../utils";
@@ -15,11 +19,16 @@ const DEFAULT_BUTTON = {
     font: "",
   },
   subreddits: [],
+  // false ID to distinguish from database
+  id: false,
 };
 
 const ButtonSettings = ({ uid, buttons, setButtons }) => {
   const [currentButtons, setCurrentButtons] = useState(null);
   const [buttonsBeingEdited, setButtonsBeingEdited] = useState(null);
+
+  // media query
+  const isTouchscreen = useMediaQuery({ query: "(hover: none)" });
 
   // Show / hide button editor (reset buttons on hide)
   const toggleButtonEdit = (i) => {
@@ -78,35 +87,41 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
     });
   };
 
+  const deleteButton = useCallback(
+    async (id) => {
+      if (!id) {
+        // No ID, delete button for temporary new button
+        toggleButtonEdit(currentButtons.length - 1);
+        return;
+      }
+      const deletedButton = buttons.find((button) => button.id === id);
+      const deleteSuccess = await updateData.deleteButton(uid, deletedButton);
+      deleteSuccess || alert("Could not delete!");
+    },
+    [buttons, currentButtons, uid]
+  );
+
   if (!currentButtons) return <p>Loading your buttons...</p>;
 
   return (
     <fieldset id="userbuttonsettings">
       <legend>Button settings</legend>
+      <p>{`${isTouchscreen ? "Tap" : "Click"} button to edit`}</p>
+      <aside>
+        New to Reddit? Check{" "}
+        <a
+          href="https://www.reddit.com/r/ListOfSubreddits/wiki/listofsubreddits"
+          target="_blank"
+          rel="noreferrer"
+        >
+          this directory
+        </a>{" "}
+        for inspiration for subreddits!
+      </aside>
       {currentButtons.map((currentButton, i) => {
         const toggleThisButtonEdit = () => toggleButtonEdit(i);
         return (
-          <>
-            {currentButton.text !== DEFAULT_BUTTON.text && (
-              <button
-                type="button"
-                onClick={() => {
-                  if (
-                    // A confirm box will do for now
-                    //eslint-disable-next-line
-                    confirm(
-                      `Are you sure you want to delete ${
-                        currentButton.text || "this button"
-                      }?`
-                    )
-                  ) {
-                    // TODO: Handle delete button
-                  }
-                }}
-              >
-                Delete
-              </button>
-            )}
+          <div className="editbutton">
             <Button
               button={currentButton}
               key={`button${currentButton.id}${i}`}
@@ -118,11 +133,12 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
                 currentButton={currentButton}
                 editCurrentButton={editCurrentButton}
                 deleteCurrentButtonSubreddit={deleteCurrentButtonSubreddit}
+                deleteButton={deleteButton}
                 index={i}
                 cancel={toggleThisButtonEdit}
               />
             )}
-          </>
+          </div>
         );
       })}
     </fieldset>

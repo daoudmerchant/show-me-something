@@ -404,7 +404,60 @@ button {
   height: min-content;
 }
 
+.editbutton > *,
+.buttoneditorform > * {
+  margin: 1em 0;
+}
+
 .subredditlist {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  grid-gap: 1em;
+}
+
+.subredditlistitem {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  grid-gap: 0;
+}
+
+.subredditlistitem,
+.newsubreddit,
+.buttoneditorformcontrols {
+  height: 60px;
+}
+
+.subredditlist input {
+  padding-left: 2em;
+}
+
+.subredditlistitem * {
+  margin: 0;
+}
+
+.subredditvalidity {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: 2fr;
+  margin: 0.5em 0;
+}
+
+.checkingstatus {
+  grid-row: 1 / span 2;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+}
+
+.newsubreddit {
+  grid-column-start: 2;
+}
+
+.buttoneditorformcontrols {
+  display: flex;
+}
+
+.buttoneditorformcontrols > * {
+  margin: 0.5em;
 }
