@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
-import _ from "lodash";
+import _ from "lodash/";
+
+// utils
+
+import { fireCallbacks } from "../utils";
 
 // API
 import { updateData } from "../API/firebase/firebase";
@@ -17,7 +21,6 @@ const DEFAULT_BUTTON = {
     font: "",
   },
   subreddits: [],
-  id: false,
 };
 
 const ButtonSettings = ({ uid, buttons, setButtons }) => {
@@ -29,22 +32,49 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   // media query
   const isTouchscreen = useMediaQuery({ query: "(hover: none)" });
 
+  // generate id
+  const _getId = () => (Math.random() * 100000000000).toFixed();
+
+  const getNewButton = (id) => {
+    return { ..._.cloneDeep(DEFAULT_BUTTON), id: id || _getId() };
+  };
+
   // Set state on render
   useEffect(() => {
     if (!buttons) return;
-    const clonedButtons = _.cloneDeep(buttons);
-    setReferenceButtons(buttons);
-    const firstCurrentButtons = [...clonedButtons, { ...DEFAULT_BUTTON }];
-    setCurrentButtons(firstCurrentButtons);
+    const _getDefaultButtons = () => {
+      return [..._.cloneDeep(buttons), getNewButton()];
+    };
+    fireCallbacks(_getDefaultButtons, setReferenceButtons, setCurrentButtons);
 
     const getObjWithFalseIdParams = () => {
       let obj = {};
       buttons.forEach((button) => (obj[button.id] = false));
       return obj;
     };
-    setButtonsBeingEdited(getObjWithFalseIdParams());
-    setButtonValidity(getObjWithFalseIdParams());
+    fireCallbacks(
+      getObjWithFalseIdParams,
+      setButtonsBeingEdited,
+      setButtonValidity
+    );
   }, [buttons]);
+
+  // tack on new button to current buttons
+  useEffect(() => {
+    if (
+      !currentButtons ||
+      currentButtons[currentButtons.length - 1].text === DEFAULT_BUTTON.text
+    )
+      return;
+    const newId = _getId();
+    setCurrentButtons((prevButtons) => {
+      return [...prevButtons, getNewButton(newId)];
+    });
+    const _addNewButtonProp = (obj) => {
+      return { ...obj, [newId]: false };
+    };
+    fireCallbacks(_addNewButtonProp, setButtonsBeingEdited, setButtonValidity);
+  }, [currentButtons]);
 
   // Show / hide button editor
   const toggleButtonBeingEdited = (id) => {
@@ -73,6 +103,13 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   const confirmChanges = (id) => {
     const editedIndex = currentButtons.findIndex((button) => button.id === id);
     setReferenceButtons((prevButtons) => {
+      if (editedIndex < 0) {
+        // Pre-existing button
+        return [
+          ...prevButtons,
+          _.cloneDeep(currentButtons[currentButtons.length - 1]),
+        ];
+      }
       let newButtons = [...prevButtons];
       newButtons[editedIndex] = _.cloneDeep(currentButtons[editedIndex]);
       return newButtons;
@@ -107,21 +144,18 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   };
 
   const deleteButton = (id) => {
-    const _fireCallbacks = (cb, ...fns) => {
-      fns.forEach((fn) => fn(cb));
-    };
     // delete button from current and reference
     const _removeButton = (prevButtons) => {
       return prevButtons.filter((button) => button.id !== id);
     };
-    _fireCallbacks(_removeButton, setCurrentButtons, setReferenceButtons);
+    fireCallbacks(_removeButton, setCurrentButtons, setReferenceButtons);
     // delete validity check and editor open/closed
     const _removeIdParam = (prevObj) => {
       let newObj = { ...prevObj };
       delete newObj[id];
       return newObj;
     };
-    _fireCallbacks(_removeIdParam, setButtonValidity, setButtonsBeingEdited);
+    fireCallbacks(_removeIdParam, setButtonValidity, setButtonsBeingEdited);
   };
 
   const checkForDuplicateButton = (text) => {

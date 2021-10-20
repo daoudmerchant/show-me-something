@@ -40,3 +40,7 @@ export const checkButtonEquality = (prevButton, newButton) => {
     _checkParamArrayEquality("subreddits")
   );
 };
+
+export const fireCallbacks = (cb, ...fns) => {
+  fns.forEach((fn) => fn(cb));
+};

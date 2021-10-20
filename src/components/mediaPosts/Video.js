@@ -1,8 +1,8 @@
 import { useContext, useRef, useState, useEffect } from "react";
 import { RedditPostContext } from "../../contexts";
 
-import PlayPause from "./playpause.png";
-import AudioIcon from "./audio-icon.png";
+import PlayPause from "../../images/playpause.png";
+import AudioIcon from "../../images/audio-icon.png";
 
 // components
 import Loading from "../Loading";

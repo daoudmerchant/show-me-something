@@ -51,8 +51,6 @@ const ButtonEditor = ({
     isDuplicate,
   ]);
 
-  console.log(subredditValidity);
-
   const lastSubredditRef = useRef();
 
   const handleDeleteSubreddit = (subreddit, subredditIndex) => {
@@ -304,7 +302,11 @@ const ButtonEditor = ({
         <button type="button" onClick={cancel}>
           Cancel
         </button>
-        <button type="button" onClick={() => deleteButton(currentButton.id)}>
+        <button
+          type="button"
+          onClick={() => deleteButton(currentButton.id)}
+          disabled={currentButton.text === "Add new Button..."}
+        >
           Delete Button
         </button>
         <button type="submit" disabled={!isValidEdit}>
