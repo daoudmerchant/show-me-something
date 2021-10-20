@@ -24,15 +24,25 @@ const ButtonEditor = ({
 
   // check if valid each render
   useEffect(() => {
-    if (!modified) {
+    if (
+      !modified ||
+      !subredditValidity.length ||
+      !currentButton.subreddits.length ||
+      subredditValidity.some((validity) => {
+        return (
+          validity &&
+          (!validity.attempt || !validity.resolved || !validity.exists)
+        );
+      })
+    ) {
       if (!isValidEdit) return;
       setIsValidEdit(false);
       return;
     }
     setIsValidEdit(true);
-  }, [currentButton, modified, isValidEdit]);
+  }, [currentButton, modified, isValidEdit, subredditValidity]);
 
-  console.log(currentButton.subreddits);
+  console.log(subredditValidity);
 
   const lastSubredditRef = useRef();
 
@@ -192,10 +202,7 @@ const ButtonEditor = ({
                 >
                   Delete subreddit
                 </button>
-                <div
-                  className="subredditlistitem"
-                  key={`subreddit${subreddit}`}
-                >
+                <div className="subredditlistitem" key={`subreddit${j}`}>
                   <p>r/</p>
                   <input
                     className="subredditinput"
@@ -239,22 +246,24 @@ const ButtonEditor = ({
             );
           })}
           {currentButton.subreddits.length < MAX_SUBREDDITS && (
-            <input
-              className="newsubreddit"
-              type="text"
-              onChange={(e) => {
-                editCurrentButton(
-                  index,
-                  e.target.value,
-                  "subreddits",
-                  currentButton.subreddits.length
-                );
-                setCheckingSubreddit(currentButton.subreddits.length);
-                setNewSubredditAdded(true);
-              }}
-              value=""
-              placeholder="Add a subreddit..."
-            />
+            <div className="subredditlistitem newsubreddit">
+              <p>r/</p>
+              <input
+                type="text"
+                onChange={(e) => {
+                  editCurrentButton(
+                    index,
+                    e.target.value,
+                    "subreddits",
+                    currentButton.subreddits.length
+                  );
+                  setCheckingSubreddit(currentButton.subreddits.length);
+                  setNewSubredditAdded(true);
+                }}
+                value=""
+                placeholder="Add a subreddit..."
+              />
+            </div>
           )}
         </div>
       </fieldset>
@@ -280,7 +289,7 @@ const ButtonEditor = ({
           Delete Button
         </button>
         <button type="submit" disabled={!isValidEdit}>
-          Confirm
+          Confirm changes
         </button>
       </div>
     </form>
