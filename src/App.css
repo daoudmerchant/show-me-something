@@ -436,11 +436,18 @@ button {
   margin: 0;
 }
 
+.subredditicon {
+  position: absolute;
+  max-height: 100%;
+  max-width: 100%;
+}
+
 .subredditvalidity {
   display: grid;
   grid-template-columns: 1fr 3fr;
   grid-template-rows: 2fr;
   margin: 0.5em 0;
+  position: relative;
 }
 
 .checkingstatus {

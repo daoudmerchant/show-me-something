@@ -28,7 +28,26 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   // media query
   const isTouchscreen = useMediaQuery({ query: "(hover: none)" });
 
-  // Show / hide button editor (reset buttons on hide)
+  // Set state on render
+  useEffect(() => {
+    if (!buttons) return;
+    const clonedButtons = [..._.cloneDeep(buttons), { ...DEFAULT_BUTTON }];
+    setCurrentButtons(clonedButtons);
+    const falseArray = new Array(buttons.length).fill(false);
+    setButtonsBeingEdited(falseArray);
+    setButtonValidity(falseArray);
+  }, [buttons]);
+
+  // Show / hide button editor
+  const toggleButtonBeingEdited = (i) => {
+    setButtonsBeingEdited((prevButtonsBeingEdited) => {
+      let newButtonsBeingEdited = [...prevButtonsBeingEdited];
+      newButtonsBeingEdited[i] = !prevButtonsBeingEdited[i];
+      return newButtonsBeingEdited;
+    });
+  };
+
+  // Toggle button edit (reset buttons on hide)
   const toggleButtonEdit = (i) => {
     if (buttonsBeingEdited[i]) {
       // closing editor, cancelling edit
@@ -44,34 +63,18 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
         return newButtons;
       });
     }
-    setButtonsBeingEdited((prevButtonsBeingEdited) => {
-      const newButtonsBeingEdited = [...prevButtonsBeingEdited];
-      newButtonsBeingEdited[i] = !prevButtonsBeingEdited[i];
-      return newButtonsBeingEdited;
-    });
+    toggleButtonBeingEdited(i);
   };
-
-  // Set state on render
-  useEffect(() => {
-    if (!buttons) return;
-    const clonedButtons = [..._.cloneDeep(buttons), { ...DEFAULT_BUTTON }];
-    setCurrentButtons(clonedButtons);
-    const falseArray = new Array(buttons.length).fill(false);
-    setButtonsBeingEdited(falseArray);
-    setButtonValidity(falseArray);
-  }, [buttons]);
 
   // update current buttons on edit
   const editCurrentButton = (buttonIndex, value, param, subparam) => {
     setCurrentButtons((prevButtons) => {
       let newButtons = _.cloneDeep(prevButtons);
-      console.log(newButtons);
       if (subparam !== undefined) {
         newButtons[buttonIndex][param][subparam] = value;
       } else {
         newButtons[buttonIndex][param] = value;
       }
-      console.log(newButtons);
       return newButtons;
     });
   };
@@ -86,19 +89,18 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
     });
   };
 
-  const deleteButton = useCallback(
-    async (id) => {
-      if (!id) {
-        // No ID, delete button for temporary new button
-        toggleButtonEdit(currentButtons.length - 1);
-        return;
-      }
-      const deletedButton = buttons.find((button) => button.id === id);
-      const deleteSuccess = await updateData.deleteButton(uid, deletedButton);
-      deleteSuccess || alert("Could not delete!");
-    },
-    [buttons, currentButtons, uid]
-  );
+  const deleteButton = (text) => {
+    setCurrentButtons((prevButtons) =>
+      prevButtons.filter((button) => button.text !== text)
+    );
+  };
+
+  const checkForDuplicateButton = (text) => {
+    return (
+      currentButtons.filter((currentButton) => currentButton.text === text)
+        .length > 1
+    );
+  };
 
   if (!currentButtons) return <p>Loading your buttons...</p>;
 
@@ -119,7 +121,7 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
       </aside>
       {currentButtons.map((currentButton, i) => {
         const toggleThisButtonEdit = () => toggleButtonEdit(i);
-
+        const keepChanges = () => toggleButtonBeingEdited(i);
         return (
           <div className="editbutton">
             <Button
@@ -141,6 +143,8 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
                     index={i}
                     cancel={toggleThisButtonEdit}
                     modified={modified}
+                    keepChanges={keepChanges}
+                    isDuplicate={checkForDuplicateButton(currentButton.text)}
                   />
                 );
               })()}

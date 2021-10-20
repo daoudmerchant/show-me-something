@@ -11,6 +11,8 @@ const ButtonEditor = ({
   index,
   cancel,
   modified,
+  keepChanges,
+  isDuplicate,
 }) => {
   /*
     Index-based solution for checkingSubreddit, could also refactor
@@ -26,21 +28,29 @@ const ButtonEditor = ({
   useEffect(() => {
     if (
       !modified ||
-      !subredditValidity.length ||
+      isDuplicate ||
       !currentButton.subreddits.length ||
       subredditValidity.some((validity) => {
         return (
-          validity &&
+          !!validity &&
           (!validity.attempt || !validity.resolved || !validity.exists)
         );
       })
     ) {
-      if (!isValidEdit) return;
+      // if (!isValidEdit) return;
       setIsValidEdit(false);
       return;
     }
     setIsValidEdit(true);
-  }, [currentButton, modified, isValidEdit, subredditValidity]);
+  }, [
+    currentButton,
+    currentButton.style,
+    currentButton.subreddits,
+    modified,
+    isValidEdit,
+    subredditValidity,
+    isDuplicate,
+  ]);
 
   console.log(subredditValidity);
 
@@ -49,16 +59,14 @@ const ButtonEditor = ({
   const handleDeleteSubreddit = (subreddit, subredditIndex) => {
     // remove subreddit from currentButton
     deleteCurrentButtonSubreddit(index, subreddit);
-    // reset last checked subreddit if deleted
-    if (subredditIndex === checkingSubreddit) setCheckingSubreddit(false);
     // update local state
+    setCheckingSubreddit(null);
     if (
       subredditValidity[checkingSubreddit - 1] === false ||
       subredditIndex > checkingSubreddit
     )
       return;
     // TODO: Manage delete subreddit while checking another(!)
-    setCheckingSubreddit(null);
     setSubredditValidity((prevSubredditValidity) => {
       return [
         ...prevSubredditValidity.filter(
@@ -98,8 +106,9 @@ const ButtonEditor = ({
     });
     // small delay to prevent API calls on every character edit!
     const timeout = setTimeout(async () => {
+      if (checkingSubreddit === null) return;
       setSubredditValidity((prevValidity) => {
-        const newValidity = [...prevValidity];
+        let newValidity = [...prevValidity];
         newValidity[checkingSubreddit] = {
           attempt: currentButton.subreddits[checkingSubreddit],
           resolved: false,
@@ -134,7 +143,13 @@ const ButtonEditor = ({
   }, [checkingSubreddit, currentButton.subreddits[checkingSubreddit]]);
 
   return (
-    <form className="buttoneditorform">
+    <form
+      className="buttoneditorform"
+      onSubmit={(e) => {
+        e.preventDefault();
+        keepChanges();
+      }}
+    >
       <fieldset>
         <legend>Style</legend>
         <div>
@@ -157,6 +172,7 @@ const ButtonEditor = ({
               setEdited(true);
             }}
           />
+          {isDuplicate && <p>Button name already exists!</p>}
         </div>
 
         <div>
@@ -224,13 +240,19 @@ const ButtonEditor = ({
                   {!!subredditValidity[j] && subredditValidity[j].attempt && (
                     <div className="subredditvalidity">
                       <div className="checkingstatus">
-                        <p>
-                          {!subredditValidity[j].resolved
-                            ? "..."
-                            : subredditValidity[j].exists
-                            ? "✅"
-                            : "❌"}
-                        </p>
+                        {!subredditValidity[j].resolved ? (
+                          <p>...</p>
+                        ) : !subredditValidity[j].exists ? (
+                          <p>❌</p>
+                        ) : !!subredditValidity[j].icon ? (
+                          <img
+                            className="subredditicon"
+                            src={subredditValidity[j].icon}
+                            alt={subredditValidity[j].subtitle}
+                          />
+                        ) : (
+                          <p>🙂</p>
+                        )}
                       </div>
                       {subredditValidity[j].exists && (
                         <>
@@ -271,21 +293,7 @@ const ButtonEditor = ({
         <button type="button" onClick={cancel}>
           Cancel
         </button>
-        <button
-          type="button"
-          onClick={() => {
-            if (
-              // TODO: Improve user prompt
-              // eslint-disable-next-line
-              confirm(
-                `Are you sure you want to delete ${
-                  currentButton.text || "this button"
-                }?`
-              )
-            )
-              deleteButton(currentButton.id);
-          }}
-        >
+        <button type="button" onClick={() => deleteButton(currentButton.text)}>
           Delete Button
         </button>
         <button type="submit" disabled={!isValidEdit}>

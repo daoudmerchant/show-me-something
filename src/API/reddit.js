@@ -209,10 +209,12 @@ export const checkSubredditExists = async (subreddit) => {
     const data = await (
       await fetch(`https://www.reddit.com/r/${subreddit}/about.json`)
     ).json();
+    console.log(data);
     return {
       exists: true,
       subreddit: data.data.display_name,
       subtitle: data.data.title,
+      icon: data.data.icon_img || data.data.header_img || null,
     };
   } catch (error) {
     return {
