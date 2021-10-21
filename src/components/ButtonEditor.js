@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { checkSubredditExists } from "../API/reddit";
 
+import { DEFAULT_BUTTON } from "../constants";
+
 const MAX_SUBREDDITS = 3;
 
 const ButtonEditor = ({
@@ -23,22 +25,34 @@ const ButtonEditor = ({
   const [newSubredditAdded, setNewSubredditAdded] = useState(false);
   const [isValidEdit, setIsValidEdit] = useState(false);
 
-  const newButtonText = "Add New Button...";
-
   // check if valid each render
   useEffect(() => {
+    console.log(`Modified: ${modified}`);
+    console.log(`Not a duplicate: ${!isDuplicate}`);
+    console.log(`Has text: ${!!currentButton.text}`);
+    console.log(
+      `Is not new button text: ${!currentButton.text === DEFAULT_BUTTON.text}`
+    );
+    console.log(`Has subreddits: ${!!currentButton.subreddits.length}`);
+    console.log(
+      `Only contains valid subreddits: ${subredditValidity
+        .filter((validity) => !!validity)
+        .every(
+          (validity) =>
+            !!validity.attempt && validity.resolved && validity.exists
+        )}`
+    );
     if (
       !modified ||
       isDuplicate ||
       !currentButton.text ||
-      currentButton.text === newButtonText ||
+      currentButton.text === DEFAULT_BUTTON.text ||
       !currentButton.subreddits.length ||
-      subredditValidity.some((validity) => {
-        return (
-          !!validity &&
-          (!validity.attempt || !validity.resolved || !validity.exists)
-        );
-      })
+      subredditValidity
+        .filter((validity) => !!validity)
+        .some((validity) => {
+          return !validity.attempt || !validity.resolved || !validity.exists;
+        })
     ) {
       // if (!isValidEdit) return;
       setIsValidEdit(false);
@@ -46,7 +60,7 @@ const ButtonEditor = ({
     }
     setIsValidEdit(true);
   }, [
-    currentButton,
+    currentButton.text,
     currentButton.style,
     currentButton.subreddits,
     modified,
@@ -160,7 +174,9 @@ const ButtonEditor = ({
           <input
             type="text"
             value={
-              currentButton.text === newButtonText ? "" : currentButton.text
+              currentButton.text === DEFAULT_BUTTON.text
+                ? ""
+                : currentButton.text
             }
             maxLength="12"
             placeholder="Add button text..."
@@ -309,7 +325,7 @@ const ButtonEditor = ({
         <button
           type="button"
           onClick={() => deleteButton(currentButton.id)}
-          disabled={currentButton.text === newButtonText}
+          disabled={currentButton.text === DEFAULT_BUTTON.text}
         >
           Delete Button
         </button>
