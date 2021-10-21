@@ -34,15 +34,22 @@ nav > * {
 }
 
 #userbar {
+  height: 40px;
   display: flex;
   align-items: center;
+  border-radius: 20px;
+  background-color: white;
+  padding: 0 5px;
+}
+
+#userbar p {
+  margin: 0 10px;
 }
 
 .userpic {
-  height: 40px;
-  width: 40px;
+  height: 30px;
+  width: 30px;
   border-radius: 50%;
-  margin-left: 1rem;
 }
 
 div.userpic {
@@ -277,8 +284,8 @@ iframe {
   width: 100%;
 }
 
-.commentbox > *:first-child {
-  text-align: start;
+.commentcontent {
+  text-align: left;
   font-size: larger;
 }
 

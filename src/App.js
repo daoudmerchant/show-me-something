@@ -18,7 +18,6 @@ import About from "./components/About";
 import Canvas from "./components/Canvas";
 import Settings from "./components/Settings";
 import ButtonBox from "./components/ButtonBox";
-import ButtonSettings from "./components/ButtonSettings";
 
 // contexts
 import { RedditPostContext } from "./contexts";
@@ -28,6 +27,11 @@ import { shuffleArray } from "./utils";
 
 function App() {
   // STATE
+  const [firebaseReady, setFirebaseReady] = useState({
+    initialized: false,
+    observed: false,
+  });
+  const [user, setUser] = useState(undefined);
   const [buttons, setButtons] = useState(null);
   const [settings, setSettings] = useState(null);
   const [fetchingPosts, setFetchingPosts] = useState(false);
@@ -35,66 +39,83 @@ function App() {
   const [currentCategory, setCurrentCategory] = useState(null);
   const [redditLists, setRedditLists] = useState(null);
 
-  const resetAllData = () => {
+  const confirmWelcomed = useCallback(() => {
+    if (welcomed) return;
+    setWelcomed(true);
+  }, [welcomed]);
+
+  const resetAllData = useCallback(() => {
     // TODO: Update
-    setButtons(null);
-    setSettings(null);
-    setRedditLists(null);
-    setCurrentCategory(null);
-  };
+    const data = [
+      {
+        state: buttons,
+        setState: setButtons,
+      },
+      {
+        state: settings,
+        setState: setSettings,
+      },
+      {
+        state: redditLists,
+        setState: setRedditLists,
+      },
+      {
+        state: currentCategory,
+        setState: currentCategory,
+      },
+    ];
+    data.forEach((dataset) => {
+      if (!dataset.state) return;
+      dataset.setState(null);
+    });
+  }, [buttons, currentCategory, redditLists, settings]);
 
   // FIREBASE
-  const [user, setUser] = useState(undefined);
-
+  // observer function
   const authStateObserver = (user) => {
     user
       ? setUser(() => ({ ...user, displayName: user.displayName.split(" ") }))
       : setUser(undefined);
   };
 
-  const isInitialized = getInitStatus();
-
-  // Pass Firebase authStateObserver
+  // SET-UP
+  // Report initialized
   useEffect(() => {
-    if (!isInitialized) return;
+    if (firebaseReady.initialized || !getInitStatus()) return;
+    setFirebaseReady((prevStatus) => ({ ...prevStatus, initialized: true }));
+  }, [firebaseReady.initialized]);
+
+  // Pass observer and report observed
+  useEffect(() => {
+    if (!firebaseReady.initialized || firebaseReady.observed) return;
+    // Pass Firebase authStateObserver
     initFirebaseAuth(authStateObserver);
-  }, [isInitialized]);
+    setFirebaseReady((prevStatus) => ({ ...prevStatus, observed: true }));
+  }, [firebaseReady]);
 
-  // Get default buttons from database
-  const getDefaults = useCallback(async () => {
-    if (!!user) return;
-    resetAllData();
-    let isSubscribed = true;
-    const defaultData = await getData.defaults();
-    if (isSubscribed) {
-      setButtons(defaultData.buttons);
-      setSettings(defaultData.settings);
-    }
-    return () => (isSubscribed = false);
-  }, [user]);
+  // Firebase query
+  const getFirebaseData = useCallback(
+    async (fn, arg) => {
+      resetAllData();
+      let isSubscribed = true;
+      const data = await fn(arg);
+      if (isSubscribed) {
+        setButtons(data.buttons);
+        setSettings(data.settings);
+      }
+      return () => (isSubscribed = false);
+    },
+    [resetAllData]
+  );
 
-  // Set default buttons on mount
+  // Set buttons and settings on user change
   useEffect(() => {
-    getDefaults();
-  }, [user]);
-
-  // get user buttons from database
-  const setUserState = useCallback(async () => {
-    resetAllData();
-    let isSubscribed = true;
-    const userData = await getData.userData(user.uid);
-    if (isSubscribed) {
-      setButtons(userData.buttons);
-      setSettings(userData.settings);
+    if (!user) {
+      getFirebaseData(getData.defaults);
+      return;
     }
-    return () => (isSubscribed = false);
+    getFirebaseData(getData.userData, user.uid);
   }, [user]);
-
-  // set user buttons on sign-in
-  useEffect(() => {
-    if (!user) return;
-    setUserState();
-  }, [setUserState, user]);
 
   // REDDIT
   const categoryExists = useCallback(
@@ -122,7 +143,7 @@ function App() {
           });
           return redditResponse;
         };
-        if (!welcomed) setWelcomed(true);
+        confirmWelcomed();
         let subredditLists = [];
         for (let i = 0; i < subreddits.length; i++) {
           const subredditList = await getSubredditList(subreddits[i]);
@@ -167,7 +188,7 @@ function App() {
       fetchingPosts,
       listFinished,
       settings,
-      welcomed,
+      confirmWelcomed,
     ]
   );
 
@@ -183,12 +204,20 @@ function App() {
   return (
     <main className="App">
       <Router>
-        <NavBar user={user} />
+        <NavBar user={user} confirmWelcomed={confirmWelcomed} />
         <RedditPostContext.Provider value={RedditContextValue}>
           <Switch>
             <Route exact path="/">
               <div id="appcontainer">
-                <Canvas welcomed={welcomed} />
+                <Canvas
+                  welcomed={welcomed}
+                  showContent={
+                    settings && {
+                      promptOnNSFW: settings.promptOnNSFW,
+                      promptOnSpoiler: settings.promptOnSpoiler,
+                    }
+                  }
+                />
                 <ButtonBox buttons={buttons} />
               </div>
             </Route>

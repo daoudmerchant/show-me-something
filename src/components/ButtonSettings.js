@@ -63,9 +63,9 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
 
   // tack on new button to current buttons
   useEffect(() => {
+    if (!currentButtons) return;
     const lastCurrentButton = currentButtons[currentButtons.length - 1];
     if (
-      !currentButtons ||
       lastCurrentButton.text === DEFAULT_BUTTON.text ||
       buttonsBeingEdited[lastCurrentButton.id] === true
     )

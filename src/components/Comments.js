@@ -1,5 +1,7 @@
 import { useState, useCallback, useEffect, useContext } from "react";
 import { useMediaQuery } from "react-responsive";
+import { useHistory } from "react-router";
+import ReactMarkdown from "react-markdown";
 
 // context
 import { RedditPostContext } from "../contexts";
@@ -7,7 +9,12 @@ import { RedditPostContext } from "../contexts";
 // API
 import { getCommentData } from "../API/reddit";
 
+// components
+import Prompt from "./Prompt";
+
 const Comments = () => {
+  const history = useHistory();
+
   // state
   const [clicked, setClicked] = useState(false);
   const [comments, setComments] = useState(null);
@@ -22,9 +29,7 @@ const Comments = () => {
   const isTouchscreen = useMediaQuery({ query: "(hover: none)" });
 
   const getComments = useCallback(async () => {
-    console.log(currentPost.url);
     const postComments = await getCommentData(currentPost.url);
-    console.log(postComments);
     setComments(postComments);
   }, [currentPost.url]);
 
@@ -38,6 +43,12 @@ const Comments = () => {
     if (!comments) getComments();
     toggleClicked();
   };
+
+  const retryGetComments = () => {
+    setComments(null);
+    getComments();
+  };
+
   return (
     <div
       id="comments"
@@ -51,19 +62,27 @@ const Comments = () => {
         clicked ? "close" : "expand"
       } comments`}</div>
       <div id="commentcontainer">
-        {comments ? (
+        {!!comments ? (
           comments.map((comment) => {
             if (!comment.content || !comment.author) {
               return;
             }
             return (
               <div className="commentbox">
-                <p>{`"${comment.content}"`}</p>
+                <div className="commentcontent">
+                  <ReactMarkdown>{comment.content}</ReactMarkdown>
+                </div>
                 <hr />
                 <p>{`- ${comment.author}`}</p>
               </div>
             );
           })
+        ) : comments === false ? (
+          <Prompt
+            type="RedditError"
+            confirm={retryGetComments}
+            cancel={() => history.push("/settings")}
+          />
         ) : (
           <p>Loading comments...</p>
         )}

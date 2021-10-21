@@ -5,7 +5,7 @@ import { RedditPostContext } from "../contexts";
 import Post from "./Post";
 import Loading from "./Loading";
 
-const Canvas = ({ welcomed }) => {
+const Canvas = ({ welcomed, showContent }) => {
   const { fetchingPosts, finishedList, currentPost } =
     useContext(RedditPostContext);
   return (
@@ -15,7 +15,7 @@ const Canvas = ({ welcomed }) => {
         if (fetchingPosts) return <Loading type="POSTS" />;
         if (!!finishedList) return <div>Finished!</div>;
         if (!currentPost) return <div>Click below to begin</div>;
-        return <Post />;
+        return <Post showContent={showContent} />;
       })()}
     </div>
   );

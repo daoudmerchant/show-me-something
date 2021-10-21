@@ -14,7 +14,7 @@ export const getRedditData = async ({
     if (data.error === 404) {
       return [];
     }
-    //
+    //zs
     const parsedData = data.data.children.map((child) => ({
       title: child.data.title,
       text: child.data.selftext,
@@ -23,7 +23,8 @@ export const getRedditData = async ({
       downvotes: child.data.downs,
       controversiality: child.data.upvote_ratio,
       id: child.data.id,
-      nsfw: child.data.over_18,
+      NSFW: child.data.over_18,
+      spoiler: child.data.spoiler,
       url: `https://www.reddit.com${child.data.permalink.slice(0, -1)}`,
       media: (() => {
         if (child.data.post_hint === "link") {
@@ -180,6 +181,7 @@ export const getRedditData = async ({
     return parsedData;
   } catch (error) {
     console.error(error);
+    return false;
   }
 };
 
@@ -201,6 +203,7 @@ export const getCommentData = async (url) => {
       .filter((comment) => !comment.isMod);
   } catch (error) {
     console.log(error);
+    return false;
   }
 };
 

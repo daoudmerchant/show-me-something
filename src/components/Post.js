@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect, useMemo } from "react";
 import { RedditPostContext } from "../contexts";
 import ReactMarkdown from "react-markdown";
 
@@ -9,15 +9,55 @@ import newwindowicon from "../images/newwindow.png";
 import { insertLineBreaks } from "../utils";
 
 // components
+import Prompt from "./Prompt";
 import Image from "./mediaPosts/Image";
 import Gallery from "./mediaPosts/Gallery";
 import Video from "./mediaPosts/Video";
 import Wikipedia from "./mediaPosts/Wikipedia";
 import Comments from "./Comments";
 
-const Post = () => {
-  const { currentPost } = useContext(RedditPostContext);
+// constants
+const FLAGS = ["NSFW", "spoiler"];
 
+const Post = ({ showContent }) => {
+  const { currentPost } = useContext(RedditPostContext);
+  const [visibleNSFW, setVisibleNSFW] = useState(null);
+  const [visibleSpoiler, setVisibleSpoiler] = useState(null);
+
+  const postHasNoFlags = FLAGS.every((flag) => !currentPost[flag]);
+
+  // namespace props and state for functional access
+  const userVisibility = useMemo(
+    () => ({
+      NSFW: !showContent.promptOnNSFW,
+      spoiler: !showContent.promptOnSpoiler,
+    }),
+    [showContent]
+  );
+
+  const postVisibility = useMemo(
+    () => ({
+      visibleNSFW,
+      denyVisibleNSFW: () => setVisibleNSFW(false),
+      confirmVisibleNSFW: () => setVisibleNSFW(true),
+      visiblespoiler: visibleSpoiler,
+      denyVisiblespoiler: () => setVisibleSpoiler(false),
+      confirmVisiblespoiler: () => setVisibleSpoiler(true),
+    }),
+    [visibleNSFW, visibleSpoiler]
+  );
+
+  // set content visibility state on render
+  useEffect(() => {
+    if (!showContent || postHasNoFlags) return;
+    FLAGS.forEach((flag) => {
+      userVisibility[flag]
+        ? postVisibility[`confirmVisible${flag}`]()
+        : postVisibility[`denyVisible${flag}`]();
+    });
+  }, [postHasNoFlags, postVisibility, showContent, userVisibility]);
+
+  // CONTENT
   const Content = () => {
     if (currentPost.media.type === "image") {
       return (
@@ -48,8 +88,22 @@ const Post = () => {
     if (currentPost.media.type === "website") {
       return <p>TODO: External link to website</p>;
     }
-    return <p>{currentPost.type}</p>;
+    return (
+      <p>{`Oops, I haven't got round to handling "${currentPost.type}" yet... Sorry!`}</p>
+    );
   };
+
+  const PostBody = () => (
+    <>
+      <Content />
+      <Comments />
+    </>
+  );
+
+  // show no content before state initialisation
+  if (!postHasNoFlags && (visibleNSFW === null || visibleSpoiler === null))
+    return null;
+
   return (
     <div id="post">
       <div className="posttitle">
@@ -69,8 +123,23 @@ const Post = () => {
           />
         </a>
       </div>
-      <Content />
-      <Comments />
+      {(() => {
+        if (postHasNoFlags) {
+          console.log("No flags!");
+          return <PostBody />;
+        }
+        for (let i = 0; i < FLAGS.length; i++) {
+          if (currentPost[FLAGS[i]])
+            return postVisibility[`visible${FLAGS[i]}`] ? (
+              <PostBody />
+            ) : (
+              <Prompt
+                type={FLAGS[i]}
+                confirm={() => postVisibility[`setVisible${FLAGS[i]}`](true)}
+              />
+            );
+        }
+      })()}
     </div>
   );
 };
