@@ -1,12 +1,11 @@
-import { memo } from "react";
+import { useState } from "react";
+
 import { Link, useLocation } from "react-router-dom";
 import { signInWithGoogle } from "../API/firebase/firebase";
 
-import defaultProfilePic from "../images/profile-default.png";
-
 const NavBar = ({ user }) => {
+  const [canGetPic, setCanGetPic] = useState(true);
   const { pathname } = useLocation();
-  user && console.log(user.photoURL);
   return (
     <nav>
       <Link to="/" id="home">
@@ -23,8 +22,19 @@ const NavBar = ({ user }) => {
           }}
         >
           <div id="userbar">
-            <p>{user.displayName}</p>
-            <img id="userpic" src={user.photoURL} alt="user profile pic" />
+            <p>{user.displayName.join(" ")}</p>
+            {user.photoURL && canGetPic ? (
+              <img
+                className="userpic"
+                src={user.photoURL}
+                alt="user profile pic"
+                onError={() => setCanGetPic(false)}
+              />
+            ) : (
+              <div className="userpic">
+                <p>{user.displayName.map((name) => name.slice(0, 1))}</p>
+              </div>
+            )}
           </div>
         </Link>
       )}
@@ -32,4 +42,4 @@ const NavBar = ({ user }) => {
   );
 };
 
-export default memo(NavBar);
+export default NavBar;

@@ -32,8 +32,10 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   // media query
   const isTouchscreen = useMediaQuery({ query: "(hover: none)" });
 
-  // generate id
-  const _getId = () => (Math.random() * 100000000000).toFixed();
+  // generate id for local modification/deletion
+  // Not handling repeat IDs because... Really, the likelihood...
+  // Using premade IDs would involve another setState and another render
+  const _getId = () => Math.random() * 100000000000000000;
 
   const getNewButton = (id) => {
     return { ..._.cloneDeep(DEFAULT_BUTTON), id: id || _getId() };
@@ -61,9 +63,11 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
 
   // tack on new button to current buttons
   useEffect(() => {
+    const lastCurrentButton = currentButtons[currentButtons.length - 1];
     if (
       !currentButtons ||
-      currentButtons[currentButtons.length - 1].text === DEFAULT_BUTTON.text
+      lastCurrentButton.text === DEFAULT_BUTTON.text ||
+      buttonsBeingEdited[lastCurrentButton.id] === true
     )
       return;
     const newId = _getId();

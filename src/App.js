@@ -47,7 +47,9 @@ function App() {
   const [user, setUser] = useState(undefined);
 
   const authStateObserver = (user) => {
-    user ? setUser(user) : setUser(undefined);
+    user
+      ? setUser(() => ({ ...user, displayName: user.displayName.split(" ") }))
+      : setUser(undefined);
   };
 
   const isInitialized = getInitStatus();
