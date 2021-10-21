@@ -3,7 +3,7 @@ import { useMediaQuery } from "react-responsive";
 import _ from "lodash/";
 
 // utils
-
+import { DEFAULT_BUTTON } from "../constants";
 import { fireCallbacks } from "../utils";
 
 // API
@@ -12,16 +12,6 @@ import { updateData } from "../API/firebase/firebase";
 // components
 import Button from "./Button";
 import ButtonEditor from "./ButtonEditor";
-
-const DEFAULT_BUTTON = {
-  text: "Add New Button...",
-  style: {
-    color: "#000000",
-    backgroundColor: "#FFFFFF",
-    font: "",
-  },
-  subreddits: [],
-};
 
 const ButtonSettings = ({ uid, buttons, setButtons }) => {
   const [referenceButtons, setReferenceButtons] = useState(null);

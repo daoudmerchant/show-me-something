@@ -23,11 +23,15 @@ const ButtonEditor = ({
   const [newSubredditAdded, setNewSubredditAdded] = useState(false);
   const [isValidEdit, setIsValidEdit] = useState(false);
 
+  const newButtonText = "Add New Button...";
+
   // check if valid each render
   useEffect(() => {
     if (
       !modified ||
       isDuplicate ||
+      !currentButton.text ||
+      currentButton.text === newButtonText ||
       !currentButton.subreddits.length ||
       subredditValidity.some((validity) => {
         return (
@@ -91,15 +95,17 @@ const ButtonEditor = ({
       return;
     let isSubscribed = true;
     setSubredditValidity((prevValidity) => {
-      return [
-        ...prevValidity.map((validity, i) => {
-          if (i === checkingSubreddit)
-            return {
-              attempt: null,
-            };
-          return validity;
-        }),
-      ];
+      return prevValidity.length
+        ? [
+            ...prevValidity.map((validity, i) => {
+              if (i === checkingSubreddit)
+                return {
+                  attempt: null,
+                };
+              return validity;
+            }),
+          ]
+        : [{ attempt: null }];
     });
     // small delay to prevent API calls on every character edit!
     const timeout = setTimeout(async () => {
@@ -154,9 +160,7 @@ const ButtonEditor = ({
           <input
             type="text"
             value={
-              currentButton.text === "Add New Button..."
-                ? ""
-                : currentButton.text
+              currentButton.text === newButtonText ? "" : currentButton.text
             }
             maxLength="12"
             placeholder="Add button text..."
@@ -305,7 +309,7 @@ const ButtonEditor = ({
         <button
           type="button"
           onClick={() => deleteButton(currentButton.id)}
-          disabled={currentButton.text === "Add New Button..."}
+          disabled={currentButton.text === newButtonText}
         >
           Delete Button
         </button>
