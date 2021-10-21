@@ -18,6 +18,8 @@ export const insertLineBreaks = (string) => {
 // manual object utils for known structures, replace
 // with library-based solution if database refactored
 
+export const getId = () => Math.random() * 100000000000000000;
+
 export const getNewButtons = (prevButtons) => {
   // deep clone
   return prevButtons.map((button) => ({

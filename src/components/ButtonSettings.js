@@ -4,7 +4,7 @@ import _ from "lodash/";
 
 // utils
 import { DEFAULT_BUTTON } from "../constants";
-import { fireCallbacks } from "../utils";
+import { fireCallbacks, getId } from "../utils";
 
 // API
 import { updateData } from "../API/firebase/firebase";
@@ -25,17 +25,26 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   // generate id for local modification/deletion
   // Not handling repeat IDs because... Really, the likelihood...
   // Using premade IDs would involve another setState and another render
-  const _getId = () => Math.random() * 100000000000000000;
 
   const getNewButton = (id) => {
-    return { ..._.cloneDeep(DEFAULT_BUTTON), id: id || _getId() };
+    return { ..._.cloneDeep(DEFAULT_BUTTON), id: id || getId() };
   };
 
   // Set state on render
   useEffect(() => {
     if (!buttons) return;
     const _getDefaultButtons = () => {
-      return [..._.cloneDeep(buttons), getNewButton()];
+      return [
+        ..._.cloneDeep(buttons).map((button) => ({
+          ...button,
+          subreddits: button.subreddits.map((subreddit) => ({
+            name: subreddit,
+            // Map temporary ID on to every subreddit
+            id: getId(),
+          })),
+        })),
+        getNewButton(),
+      ];
     };
     fireCallbacks(_getDefaultButtons, setReferenceButtons, setCurrentButtons);
 
@@ -60,7 +69,7 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
       buttonsBeingEdited[lastCurrentButton.id] === true
     )
       return;
-    const newId = _getId();
+    const newId = getId();
     setCurrentButtons((prevButtons) => {
       return [...prevButtons, getNewButton(newId)];
     });
@@ -116,15 +125,44 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
     toggleButtonBeingEdited(id);
   };
 
+  const findIndex = (array, id) => {
+    return array.findIndex((obj) => obj.id === id);
+  };
+
   // update current buttons on edit
-  const editCurrentButton = (id, value, param, subparam) => {
+  const editCurrentButton = ({
+    buttonId,
+    value,
+    param,
+    subparam,
+    subredditId,
+  }) => {
     setCurrentButtons((prevButtons) => {
       let newButtons = [...prevButtons];
-      let editedButtonIndex = newButtons.findIndex(
-        (button) => button.id === id
-      );
-      if (subparam !== undefined) {
+      const editedButtonIndex = findIndex(newButtons, buttonId);
+      if (!!subparam) {
         newButtons[editedButtonIndex][param][subparam] = value;
+      } else if (!!subredditId && !param) {
+        // is subreddit edit
+        const editedSubredditIndex = findIndex(
+          newButtons[editedButtonIndex].subreddits,
+          subredditId
+        );
+        if (editedSubredditIndex >= 0) {
+          // edit to preexisting subreddit
+          newButtons[editedButtonIndex].subreddits[editedSubredditIndex] = {
+            ...newButtons[editedSubredditIndex].subreddits[
+              editedSubredditIndex
+            ],
+            name: value,
+          };
+        } else {
+          // newly added subreddit
+          newButtons[editedButtonIndex].subreddits.push({
+            name: value,
+            id: subredditId,
+          });
+        }
       } else {
         newButtons[editedButtonIndex][param] = value;
       }
@@ -132,12 +170,13 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
     });
   };
 
-  const deleteCurrentButtonSubreddit = (buttonIndex, deletedSubreddit) => {
+  const deleteCurrentButtonSubreddit = (buttonId, subredditId) => {
     setCurrentButtons((prevButtons) => {
       let newButtons = [...prevButtons];
-      newButtons[buttonIndex].subreddits = newButtons[
-        buttonIndex
-      ].subreddits.filter((subreddit) => subreddit !== deletedSubreddit);
+      const editedButtonIndex = findIndex(newButtons, buttonId);
+      newButtons[editedButtonIndex].subreddits = newButtons[
+        editedButtonIndex
+      ].subreddits.filter((subreddit) => subreddit.id !== subredditId);
       return newButtons;
     });
   };

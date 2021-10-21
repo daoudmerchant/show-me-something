@@ -3,6 +3,8 @@ import { checkSubredditExists } from "../API/reddit";
 
 import { DEFAULT_BUTTON } from "../constants";
 
+import { getId } from "../utils";
+
 const MAX_SUBREDDITS = 3;
 
 const ButtonEditor = ({
@@ -27,21 +29,6 @@ const ButtonEditor = ({
 
   // check if valid each render
   useEffect(() => {
-    console.log(`Modified: ${modified}`);
-    console.log(`Not a duplicate: ${!isDuplicate}`);
-    console.log(`Has text: ${!!currentButton.text}`);
-    console.log(
-      `Is not new button text: ${!currentButton.text === DEFAULT_BUTTON.text}`
-    );
-    console.log(`Has subreddits: ${!!currentButton.subreddits.length}`);
-    console.log(
-      `Only contains valid subreddits: ${subredditValidity
-        .filter((validity) => !!validity)
-        .every(
-          (validity) =>
-            !!validity.attempt && validity.resolved && validity.exists
-        )}`
-    );
     if (
       !modified ||
       isDuplicate ||
@@ -71,9 +58,9 @@ const ButtonEditor = ({
 
   const lastSubredditRef = useRef();
 
-  const handleDeleteSubreddit = (subreddit, subredditIndex) => {
+  const handleDeleteSubreddit = (subredditId, subredditIndex) => {
     // remove subreddit from currentButton
-    deleteCurrentButtonSubreddit(currentButton.id, subreddit);
+    deleteCurrentButtonSubreddit(currentButton.id, subredditId);
     // update local state
     setCheckingSubreddit(null);
     if (
@@ -86,7 +73,7 @@ const ButtonEditor = ({
       return [
         ...prevSubredditValidity.filter(
           (subredditValidity) =>
-            !!subredditValidity && subredditValidity.attempt !== subreddit
+            !!subredditValidity && subredditValidity.attempt !== subredditId
         ),
       ];
     });
@@ -127,20 +114,20 @@ const ButtonEditor = ({
       setSubredditValidity((prevValidity) => {
         let newValidity = [...prevValidity];
         newValidity[checkingSubreddit] = {
-          attempt: currentButton.subreddits[checkingSubreddit],
+          attempt: currentButton.subreddits[checkingSubreddit].id,
           resolved: false,
         };
         return newValidity;
       });
       try {
         const subredditIsValid = await checkSubredditExists(
-          currentButton.subreddits[checkingSubreddit]
+          currentButton.subreddits[checkingSubreddit].name
         );
         if (isSubscribed) {
           setSubredditValidity((prevValidity) => {
             let newValidity = [...prevValidity];
             newValidity[checkingSubreddit] = {
-              attempt: currentButton.subreddits[checkingSubreddit],
+              attempt: currentButton.subreddits[checkingSubreddit].id,
               resolved: true,
               ...subredditIsValid,
             };
@@ -157,7 +144,7 @@ const ButtonEditor = ({
       clearTimeout(timeout);
       isSubscribed = false;
     };
-  }, [checkingSubreddit, currentButton.subreddits[checkingSubreddit]]);
+  }, [checkingSubreddit, currentButton.subreddits]);
 
   return (
     <form
@@ -184,7 +171,11 @@ const ButtonEditor = ({
               const value = e.target.value;
               const textValue =
                 value.length === 1 ? value.toUpperCase() : value;
-              editCurrentButton(currentButton.id, textValue, "text");
+              editCurrentButton({
+                buttonId: currentButton.id,
+                value: textValue,
+                param: "text",
+              });
               if (edited) return;
               setEdited(true);
             }}
@@ -198,12 +189,12 @@ const ButtonEditor = ({
             type="color"
             value={currentButton.style.color}
             onInput={(e) => {
-              editCurrentButton(
-                currentButton.id,
-                e.target.value,
-                "style",
-                "color"
-              );
+              editCurrentButton({
+                buttonId: currentButton.id,
+                value: e.target.value,
+                param: "style",
+                subparam: "color",
+              });
               if (edited) return;
               setEdited(true);
             }}
@@ -215,12 +206,12 @@ const ButtonEditor = ({
             type="color"
             value={currentButton.style.backgroundColor}
             onInput={(e) => {
-              editCurrentButton(
-                currentButton.id,
-                e.target.value,
-                "style",
-                "backgroundColor"
-              );
+              editCurrentButton({
+                buttonId: currentButton.id,
+                value: e.target.value,
+                param: "style",
+                subparam: "backgroundColor",
+              });
               if (edited) return;
               setEdited(true);
             }}
@@ -235,8 +226,8 @@ const ButtonEditor = ({
               <>
                 <button
                   type="button"
-                  key={`delete${subreddit}`}
-                  onClick={() => handleDeleteSubreddit(subreddit, j)}
+                  key={`delete${subreddit.name}`}
+                  onClick={() => handleDeleteSubreddit(subreddit.id, j)}
                 >
                   Delete subreddit
                 </button>
@@ -245,14 +236,13 @@ const ButtonEditor = ({
                   <input
                     className="subredditinput"
                     type="text"
-                    value={subreddit}
+                    value={subreddit.name}
                     onChange={(e) => {
-                      editCurrentButton(
-                        currentButton.id,
-                        e.target.value,
-                        "subreddits",
-                        j
-                      );
+                      editCurrentButton({
+                        buttonId: currentButton.id,
+                        value: e.target.value,
+                        subredditId: subreddit.id,
+                      });
                       setCheckingSubreddit(j);
                     }}
                     placeholder="Add a subreddit..."
@@ -302,12 +292,11 @@ const ButtonEditor = ({
               <input
                 type="text"
                 onChange={(e) => {
-                  editCurrentButton(
-                    currentButton.id,
-                    e.target.value,
-                    "subreddits",
-                    currentButton.subreddits.length
-                  );
+                  editCurrentButton({
+                    buttonId: currentButton.id,
+                    value: e.target.value,
+                    subredditId: getId(),
+                  });
                   setCheckingSubreddit(currentButton.subreddits.length);
                   setNewSubredditAdded(true);
                 }}
