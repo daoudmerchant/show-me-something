@@ -95,9 +95,14 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
       // closing editor, cancelling edit
       setCurrentButtons((prevButtons) => {
         let newButtons = [...prevButtons];
-        // cancelled edit to existing buttons
         const buttonIndex = prevButtons.findIndex((button) => button.id === id);
-        newButtons[buttonIndex] = _.cloneDeep(referenceButtons[buttonIndex]);
+        if (referenceButtons[buttonIndex]) {
+          // pre-existing button
+          newButtons[buttonIndex] = _.cloneDeep(referenceButtons[buttonIndex]);
+        } else {
+          // no ID on reference, was new button edit
+          newButtons[buttonIndex] = getNewButton();
+        }
         return newButtons;
       });
     }

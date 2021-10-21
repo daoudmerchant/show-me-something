@@ -305,7 +305,7 @@ const ButtonEditor = ({
         <button
           type="button"
           onClick={() => deleteButton(currentButton.id)}
-          disabled={currentButton.text === "Add new Button..."}
+          disabled={currentButton.text === "Add New Button..."}
         >
           Delete Button
         </button>
