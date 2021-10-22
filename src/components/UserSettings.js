@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { updateData } from "../API/firebase/firebase";
 import _ from "lodash";
 
@@ -48,6 +48,40 @@ const UserSettings = ({ uid, settings, setSettings }) => {
     });
     if (!submitSuccess) return;
     setSubmitSuccess(undefined);
+  };
+
+  const BooleanOptions = ({ type }) => {
+    const reportRadioChange = (e) => {
+      const booleanValue = e.target.value === "true" ? true : false;
+      handleFormChange(`${type}Prompt`, booleanValue);
+    };
+    return (
+      <fieldset>
+        <legend>{`Show content with the '${type}' flag':`}</legend>
+        <label for={`${type}Prompt`}>
+          <input
+            id={`${type}Prompt`}
+            type="radio"
+            name={type}
+            value="true"
+            checked={currentSettings[`${type}Prompt`] === true}
+            onChange={reportRadioChange}
+          />
+          On prompt
+        </label>
+        <label for={`${type}noprompt`}>
+          <input
+            id={`${type}noprompt`}
+            type="radio"
+            name={type}
+            value="false"
+            checked={currentSettings[`${type}Prompt`] === false}
+            onChange={reportRadioChange}
+          />
+          By default
+        </label>
+      </fieldset>
+    );
   };
 
   if (!currentSettings) {
@@ -100,6 +134,7 @@ const UserSettings = ({ uid, settings, setSettings }) => {
             <input
               type="number"
               id="limitinput"
+              name="limit"
               min="1"
               max="100"
               value={limit}
@@ -132,6 +167,8 @@ const UserSettings = ({ uid, settings, setSettings }) => {
               <option value="all">Forever</option>
             </select>
           </div>
+          <BooleanOptions type="NSFW" />
+          <BooleanOptions type="spoiler" />
           <FormButtons
             submitSuccess={submitSuccess}
             isDifferent={!_.isEqual(currentSettings, settings)}
