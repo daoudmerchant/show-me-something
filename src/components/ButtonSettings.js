@@ -244,17 +244,17 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
         const keepChanges = () => confirmChanges(currentButton.id);
         return (
           <div className="editbutton">
-            <Button
-              button={currentButton}
-              key={`button${currentButton.id}${i}`}
-              handleClick={() => toggleButtonEdit(currentButton.id)}
-            />
+            <div className="formuserbuttoncontainer">
+              <Button
+                button={currentButton}
+                key={`button${currentButton.id}${i}`}
+                handleClick={() => toggleButtonEdit(currentButton.id)}
+              />
+            </div>
             {buttonsBeingEdited &&
               buttonsBeingEdited[currentButton.id] &&
               (() => {
                 const originalButton = buttons[i];
-                console.log(originalButton);
-                console.log(currentButton);
                 const modified = !_.isEqual(currentButton, originalButton);
                 return (
                   <ButtonEditor

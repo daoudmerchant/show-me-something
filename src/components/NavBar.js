@@ -24,14 +24,18 @@ const NavBar = ({ user, confirmWelcomed }) => {
         About
       </Link>
       {!user ? (
-        <p
+        <div
+          id="userbar"
           onClick={() => {
             signInWithGoogle();
             confirmWelcomed();
           }}
         >
-          Login
-        </p>
+          <p>Login</p>
+          <div className="userpic">
+            <p>?</p>
+          </div>
+        </div>
       ) : (
         <Link to="/settings" onClick={confirmWelcomed}>
           <div id="userbar">

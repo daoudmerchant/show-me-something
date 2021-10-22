@@ -421,9 +421,26 @@ button {
   height: min-content;
 }
 
+#userbuttonsettings,
+.editbutton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.editbutton,
+.buttoneditorform {
+  width: 100%;
+}
+
 .editbutton > *,
 .buttoneditorform > * {
   margin: 1em 0;
+}
+
+.formuserbuttoncontainer {
+  height: 100px;
+  width: 300px;
 }
 
 .subredditlistitem {
@@ -432,23 +449,36 @@ button {
   grid-gap: 1em;
   grid-template-columns: repeat(4, 1fr);
   grid-template-areas:
-    "delete, subreddit subreddit duplicate"
+    "delete subreddit subreddit duplicate"
     "validity validity validity validity";
   margin: 1em;
+  grid-template-rows: 80px;
 }
 
 .buttonstyle {
   display: grid;
+  grid-template-rows: 80px;
 }
 
-@media (min-width: 500px) {
+/* Grid area attribution */
+.deletesubredditbutton {
+  grid-area: "delete";
+}
+.subredditname,
+#newsubreddit {
+  grid-area: "subreddit";
+}
+.subredditvalidity {
+  grid-area: "validity";
+}
+.duplicatesubredditalert {
+  grid-area: "duplicate";
+}
+
+@media (min-width: 1250px) {
   .subredditlistitem {
     grid-template-columns: 2fr 3fr 3fr 1fr;
-    grid-template-rows: 80px;
     grid-template-areas: "delete subreddit validity duplicate";
-  }
-  .buttonstyle {
-    grid-template-rows: 80px;
   }
 }
 
