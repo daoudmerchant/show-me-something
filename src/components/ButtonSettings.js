@@ -252,7 +252,9 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
             {buttonsBeingEdited &&
               buttonsBeingEdited[currentButton.id] &&
               (() => {
-                const originalButton = referenceButtons[i] || DEFAULT_BUTTON;
+                const originalButton = buttons[i];
+                console.log(originalButton);
+                console.log(currentButton);
                 const modified = !_.isEqual(currentButton, originalButton);
                 return (
                   <ButtonEditor

@@ -44,6 +44,20 @@ const ButtonEditor = ({
 
   // check if valid each render
   useEffect(() => {
+    console.log("checking");
+    console.log(modified);
+    console.log(!isDuplicate);
+    console.log(!!currentButton.text);
+    console.log(currentButton !== DEFAULT_BUTTON.text);
+    console.log(!!currentButton.subreddits.length);
+    console.log(!duplicateSubreddit);
+    console.log(
+      subredditValidity
+        .filter((validity) => !!validity)
+        .every((validity) => {
+          return !!validity.attempt || validity.resolved || validity.exists;
+        })
+    );
     if (
       // is not modified
       !modified ||
