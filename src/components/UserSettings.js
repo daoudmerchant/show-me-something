@@ -2,15 +2,21 @@ import { useEffect, useState, useCallback } from "react";
 import { updateData } from "../API/firebase/firebase";
 import _ from "lodash";
 
+import FormButtons from "./FormButtons";
+
 const UserSettings = ({ uid, settings, setSettings }) => {
   const [currentSettings, setCurrentSettings] = useState(null);
   const [submitSuccess, setSubmitSuccess] = useState(undefined);
 
+  const resetSettings = () => {
+    const clonedSettings = _.cloneDeep(settings);
+    setCurrentSettings(clonedSettings);
+  };
+
   // set component settings state from current user settings
   useEffect(() => {
     if (!settings) return;
-    const clonedSettings = _.cloneDeep(settings);
-    setCurrentSettings(clonedSettings);
+    resetSettings();
   }, [settings]);
 
   // reset submit success on mount
@@ -126,18 +132,11 @@ const UserSettings = ({ uid, settings, setSettings }) => {
               <option value="all">Forever</option>
             </select>
           </div>
-          <button
-            type="submit"
-            id="settingssubmit"
-            disabled={_.isEqual(currentSettings, settings)}
-          >
-            Submit
-          </button>
-          {submitSuccess ? (
-            <p>Success!</p>
-          ) : submitSuccess === false ? (
-            <p>Failure!</p>
-          ) : null}
+          <FormButtons
+            submitSuccess={submitSuccess}
+            isDifferent={!_.isEqual(currentSettings, settings)}
+            cancel={resetSettings}
+          />
         </form>
       </fieldset>
     </div>

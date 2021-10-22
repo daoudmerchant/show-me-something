@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useMediaQuery } from "react-responsive";
 import _ from "lodash/";
 
@@ -12,6 +12,7 @@ import { updateData } from "../API/firebase/firebase";
 // components
 import Button from "./Button";
 import ButtonEditor from "./ButtonEditor";
+import FormButtons from "./FormButtons";
 
 const ButtonSettings = ({ uid, buttons, setButtons }) => {
   const [referenceButtons, setReferenceButtons] = useState(null);
@@ -22,24 +23,17 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   // media query
   const isTouchscreen = useMediaQuery({ query: "(hover: none)" });
 
-  // generate id for local modification/deletion
   // Not handling repeat IDs because... Really, the likelihood...
   // Using premade IDs would involve another setState and another render
 
-  const getNewButton = (id) => {
-    return { ..._.cloneDeep(DEFAULT_BUTTON), id: id || getId() };
-  };
-
-  // Set state on render
-  useEffect(() => {
-    if (!buttons) return;
+  const resetAll = () => {
     const _getDefaultButtons = () => {
       return [
         ..._.cloneDeep(buttons).map((button) => ({
           ...button,
+          id: getId(),
           subreddits: button.subreddits.map((subreddit) => ({
             name: subreddit,
-            // Map temporary ID on to every subreddit
             id: getId(),
           })),
         })),
@@ -58,6 +52,16 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
       setButtonsBeingEdited,
       setButtonValidity
     );
+  };
+
+  const getNewButton = (id) => {
+    return { ..._.cloneDeep(DEFAULT_BUTTON), id: id || getId() };
+  };
+
+  // Set state on render
+  useEffect(() => {
+    if (!buttons) return;
+    resetAll();
   }, [buttons]);
 
   // tack on new button to current buttons
@@ -77,7 +81,7 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
       return { ...obj, [newId]: false };
     };
     fireCallbacks(_addNewButtonProp, setButtonsBeingEdited, setButtonValidity);
-  }, [currentButtons]);
+  }, [buttonsBeingEdited, currentButtons]);
 
   // Show / hide button editor
   const toggleButtonBeingEdited = (id) => {
@@ -95,13 +99,7 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
       setCurrentButtons((prevButtons) => {
         let newButtons = [...prevButtons];
         const buttonIndex = prevButtons.findIndex((button) => button.id === id);
-        if (referenceButtons[buttonIndex]) {
-          // pre-existing button
-          newButtons[buttonIndex] = _.cloneDeep(referenceButtons[buttonIndex]);
-        } else {
-          // no ID on reference, was new button edit
-          newButtons[buttonIndex] = getNewButton();
-        }
+        newButtons[buttonIndex] = _.cloneDeep(referenceButtons[buttonIndex]);
         return newButtons;
       });
     }
@@ -203,6 +201,19 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
     );
   };
 
+  const containsNewButtons = useMemo(() => {
+    if (!referenceButtons) return;
+    const strippedButtons = referenceButtons
+      .map(({ id, ...button }) => {
+        return {
+          ...button,
+          subreddits: button.subreddits.map(({ id, name }) => name),
+        };
+      })
+      .slice(0, -1);
+    return !_.isEqual(strippedButtons, buttons);
+  }, [buttons, referenceButtons]);
+
   if (!currentButtons) return <p>Loading your buttons...</p>;
 
   return (
@@ -251,10 +262,7 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
           </div>
         );
       })}
-      <div className="formbuttons">
-        <button type="button">Discard all changes</button>
-        <button>Save changes</button>
-      </div>
+      <FormButtons isDifferent={containsNewButtons} cancel={resetAll} />
     </fieldset>
   );
 };
