@@ -320,7 +320,9 @@ const ButtonEditor = ({
                 )}
                 {subreddit.name === duplicateSubreddit && (
                   <div className="duplicatesubredditalert">
-                    <p>!</p>
+                    <div className="exclamationcontainer">
+                      <p>!</p>
+                    </div>
                   </div>
                 )}
               </div>
