@@ -23,22 +23,27 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   // media query
   const isTouchscreen = useMediaQuery({ query: "(hover: none)" });
 
+  // JSON dependencies
+  const JSONbuttons = JSON.stringify(buttons);
+  const JSONreferenceButtons = JSON.stringify(referenceButtons);
+
   // Not handling repeat IDs because... Really, the likelihood...
   // Using premade IDs would involve another setState and another render
 
   const resetAll = () => {
-    const _getDefaultButtons = () => {
-      return [
-        ..._.cloneDeep(buttons).map((button) => ({
-          ...button,
+    const defaultButtons = [
+      ..._.cloneDeep(buttons).map((button) => ({
+        ...button,
+        id: getId(),
+        subreddits: button.subreddits.map((subreddit) => ({
+          name: subreddit,
           id: getId(),
-          subreddits: button.subreddits.map((subreddit) => ({
-            name: subreddit,
-            id: getId(),
-          })),
         })),
-        getNewButton(),
-      ];
+      })),
+      getNewButton(),
+    ];
+    const _getDefaultButtons = () => {
+      return defaultButtons;
     };
     fireCallbacks(_getDefaultButtons, setReferenceButtons, setCurrentButtons);
 
@@ -74,9 +79,10 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
     )
       return;
     const newId = getId();
-    setCurrentButtons((prevButtons) => {
+    const _addNewButton = (prevButtons) => {
       return [...prevButtons, getNewButton(newId)];
-    });
+    };
+    fireCallbacks(_addNewButton, setCurrentButtons, setReferenceButtons);
     const _addNewButtonProp = (obj) => {
       return { ...obj, [newId]: false };
     };
@@ -123,7 +129,7 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
     toggleButtonBeingEdited(id);
   };
 
-  const findIndex = (array, id) => {
+  const findItemIndex = (array, id) => {
     return array.findIndex((obj) => obj.id === id);
   };
 
@@ -137,12 +143,12 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   }) => {
     setCurrentButtons((prevButtons) => {
       let newButtons = [...prevButtons];
-      const editedButtonIndex = findIndex(newButtons, buttonId);
+      const editedButtonIndex = findItemIndex(newButtons, buttonId);
       if (!!subparam) {
         newButtons[editedButtonIndex][param][subparam] = value;
       } else if (!!subredditId && !param) {
         // is subreddit edit
-        const editedSubredditIndex = findIndex(
+        const editedSubredditIndex = findItemIndex(
           newButtons[editedButtonIndex].subreddits,
           subredditId
         );
@@ -171,7 +177,7 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   const deleteCurrentButtonSubreddit = (buttonId, subredditId) => {
     setCurrentButtons((prevButtons) => {
       let newButtons = [...prevButtons];
-      const editedButtonIndex = findIndex(newButtons, buttonId);
+      const editedButtonIndex = findItemIndex(newButtons, buttonId);
       newButtons[editedButtonIndex].subreddits = newButtons[
         editedButtonIndex
       ].subreddits.filter((subreddit) => subreddit.id !== subredditId);
@@ -182,7 +188,10 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   const deleteButton = (id) => {
     // delete button from current and reference
     const _removeButton = (prevButtons) => {
-      return prevButtons.filter((button) => button.id !== id);
+      console.log(prevButtons[0]);
+      const filteredButtons = prevButtons.filter((button) => button.id !== id);
+      console.log(filteredButtons[0]);
+      return filteredButtons;
     };
     fireCallbacks(_removeButton, setCurrentButtons, setReferenceButtons);
     // delete validity check and editor open/closed
@@ -212,7 +221,7 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
       })
       .slice(0, -1);
     return !_.isEqual(strippedButtons, buttons);
-  }, [buttons, referenceButtons]);
+  }, [JSONbuttons, JSONreferenceButtons]);
 
   if (!currentButtons) return <p>Loading your buttons...</p>;
 

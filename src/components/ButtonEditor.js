@@ -23,10 +23,6 @@ const ButtonEditor = ({
   const [newSubredditAdded, setNewSubredditAdded] = useState(false);
   const [isValidEdit, setIsValidEdit] = useState(false);
 
-  console.log(currentButton.subreddits);
-  console.log(checkingSubreddit);
-  console.log(subredditValidity);
-
   // dependencies
   const subredditsJSON = JSON.stringify(currentButton.subreddits);
 
