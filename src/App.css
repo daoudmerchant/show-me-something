@@ -425,31 +425,51 @@ button {
   margin: 1em 0;
 }
 
-.subredditlist {
+.subredditlistitem {
+  position: relative;
   display: grid;
-  grid-template-columns: 1fr 4fr;
   grid-gap: 1em;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-areas:
+    "delete, subreddit subreddit duplicate"
+    "validity validity validity validity";
+  margin: 1em;
 }
 
-.subredditlistitem {
+.buttonstyle {
   display: grid;
-  grid-template-columns: 1fr 6fr 8fr;
-  grid-gap: 0;
+}
+
+@media (min-width: 500px) {
+  .subredditlistitem {
+    grid-template-columns: 2fr 3fr 3fr 1fr;
+    grid-template-rows: 80px;
+    grid-template-areas: "delete subreddit validity duplicate";
+  }
+  .buttonstyle {
+    grid-template-rows: 80px;
+  }
+}
+
+.subredditname {
+  display: grid;
+  grid-template-columns: 1fr 6fr;
   align-items: center;
 }
 
 .subredditlistitem input,
-.newsubreddit,
+#newsubreddit,
 .formbuttons {
-  height: 60px;
+  height: 100%;
 }
 
-.subredditlist input {
+.buttoneditorform input[type="text"] {
   padding-left: 2em;
 }
 
-.subredditlistitem * {
-  margin: 0;
+.subredditvalidity {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
 }
 
 .subredditicon {
@@ -458,24 +478,30 @@ button {
   max-width: 100%;
 }
 
-.subredditvalidity {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  grid-template-rows: 2fr;
-  margin: 0.5em 0;
-  position: relative;
-}
-
 .checkingstatus {
-  grid-row: 1 / span 2;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 2em;
 }
 
-.newsubreddit {
+.validsubredditdetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.validsubredditdetails {
+  line-height: 50%;
+}
+
+#newsubreddit {
   grid-column-start: 2;
+}
+
+.duplicatesubredditalert {
+  grid-column-start: 4;
 }
 
 .formbuttons {

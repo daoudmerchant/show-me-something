@@ -135,7 +135,6 @@ function App() {
   const getNextPost = useCallback(
     async ({ subreddits, category }) => {
       const refreshRedditList = async (subreddits, category) => {
-        console.log(subreddits);
         const getSubredditList = async (subreddit) => {
           const redditResponse = await getRedditData({
             ...settings,
@@ -202,42 +201,44 @@ function App() {
     finishedList: categoryExists() && listFinished(),
   };
   return (
-    <main className="App">
+    <div className="App">
       <Router>
         <NavBar user={user} confirmWelcomed={confirmWelcomed} />
         <RedditPostContext.Provider value={RedditContextValue}>
-          <Switch>
-            <Route exact path="/">
-              <div id="appcontainer">
-                <Canvas
-                  welcomed={welcomed}
-                  showContent={
-                    settings && {
-                      promptOnNSFW: settings.promptOnNSFW,
-                      promptOnSpoiler: settings.promptOnSpoiler,
+          <main>
+            <Switch>
+              <Route exact path="/">
+                <div id="appcontainer">
+                  <Canvas
+                    welcomed={welcomed}
+                    showContent={
+                      settings && {
+                        promptOnNSFW: settings.promptOnNSFW,
+                        promptOnSpoiler: settings.promptOnSpoiler,
+                      }
                     }
-                  }
+                  />
+                  <ButtonBox buttons={buttons} />
+                </div>
+              </Route>
+              <Route path="/about">
+                <About />
+              </Route>
+              <Route path="/settings">
+                <Settings
+                  resetAllData={resetAllData}
+                  uid={user && user.uid}
+                  settings={settings}
+                  setSettings={setSettings}
+                  buttons={buttons}
+                  setButtons={setButtons}
                 />
-                <ButtonBox buttons={buttons} />
-              </div>
-            </Route>
-            <Route path="/about">
-              <About />
-            </Route>
-            <Route path="/settings">
-              <Settings
-                resetAllData={resetAllData}
-                uid={user && user.uid}
-                settings={settings}
-                setSettings={setSettings}
-                buttons={buttons}
-                setButtons={setButtons}
-              />
-            </Route>
-          </Switch>
+              </Route>
+            </Switch>
+          </main>
         </RedditPostContext.Provider>
       </Router>
-    </main>
+    </div>
   );
 }
 
