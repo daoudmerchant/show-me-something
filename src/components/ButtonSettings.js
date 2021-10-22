@@ -20,6 +20,13 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   const [buttonsBeingEdited, setButtonsBeingEdited] = useState(null);
   const [buttonValidity, setButtonValidity] = useState(null);
 
+  console.table(
+    currentButtons &&
+      currentButtons.map((button) =>
+        button.subreddits.map((subreddit) => subreddit.id)
+      )
+  );
+
   // media query
   const isTouchscreen = useMediaQuery({ query: "(hover: none)" });
 
@@ -42,6 +49,7 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
       })),
       getNewButton(),
     ];
+    console.log(defaultButtons);
     const _getDefaultButtons = () => {
       return defaultButtons;
     };
@@ -70,24 +78,24 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   }, [buttons]);
 
   // tack on new button to current buttons
-  useEffect(() => {
-    if (!currentButtons) return;
-    const lastCurrentButton = currentButtons[currentButtons.length - 1];
-    if (
-      lastCurrentButton.text === DEFAULT_BUTTON.text ||
-      buttonsBeingEdited[lastCurrentButton.id] === true
-    )
-      return;
-    const newId = getId();
-    const _addNewButton = (prevButtons) => {
-      return [...prevButtons, getNewButton(newId)];
-    };
-    fireCallbacks(_addNewButton, setCurrentButtons, setReferenceButtons);
-    const _addNewButtonProp = (obj) => {
-      return { ...obj, [newId]: false };
-    };
-    fireCallbacks(_addNewButtonProp, setButtonsBeingEdited, setButtonValidity);
-  }, [buttonsBeingEdited, currentButtons]);
+  // useEffect(() => {
+  //   if (!currentButtons) return;
+  //   const lastCurrentButton = currentButtons[currentButtons.length - 1];
+  //   if (
+  //     lastCurrentButton.text === DEFAULT_BUTTON.text ||
+  //     buttonsBeingEdited[lastCurrentButton.id] === true
+  //   )
+  //     return;
+  //   const newId = getId();
+  //   const _addNewButton = (prevButtons) => {
+  //     return [...prevButtons, getNewButton(newId)];
+  //   };
+  //   fireCallbacks(_addNewButton, setCurrentButtons, setReferenceButtons);
+  //   const _addNewButtonProp = (obj) => {
+  //     return { ...obj, [newId]: false };
+  //   };
+  //   fireCallbacks(_addNewButtonProp, setButtonsBeingEdited, setButtonValidity);
+  // }, [buttonsBeingEdited, currentButtons]);
 
   // Show / hide button editor
   const toggleButtonBeingEdited = (id) => {
@@ -142,7 +150,7 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
     subredditId,
   }) => {
     setCurrentButtons((prevButtons) => {
-      let newButtons = [...prevButtons];
+      let newButtons = _.cloneDeep(prevButtons);
       const editedButtonIndex = findItemIndex(newButtons, buttonId);
       if (!!subparam) {
         newButtons[editedButtonIndex][param][subparam] = value;
@@ -152,15 +160,24 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
           newButtons[editedButtonIndex].subreddits,
           subredditId
         );
+        console.log(buttonId);
+        console.log(subredditId);
+        console.log(editedSubredditIndex);
         if (editedSubredditIndex >= 0) {
+          console.log(
+            `Editing subreddit ${newButtons[editedButtonIndex].subreddits[editedSubredditIndex].name} on button ${newButtons[editedButtonIndex].text}`
+          );
           // edit to preexisting subreddit
+          console.log("IS EDIT");
           newButtons[editedButtonIndex].subreddits[editedSubredditIndex] = {
             ...newButtons[editedSubredditIndex].subreddits[
               editedSubredditIndex
             ],
             name: value,
+            id: subredditId,
           };
         } else {
+          console.log("IS NEW");
           // newly added subreddit
           newButtons[editedButtonIndex].subreddits.push({
             name: value,

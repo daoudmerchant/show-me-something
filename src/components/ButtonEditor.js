@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { checkSubredditExists } from "../API/reddit";
 
 import { DEFAULT_BUTTON } from "../constants";
@@ -18,13 +18,26 @@ const ButtonEditor = ({
   isDuplicate,
 }) => {
   const [checkingSubreddit, setCheckingSubreddit] = useState(null);
-  const [subredditValidity, setSubredditValidity] = useState([]);
+  const [subredditValidity, setSubredditValidity] = useState(null);
   const [edited, setEdited] = useState(false);
   const [newSubredditAdded, setNewSubredditAdded] = useState(false);
   const [isValidEdit, setIsValidEdit] = useState(false);
 
+  const lastSubredditRef = useRef();
+
+  console.log(currentButton.subreddits);
+
   // dependencies
   const subredditsJSON = JSON.stringify(currentButton.subreddits);
+
+  // set state on render
+  useEffect(() => {
+    let blankValidity = {};
+    currentButton.subreddits.forEach((subreddit) => {
+      blankValidity[subreddit.id] = null;
+    });
+    setSubredditValidity(blankValidity);
+  }, []);
 
   const duplicateSubreddit = useMemo(() => {
     let duplicate = false;
@@ -69,13 +82,14 @@ const ButtonEditor = ({
       // has no subreddits
       !currentButton.subreddits.length ||
       // has duplicate subreddits
-      !!duplicateSubreddit ||
-      // contains unsuccessful validity checks
-      subredditValidity
-        .filter((validity) => !!validity)
-        .some((validity) => {
-          return !validity.attempt || !validity.resolved || !validity.exists;
-        })
+      !!duplicateSubreddit
+      // ||
+      // // contains unsuccessful validity checks
+      // subredditValidity
+      //   .filter((validity) => !!validity)
+      //   .some((validity) => {
+      //     return !validity.attempt || !validity.resolved || !validity.exists;
+      //   })
     ) {
       if (!isValidEdit) return; // works?
       setIsValidEdit(false);
@@ -93,26 +107,16 @@ const ButtonEditor = ({
     duplicateSubreddit,
   ]);
 
-  const lastSubredditRef = useRef();
-
-  const handleDeleteSubreddit = (subredditId, subredditIndex) => {
+  const handleDeleteSubreddit = (subredditId) => {
     // remove subreddit from currentButton
     deleteCurrentButtonSubreddit(currentButton.id, subredditId);
     // update local state
     setCheckingSubreddit(null);
-    if (
-      subredditValidity[checkingSubreddit - 1] === false ||
-      subredditIndex > checkingSubreddit
-    )
-      return;
     // TODO: Manage delete subreddit while checking another(!)
     setSubredditValidity((prevSubredditValidity) => {
-      return [
-        ...prevSubredditValidity.filter(
-          (subredditValidity) =>
-            !!subredditValidity && subredditValidity.attempt !== subredditId
-        ),
-      ];
+      let newSubredditValidity = { ...prevSubredditValidity };
+      delete newSubredditValidity[subredditId];
+      return newSubredditValidity;
     });
   };
 
@@ -126,54 +130,56 @@ const ButtonEditor = ({
 
   // Check if subreddit exists on edit
   useEffect(() => {
-    if (
-      // not checking anything
-      checkingSubreddit === null ||
-      // nothing to check
-      currentButton.subreddits[checkingSubreddit].name === ""
-    )
-      return;
+    if (!checkingSubreddit) return;
+    console.log(
+      currentButton.subreddits.map(
+        (subreddit) => "Subreddit ID: " + subreddit.id
+      )
+    );
+    console.log("Checking ID " + checkingSubreddit);
+    const currentSubreddit = currentButton.subreddits.find(
+      (subreddit) => subreddit.id === checkingSubreddit
+    );
+    if (currentSubreddit.name === "") return;
     let isSubscribed = true;
     // subreddit unattempted
     setSubredditValidity((prevValidity) => {
-      return prevValidity.length
-        ? [
-            ...prevValidity.map((validity, i) => {
-              if (i === checkingSubreddit)
-                return {
-                  attempt: null,
-                };
-              return validity;
-            }),
-          ]
-        : [{ attempt: null }];
+      return {
+        ...prevValidity,
+        [checkingSubreddit]: {
+          attempt: currentSubreddit.name,
+          attempted: false,
+          resolved: false,
+        },
+      };
     });
     // small delay to prevent API calls on every character edit!
     const timeout = setTimeout(async () => {
-      if (checkingSubreddit === null) return;
       // subreddit unresolved
       setSubredditValidity((prevValidity) => {
-        let newValidity = [...prevValidity];
-        newValidity[checkingSubreddit] = {
-          attempt: currentButton.subreddits[checkingSubreddit].id,
-          resolved: false,
+        return {
+          ...prevValidity,
+          [checkingSubreddit]: {
+            ...prevValidity[checkingSubreddit],
+            attempted: true,
+          },
         };
-        return newValidity;
       });
       try {
         const subredditIsValid = await checkSubredditExists(
-          currentButton.subreddits[checkingSubreddit].name
+          currentSubreddit.name
         );
         if (isSubscribed) {
           // subreddit resolved and does/doesn't exist
           setSubredditValidity((prevValidity) => {
-            let newValidity = [...prevValidity];
-            newValidity[checkingSubreddit] = {
-              attempt: currentButton.subreddits[checkingSubreddit].id,
-              resolved: true,
-              ...subredditIsValid,
+            return {
+              ...prevValidity,
+              [checkingSubreddit]: {
+                ...prevValidity[checkingSubreddit],
+                resolved: true,
+                ...subredditIsValid,
+              },
             };
-            return newValidity;
           });
         }
       } catch (error) {
@@ -210,6 +216,7 @@ const ButtonEditor = ({
               }
               maxLength="12"
               placeholder="Add button text..."
+              required
               onChange={(e) => {
                 const value = e.target.value;
                 const textValue =
@@ -265,13 +272,17 @@ const ButtonEditor = ({
         <legend>Subreddits:</legend>
         <div className="subredditlist">
           {currentButton.subreddits.map((subreddit, j) => {
+            console.log(subreddit);
             return (
-              <div className="subredditlistitem">
+              <div
+                className="subredditlistitem"
+                key={currentButton.id + subreddit.id}
+              >
                 <button
                   type="button"
                   className="deletesubredditbutton"
                   key={`delete${subreddit.name}`}
-                  onClick={() => handleDeleteSubreddit(subreddit.id, j)}
+                  onClick={() => handleDeleteSubreddit(subreddit.id)}
                 >
                   Delete subreddit
                 </button>
@@ -282,15 +293,20 @@ const ButtonEditor = ({
                     type="text"
                     value={subreddit.name}
                     onChange={(e) => {
-                      setCheckingSubreddit(j);
+                      /*
+                      I need to double check the button AND the subreddit
+                      when I check the subreddit because something WEIRD
+                      was going on with the rendering
+                      */
                       editCurrentButton({
                         buttonId: currentButton.id,
                         value: e.target.value.toLowerCase(),
                         subredditId: subreddit.id,
                       });
+                      setCheckingSubreddit(subreddit.id);
                     }}
                     placeholder="Add a subreddit..."
-                    required
+                    required={j === 0}
                     ref={
                       newSubredditAdded &&
                       j === currentButton.subreddits.length - 1
@@ -299,35 +315,37 @@ const ButtonEditor = ({
                     }
                   />
                 </div>
-                {!!subredditValidity[j] && subredditValidity[j].attempt && (
-                  <div className="subredditvalidity">
-                    <div className="checkingstatus">
-                      {!subredditValidity[j].resolved ? (
-                        <p>...</p>
-                      ) : !subredditValidity[j].exists ? (
-                        <p>❌</p>
-                      ) : !!subredditValidity[j].icon ? (
-                        <img
-                          className="subredditicon"
-                          src={subredditValidity[j].icon}
-                          alt={subredditValidity[j].subtitle}
-                        />
-                      ) : (
-                        <p>🙂</p>
-                      )}
-                    </div>
-                    {subredditValidity[j].exists && (
-                      <div className="validsubredditdetails">
-                        <p>{subredditValidity[j].subreddit}</p>
-                        {/* TODO: Hide subtitle if identical to subreddit? */}
-                        {subredditValidity[j].subreddit !==
-                          subredditValidity[j].subtitle && (
-                          <p>{subredditValidity[j].subtitle}</p>
+                {!!subredditValidity &&
+                  !!subredditValidity[subreddit.id] &&
+                  !!subredditValidity[subreddit.id].attempted && (
+                    <div className="subredditvalidity">
+                      <div className="checkingstatus">
+                        {!subredditValidity[subreddit.id].resolved ? (
+                          <p>...</p>
+                        ) : !subredditValidity[subreddit.id].exists ? (
+                          <p>❌</p>
+                        ) : !!subredditValidity[subreddit.id].icon ? (
+                          <img
+                            className="subredditicon"
+                            src={subredditValidity[subreddit.id].icon}
+                            alt={subredditValidity[subreddit.id].subtitle}
+                          />
+                        ) : (
+                          <p>🙂</p>
                         )}
                       </div>
-                    )}
-                  </div>
-                )}
+                      {subredditValidity[subreddit.id].exists && (
+                        <div className="validsubredditdetails">
+                          <p>{subredditValidity[subreddit.id].subreddit}</p>
+                          {/* TODO: Hide subtitle if identical to subreddit? */}
+                          {subredditValidity[subreddit.id].subreddit !==
+                            subredditValidity[subreddit.id].subtitle && (
+                            <p>{subredditValidity[subreddit.id].subtitle}</p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 {subreddit.name === duplicateSubreddit && (
                   <div className="duplicatesubredditalert">
                     <div className="exclamationcontainer">
@@ -345,11 +363,13 @@ const ButtonEditor = ({
                 <input
                   type="text"
                   onChange={(e) => {
-                    setCheckingSubreddit(currentButton.subreddits.length);
+                    const newId = getId();
+                    console.log("New ID: " + newId);
+                    setCheckingSubreddit(newId);
                     editCurrentButton({
                       buttonId: currentButton.id,
                       value: e.target.value.toLowerCase(),
-                      subredditId: getId(),
+                      subredditId: newId,
                     });
                     setNewSubredditAdded(true);
                   }}
