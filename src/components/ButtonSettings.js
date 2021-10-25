@@ -3,29 +3,20 @@ import { useMediaQuery } from "react-responsive";
 import _ from "lodash/";
 
 // utils
-import { DEFAULT_BUTTON } from "../constants";
+import { DEFAULT_BUTTON } from "../constants/variables";
 import { fireCallbacks, getId } from "../utils";
-
-// API
-import { updateData } from "../API/firebase/firebase";
 
 // components
 import Button from "./Button";
 import ButtonEditor from "./ButtonEditor";
 import FormButtons from "./FormButtons";
 
-const ButtonSettings = ({ uid, buttons, setButtons }) => {
+const ButtonSettings = ({ buttons, updateFirebase }) => {
+  const [submitSuccess, setSubmitSuccess] = useState(undefined);
   const [referenceButtons, setReferenceButtons] = useState(null);
   const [currentButtons, setCurrentButtons] = useState(null);
   const [buttonsBeingEdited, setButtonsBeingEdited] = useState(null);
   const [buttonValidity, setButtonValidity] = useState(null);
-
-  console.table(
-    currentButtons &&
-      currentButtons.map((button) =>
-        button.subreddits.map((subreddit) => subreddit.id)
-      )
-  );
 
   // media query
   const isTouchscreen = useMediaQuery({ query: "(hover: none)" });
@@ -49,7 +40,6 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
       })),
       getNewButton(),
     ];
-    console.log(defaultButtons);
     const _getDefaultButtons = () => {
       return defaultButtons;
     };
@@ -75,27 +65,32 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   useEffect(() => {
     if (!buttons) return;
     resetAll();
-  }, [buttons]);
+  }, []);
+
+  // reset submit success on mount
+  useEffect(() => {
+    setSubmitSuccess(undefined);
+  }, []);
 
   // tack on new button to current buttons
-  // useEffect(() => {
-  //   if (!currentButtons) return;
-  //   const lastCurrentButton = currentButtons[currentButtons.length - 1];
-  //   if (
-  //     lastCurrentButton.text === DEFAULT_BUTTON.text ||
-  //     buttonsBeingEdited[lastCurrentButton.id] === true
-  //   )
-  //     return;
-  //   const newId = getId();
-  //   const _addNewButton = (prevButtons) => {
-  //     return [...prevButtons, getNewButton(newId)];
-  //   };
-  //   fireCallbacks(_addNewButton, setCurrentButtons, setReferenceButtons);
-  //   const _addNewButtonProp = (obj) => {
-  //     return { ...obj, [newId]: false };
-  //   };
-  //   fireCallbacks(_addNewButtonProp, setButtonsBeingEdited, setButtonValidity);
-  // }, [buttonsBeingEdited, currentButtons]);
+  useEffect(() => {
+    if (!currentButtons) return;
+    const lastCurrentButton = currentButtons[currentButtons.length - 1];
+    if (
+      lastCurrentButton.text === DEFAULT_BUTTON.text ||
+      buttonsBeingEdited[lastCurrentButton.id] === true
+    )
+      return;
+    const newId = getId();
+    const _addNewButton = (prevButtons) => {
+      return [...prevButtons, getNewButton(newId)];
+    };
+    fireCallbacks(_addNewButton, setCurrentButtons, setReferenceButtons);
+    const _addNewButtonProp = (obj) => {
+      return { ...obj, [newId]: false };
+    };
+    fireCallbacks(_addNewButtonProp, setButtonsBeingEdited, setButtonValidity);
+  }, [buttonsBeingEdited, currentButtons]);
 
   // Show / hide button editor
   const toggleButtonBeingEdited = (id) => {
@@ -160,24 +155,19 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
           newButtons[editedButtonIndex].subreddits,
           subredditId
         );
-        console.log(buttonId);
-        console.log(subredditId);
-        console.log(editedSubredditIndex);
         if (editedSubredditIndex >= 0) {
-          console.log(
-            `Editing subreddit ${newButtons[editedButtonIndex].subreddits[editedSubredditIndex].name} on button ${newButtons[editedButtonIndex].text}`
-          );
           // edit to preexisting subreddit
-          console.log("IS EDIT");
           newButtons[editedButtonIndex].subreddits[editedSubredditIndex] = {
             ...newButtons[editedSubredditIndex].subreddits[
               editedSubredditIndex
             ],
             name: value,
+            // For some reason React gets confused if I don't explicitly
+            // set the ID again
+            // TODO: Understand this problem better!
             id: subredditId,
           };
         } else {
-          console.log("IS NEW");
           // newly added subreddit
           newButtons[editedButtonIndex].subreddits.push({
             name: value,
@@ -189,6 +179,8 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
       }
       return newButtons;
     });
+    if (!submitSuccess) return;
+    setSubmitSuccess(undefined);
   };
 
   const deleteCurrentButtonSubreddit = (buttonId, subredditId) => {
@@ -205,9 +197,7 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
   const deleteButton = (id) => {
     // delete button from current and reference
     const _removeButton = (prevButtons) => {
-      console.log(prevButtons[0]);
       const filteredButtons = prevButtons.filter((button) => button.id !== id);
-      console.log(filteredButtons[0]);
       return filteredButtons;
     };
     fireCallbacks(_removeButton, setCurrentButtons, setReferenceButtons);
@@ -218,6 +208,8 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
       return newObj;
     };
     fireCallbacks(_removeIdParam, setButtonValidity, setButtonsBeingEdited);
+    if (!submitSuccess) return;
+    setSubmitSuccess(undefined);
   };
 
   const checkForDuplicateButton = (text) => {
@@ -227,9 +219,9 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
     );
   };
 
-  const containsNewButtons = useMemo(() => {
-    if (!referenceButtons) return;
-    const strippedButtons = referenceButtons
+  const strippedButtons =
+    referenceButtons &&
+    referenceButtons
       .map(({ id, ...button }) => {
         return {
           ...button,
@@ -237,13 +229,26 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
         };
       })
       .slice(0, -1);
+
+  const containsNewButtons = useMemo(() => {
+    if (!referenceButtons) return;
     return !_.isEqual(strippedButtons, buttons);
-  }, [JSONbuttons, JSONreferenceButtons]);
+  }, [JSONbuttons, JSONreferenceButtons, strippedButtons]);
 
   if (!currentButtons) return <p>Loading your buttons...</p>;
 
   return (
-    <fieldset id="userbuttonsettings">
+    <form
+      id="userbuttonsettings"
+      onSubmit={(e) => {
+        e.preventDefault();
+        updateFirebase({
+          type: "BUTTONS",
+          data: strippedButtons,
+          setSubmitSuccess,
+        });
+      }}
+    >
       <legend>Button settings</legend>
       <p>{`${isTouchscreen ? "Tap" : "Click"} button to edit`}</p>
       <aside>
@@ -290,8 +295,12 @@ const ButtonSettings = ({ uid, buttons, setButtons }) => {
           </div>
         );
       })}
-      <FormButtons isDifferent={containsNewButtons} cancel={resetAll} />
-    </fieldset>
+      <FormButtons
+        submitSuccess={submitSuccess}
+        isDifferent={containsNewButtons}
+        cancel={resetAll}
+      />
+    </form>
   );
 };
 

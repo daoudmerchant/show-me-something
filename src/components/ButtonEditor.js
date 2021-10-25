@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { checkSubredditExists } from "../API/reddit";
 
-import { DEFAULT_BUTTON } from "../constants";
+import { DEFAULT_BUTTON } from "../constants/variables";
 
 import { getId } from "../utils";
 
@@ -24,8 +24,6 @@ const ButtonEditor = ({
   const [isValidEdit, setIsValidEdit] = useState(false);
 
   const lastSubredditRef = useRef();
-
-  console.log(currentButton.subreddits);
 
   // dependencies
   const subredditsJSON = JSON.stringify(currentButton.subreddits);
@@ -131,12 +129,6 @@ const ButtonEditor = ({
   // Check if subreddit exists on edit
   useEffect(() => {
     if (!checkingSubreddit) return;
-    console.log(
-      currentButton.subreddits.map(
-        (subreddit) => "Subreddit ID: " + subreddit.id
-      )
-    );
-    console.log("Checking ID " + checkingSubreddit);
     const currentSubreddit = currentButton.subreddits.find(
       (subreddit) => subreddit.id === checkingSubreddit
     );
@@ -195,13 +187,7 @@ const ButtonEditor = ({
   }, [checkingSubreddit, subredditsJSON]);
 
   return (
-    <form
-      className="buttoneditorform"
-      onSubmit={(e) => {
-        e.preventDefault();
-        keepChanges();
-      }}
-    >
+    <div className="buttoneditorform">
       <fieldset>
         <legend>Style</legend>
         <div className="buttonstyle">
@@ -272,7 +258,6 @@ const ButtonEditor = ({
         <legend>Subreddits:</legend>
         <div className="subredditlist">
           {currentButton.subreddits.map((subreddit, j) => {
-            console.log(subreddit);
             return (
               <div
                 className="subredditlistitem"
@@ -364,7 +349,6 @@ const ButtonEditor = ({
                   type="text"
                   onChange={(e) => {
                     const newId = getId();
-                    console.log("New ID: " + newId);
                     setCheckingSubreddit(newId);
                     editCurrentButton({
                       buttonId: currentButton.id,
@@ -392,11 +376,17 @@ const ButtonEditor = ({
         >
           Delete Button
         </button>
-        <button type="submit" disabled={!isValidEdit}>
+        <button
+          type="button"
+          onClick={() => {
+            keepChanges();
+          }}
+          disabled={!isValidEdit}
+        >
           Confirm changes
         </button>
       </div>
-    </form>
+    </div>
   );
 };
 

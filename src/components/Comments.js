@@ -3,8 +3,10 @@ import { useMediaQuery } from "react-responsive";
 import { useHistory } from "react-router";
 import ReactMarkdown from "react-markdown";
 
+import "../styles/Comments.css";
+
 // context
-import { RedditPostContext } from "../contexts";
+import { RedditPostContext } from "../constants/contexts";
 
 // API
 import { getCommentData } from "../API/reddit";

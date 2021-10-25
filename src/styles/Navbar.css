@@ -1,0 +1,59 @@
+nav {
+  height: 50px;
+  background-color: lightgoldenrodyellow;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+nav > * {
+  padding: 1rem;
+}
+
+#userbar {
+  height: 40px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 20px;
+  background-color: white;
+  padding: 0 5px;
+}
+
+#userbar p {
+  margin: 0 10px;
+}
+
+.userpic {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+}
+
+div.userpic {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: lawngreen;
+  color: white;
+}
+
+#home {
+  margin-right: auto;
+}
+/*# sourceMappingURL=Navbar.css.map */

@@ -1,7 +1,7 @@
 import { useContext } from "react";
 
 // context
-import { RedditPostContext } from "../contexts";
+import { RedditPostContext } from "../constants/contexts";
 
 const Bold = ({ children }) => (
   <span style={{ fontWeight: "bold" }}>{children}</span>

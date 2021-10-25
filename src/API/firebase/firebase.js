@@ -42,7 +42,6 @@ const provider = new GoogleAuthProvider();
 export const signInWithGoogle = async () => {
   try {
     const result = await signInWithPopup(getAuth(), provider);
-    // const result = await signInWithPopup(getAuth(), provider);
     // const credential = GoogleAuthProvider.credentialFromResult(result);
     // const token = credential.accessToken;
     // const user = result.user;
@@ -114,11 +113,11 @@ export const updateData = (() => {
   const userSettings = async (uid, settings) => {
     return await _updateParam(uid, { settings });
   };
-  const buttons = async (uid, buttons) => {
+  const userButtons = async (uid, buttons) => {
     return await _updateParam(uid, { buttons });
   };
   return {
     userSettings,
-    buttons,
+    userButtons,
   };
 })();

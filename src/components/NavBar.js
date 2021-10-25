@@ -4,6 +4,8 @@ import { useMediaQuery } from "react-responsive";
 import { Link } from "react-router-dom";
 import { signInWithGoogle } from "../API/firebase/firebase";
 
+import "../styles/Navbar.css";
+
 const NavBar = ({ user, confirmWelcomed }) => {
   // state
   const [canGetPic, setCanGetPic] = useState(true);

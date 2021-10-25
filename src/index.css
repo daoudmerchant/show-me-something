@@ -3,13 +3,10 @@ body,
 #root,
 .App {
   margin: 0;
+  padding: 0;
   height: 100%;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: Cormorant, Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 1.1rem;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-#root {
-  display: flex;
-  flex-direction: column;
 }

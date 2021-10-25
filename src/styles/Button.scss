@@ -1,0 +1,14 @@
+@import "../constants/constants";
+
+.buttoncontainer {
+  padding: 20px 10px;
+  button {
+    @include full-size;
+    @include button-3d;
+    position: relative;
+    font-size: 250%;
+    display: block;
+    border-radius: 25px / 50%;
+    text-shadow: 5px 5px 7px $grey;
+  }
+}

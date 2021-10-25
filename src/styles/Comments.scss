@@ -1,0 +1,40 @@
+@import "../constants/constants";
+
+#comments {
+  position: absolute;
+  background-color: whitesmoke;
+  bottom: 0;
+  width: 100%;
+  transition: height ease-in-out 0.4s;
+  z-index: 10;
+}
+
+#commentheader {
+  display: flex;
+  background-color: gainsboro;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  position: sticky;
+  top: 0;
+  width: 100%;
+}
+
+.commentbox > *:last-child {
+  text-align: end;
+}
+
+.commentbox > * {
+  margin: 0.2em 0;
+}
+
+.commentbox {
+  margin: 2em;
+}
+
+.commentcontent {
+  text-align: left;
+  font-size: larger;
+  /* allow links to break */
+  word-wrap: break-word;
+}

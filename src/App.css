@@ -1,9 +1,13 @@
 .App {
-  font-family: "Cormorant", sans-serif;
   text-align: center;
   display: grid;
   grid-template-rows: 50px 1fr;
   box-sizing: border-box;
+}
+
+button {
+  border: none;
+  cursor: pointer;
 }
 
 #appcontainer {
@@ -20,49 +24,6 @@ a {
 span {
   font-weight: bold;
   cursor: pointer;
-}
-
-/* nav styles */
-nav {
-  height: 50px;
-  background-color: lightgoldenrodyellow;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-nav > * {
-  padding: 1rem;
-}
-
-#userbar {
-  height: 40px;
-  display: flex;
-  align-items: center;
-  border-radius: 20px;
-  background-color: white;
-  padding: 0 5px;
-}
-
-#userbar p {
-  margin: 0 10px;
-}
-
-.userpic {
-  height: 30px;
-  width: 30px;
-  border-radius: 50%;
-}
-
-div.userpic {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: lawngreen;
-  color: white;
-}
-
-#home {
-  margin-right: auto;
 }
 
 /* canvas styles */
@@ -145,9 +106,6 @@ video,
 #imgpost {
   height: 100%;
   width: 100%;
-  object-fit: contain;
-  position: absolute;
-  transform: translateX(-50%);
 }
 
 .hostedvideo {
@@ -265,56 +223,12 @@ iframe {
 
 /* comment styles */
 
-#comments {
-  position: absolute;
-  background-color: whitesmoke;
-  bottom: 0;
-  width: 100%;
-  transition: height ease-in-out 0.4s;
-  z-index: 10;
-}
-
-#commentheader {
-  display: flex;
-  background-color: white;
-  justify-content: center;
-  align-items: center;
-  height: 50px;
-  position: sticky;
-  top: 0;
-  width: 100%;
-}
-
-.commentcontent {
-  text-align: left;
-  font-size: larger;
-}
-
-.commentbox > *:last-child {
-  text-align: end;
-}
-
-.commentbox > * {
-  margin: 0.2em 0;
-}
-
-.commentbox {
-  margin: 2em;
-}
-
 /* button styles */
 
-#buttoncontainer {
+#buttonbox {
   width: 100%;
-  position: relative;
+  /* position: relative; */
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-}
-
-button {
-  border: none;
-  height: 100%;
-  width: 100%;
 }
 
 .buttonnav {

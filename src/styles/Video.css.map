@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "AAEA,AAAA,KAAK,CAAC;ECkBJ,UAAU,EAAE,OAAO;EACnB,QAAQ,EAAE,QAAQ;EAClB,SAAS,EAAE,gBAAgB;CDlB5B",
+    "sources": [
+        "Video.scss",
+        "../constants/_constants.scss"
+    ],
+    "names": [],
+    "file": "Video.css"
+}

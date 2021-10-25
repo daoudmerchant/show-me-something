@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { RedditPostContext } from "../contexts";
+import { RedditPostContext } from "../constants/contexts";
 
 // components
 import Post from "./Post";

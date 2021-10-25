@@ -20,7 +20,7 @@ import Settings from "./components/Settings";
 import ButtonBox from "./components/ButtonBox";
 
 // contexts
-import { RedditPostContext } from "./contexts";
+import { RedditPostContext } from "./constants/contexts";
 
 // utils
 import { shuffleArray } from "./utils";

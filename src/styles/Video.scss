@@ -1,0 +1,5 @@
+@import "../constants/constants";
+
+video {
+  @include fit-and-centre-media;
+}

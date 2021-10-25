@@ -1,7 +1,9 @@
+import { useCallback } from "react";
 import {
   signInWithGoogle,
   signOutWithGoogle,
   isSignedIn,
+  updateData,
 } from "../API/firebase/firebase";
 
 import { useHistory } from "react-router";
@@ -19,6 +21,21 @@ const Settings = ({
   setButtons,
 }) => {
   const history = useHistory();
+
+  const updateFirebase = useCallback(
+    async ({ type, data, setSubmitSuccess }) => {
+      const dataCategory = type === "SETTINGS" ? "userSettings" : "userButtons";
+      const setUserState = type === "SETTINGS" ? setSettings : setButtons;
+      const result = await updateData[dataCategory](uid, data);
+      if (!result) {
+        setSubmitSuccess(false);
+        return;
+      }
+      setUserState(data);
+      setSubmitSuccess(true);
+    },
+    [setButtons, setSettings, uid]
+  );
 
   if (!isSignedIn()) {
     return (
@@ -48,8 +65,8 @@ const Settings = ({
           of your account
         </p>
       </div>
-      <UserSettings uid={uid} settings={settings} setSettings={setSettings} />
-      <ButtonSettings uid={uid} buttons={buttons} setButtons={setButtons} />
+      <UserSettings settings={settings} updateFirebase={updateFirebase} />
+      <ButtonSettings buttons={buttons} updateFirebase={updateFirebase} />
     </div>
   );
 };

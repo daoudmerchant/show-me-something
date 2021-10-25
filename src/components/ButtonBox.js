@@ -1,6 +1,6 @@
 import { useState, memo, useEffect, useContext } from "react";
 import { useMediaQuery } from "react-responsive";
-import { RedditPostContext } from "../contexts";
+import { RedditPostContext } from "../constants/contexts";
 
 // components
 import Loading from "./Loading";
@@ -71,7 +71,7 @@ const ButtonBox = ({ buttons }) => {
 
   return buttons ? (
     <div
-      id="buttoncontainer"
+      id="buttonbox"
       style={{
         gridTemplateColumns: `${
           needsNavigation ? "1fr " : ""

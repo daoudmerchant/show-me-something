@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect, useMemo } from "react";
-import { RedditPostContext } from "../contexts";
+import { RedditPostContext } from "../constants/contexts";
 import ReactMarkdown from "react-markdown";
 
 // images
