@@ -52,7 +52,7 @@ const Settings = ({
     <div id="settingscontainer">
       <div className="signout">
         <p>
-          Click here to{" "}
+          Click{" "}
           <span
             onClick={() => {
               resetAllData();
@@ -60,9 +60,9 @@ const Settings = ({
               history.push("/");
             }}
           >
-            sign out
+            here
           </span>{" "}
-          of your account
+          to sign out of your account
         </p>
       </div>
       <UserSettings settings={settings} updateFirebase={updateFirebase} />

@@ -1,12 +1,60 @@
+@import "../constants/constants";
+
+.posttitle {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  min-height: min-content;
+  background-color: $crimson;
+
+  h2 {
+    flex-grow: 8;
+  }
+
+  p,
+  a {
+    flex-grow: 1;
+  }
+}
+
+#likepercentage {
+  text-align: left;
+}
+
+#externallink {
+  position: relative;
+}
+
+#externallink > * {
+  position: absolute;
+  transform: translateY(-50%);
+}
+
+#newwindowicon {
+  height: 15px;
+  width: 15px;
+  right: 0;
+}
+
+#newwindowtext {
+  font-size: 1vw;
+  display: block;
+  right: 25px;
+}
+
+@media screen and (max-width: 1000px) {
+  #newwindowtext {
+    display: none;
+  }
+}
+.post:nth-child(2) {
+  position: relative;
+}
+
 .mediacontainer {
   position: relative;
   height: 100%;
-}
-
-#placeholder {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  width: 100%;
 }
 
 // Text post styles

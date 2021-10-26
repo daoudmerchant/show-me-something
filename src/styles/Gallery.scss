@@ -1,13 +1,16 @@
 @import "../constants/constants";
+
+.gallerycontainer {
+  @include full-size;
+  position: relative;
+}
+
 .gallerynav {
+  @include size-media-buttons;
+  @include flex-centred;
   position: absolute;
-  top: 40%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  bottom: $media-button-margin;
   background-color: white;
-  height: 12vw;
-  width: 12vw;
   border-radius: 50%;
   z-index: 10;
   user-select: none;
@@ -15,9 +18,21 @@
 }
 
 .galleryleft {
-  left: 10px;
+  left: $media-button-margin;
+  @include button-3d(
+    $offset: (
+      "left",
+      $media-button-margin,
+    )
+  );
 }
 
 .galleryright {
-  right: 10px;
+  right: $media-button-margin;
+  @include button-3d(
+    $offset: (
+      "right",
+      $media-button-margin,
+    )
+  );
 }

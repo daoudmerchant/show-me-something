@@ -31,7 +31,7 @@ const Gallery = () => {
   };
 
   return (
-    <div className="mediacontainer">
+    <div className="gallerycontainer">
       <div className="gallerynav galleryleft" onClick={galleryBack}>
         ◄
       </div>

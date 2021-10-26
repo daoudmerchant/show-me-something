@@ -11,13 +11,16 @@ video {
 
 #playpause {
   position: absolute;
-  right: 10px;
-  bottom: 10px;
+  right: $media-button-margin;
+  bottom: $media-button-margin;
   z-index: 2;
-  height: 5vw;
-  width: 5vw;
-  min-height: 50px;
-  min-width: 50px;
+  @include size-media-buttons;
+  @include button-3d(
+    $offset: (
+      "right": $media-button-margin,
+      "bottom": $media-button-margin,
+    )
+  );
   border: 5px solid white;
   border-radius: 50%;
   background-color: white;
@@ -34,35 +37,26 @@ video {
 #volumecontrols {
   position: absolute;
   user-select: none;
-  left: 10px;
-  bottom: 10px;
+  left: $media-button-margin;
+  bottom: $media-button-margin;
   z-index: 2;
   display: flex;
-  height: 5vw;
-  width: 10vw;
-  min-width: 100px;
-  min-height: 50px;
 }
-
-@media (orientation: portrait) {
-  #playpause {
-    height: 5vh;
-    width: 5vh;
-  }
-  #volumecontrols {
-    height: 5vh;
-    width: 10vh;
-  }
-}
-
 #volumecontrols > * {
   display: flex;
+  position: relative;
+
   align-items: center;
   justify-content: center;
-  width: 50%;
-  height: 100%;
   background-color: white;
   border: 5px solid black;
+  @include size-media-buttons;
+  @include button-3d(
+    $offset: (
+      "left": 10px,
+      "bottom": 10px,
+    )
+  );
 }
 
 #volumecontrols p {
@@ -77,6 +71,7 @@ video {
 #volumeup {
   border-radius: 50% 0 0 50%;
   border-right-width: 2.5px;
+  z-index: 3;
 }
 
 #volumedown {

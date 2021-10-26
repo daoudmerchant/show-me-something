@@ -9,14 +9,13 @@ const Image = ({ currentImage, currentTitle }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => setIsLoaded(false), [currentImage]);
-  console.log(currentImage);
 
   return (
     <div className="mediacontainer">
       {isLoaded || <Loading type="IMAGE" />}
       <img
         style={{
-          aspectRatio: +currentImage.width / +currentImage.height,
+          aspectRatio: `${currentImage.images[0].width} / ${currentImage.images[0].height}`,
           display: isLoaded ? undefined : "none",
         }}
         id="imgpost"

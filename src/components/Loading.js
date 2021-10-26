@@ -8,22 +8,22 @@ const Loading = ({ type }) => {
     switch (type) {
       case "POSTS":
         return {
-          text: ["Fetching p", "sts..."],
+          text: "Fetching posts",
           className: "gettingposts",
         };
       case "BUTTONS":
         return {
-          text: ["Fetching butt", "ns..."],
+          text: "Getting buttons",
           className: "gettingbuttons",
         };
       case "VIDEO":
         return {
-          text: ["L", "ading video..."],
+          text: "Loading video",
           className: "gettingposts",
         };
       case "IMAGE":
         return {
-          text: ["L", "ading image..."],
+          text: "Loading image",
           className: "gettingposts",
         };
     }
@@ -31,9 +31,8 @@ const Loading = ({ type }) => {
   return (
     <div className="loadingcontainer">
       <div className={`loading ${loadingData.className}`}>
-        <p>{loadingData.text[0]}</p>
         <Snoo spinning={true} />
-        <p>{loadingData.text[1]}</p>
+        <p>{`${loadingData.text}...`}</p>
       </div>
     </div>
   );

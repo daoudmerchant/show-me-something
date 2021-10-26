@@ -1,3 +1,15 @@
+// variables
+$grey: rgb(104, 104, 104);
+$crimson: #b3999e;
+$brown: #59202e;
+$beige: #eccfb9;
+$gold: #ffc37e;
+$blue: #bbc6e9;
+
+$media-button-size: 60px;
+$media-button-margin: 20px;
+$button-outset: 4px;
+
 // mix-ins
 @mixin flex-centred {
   display: flex;
@@ -8,6 +20,11 @@
 @mixin full-size {
   width: 100%;
   height: 100%;
+}
+
+@mixin size-media-buttons {
+  width: $media-button-size;
+  height: $media-button-size;
 }
 
 @mixin full-height {
@@ -27,17 +44,32 @@
   transform: translateX(-50%);
 }
 
-@mixin button-3d {
+@mixin button-3d($offset) {
   border: 5px outset;
-  box-shadow: -2px 2px white, -4px 4px 7px $grey;
+  box-shadow: -($button-outset / 2) ($button-outset / 2) white,
+    -($button-outset) $button-outset ($button-outset * 2) $grey;
+
+  -webkit-tap-highlight-color: transparent;
 
   &:active {
-    right: 2px;
-    top: 2px;
-    box-shadow: -4px 4px 5px rgb(202, 202, 202);
+    @if $offset {
+      @each $direction, $value in $offset {
+        @if $direction == "right" {
+          right: calc($value + $button-outset);
+        } @else if $direction == "left" {
+          left: calc($value - $button-outset);
+        } @else if $direction == "top" {
+          top: calc($value + $button-outset);
+        } @else if $direction == "bottom" {
+          bottom: calc($value - $button-outset);
+        }
+      }
+    } @else {
+      // no provided offset
+      right: $button-outset;
+      top: $button-outset;
+    }
+    box-shadow: -($button-outset) $button-outset $button-outset rgb(202, 202, 202);
     border-style: inset;
   }
 }
-
-// variables
-$grey: rgb(104, 104, 104);

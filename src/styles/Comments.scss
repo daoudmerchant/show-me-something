@@ -9,9 +9,13 @@
   z-index: 10;
 }
 
+$commentborder: 2px solid $gold 0;
+
 #commentheader {
   display: flex;
-  background-color: gainsboro;
+  background-color: $blue;
+  border-top: $commentborder;
+  border-bottom: $commentborder;
   justify-content: center;
   align-items: center;
   height: 50px;

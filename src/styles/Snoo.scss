@@ -1,7 +1,10 @@
+@import "../constants/constants";
+
 #spinner {
   height: 1em;
   width: 1em;
   position: relative;
+  @include flex-centred;
 }
 
 .antenna {

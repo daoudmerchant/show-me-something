@@ -12,7 +12,9 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  background-color: gainsboro;
+  background-color: #bbc6e9;
+  border-top: 2px solid #ffc37e 0;
+  border-bottom: 2px solid #ffc37e 0;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;

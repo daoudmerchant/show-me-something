@@ -1,4 +1,9 @@
 @import "../constants/constants";
 #imgpost {
+  position: absolute;
+  left: 0;
+  top: 0;
   @include full-size;
+
+  object-fit: contain;
 }
