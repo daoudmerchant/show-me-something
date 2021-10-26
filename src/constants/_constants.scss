@@ -6,9 +6,17 @@ $beige: #eccfb9;
 $gold: #ffc37e;
 $blue: #bbc6e9;
 
+// heights
+$comment-height: 50px;
+
 $media-button-size: 60px;
 $media-button-margin: 20px;
 $button-outset: 4px;
+$comment-border-style: solid;
+$comment-border-color: $gold;
+$comment-border-width: 2px;
+$comment-border: $comment-border-width $comment-border-style
+  $comment-border-color;
 
 // mix-ins
 @mixin flex-centred {
@@ -44,7 +52,7 @@ $button-outset: 4px;
   transform: translateX(-50%);
 }
 
-@mixin button-3d($offset) {
+@mixin button-3d($offset: false) {
   border: 5px outset;
   box-shadow: -($button-outset / 2) ($button-outset / 2) white,
     -($button-outset) $button-outset ($button-outset * 2) $grey;
@@ -71,5 +79,6 @@ $button-outset: 4px;
     }
     box-shadow: -($button-outset) $button-outset $button-outset rgb(202, 202, 202);
     border-style: inset;
+    user-select: none;
   }
 }

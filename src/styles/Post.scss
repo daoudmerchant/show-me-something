@@ -2,38 +2,33 @@
 
 .posttitle {
   margin: 0;
-  display: flex;
+  padding: 0 2vw;
+  display: grid;
+  grid-template-columns: 50px 1fr 50px;
+  justify-content: center;
   align-items: center;
+  grid-gap: 10px;
   min-height: min-content;
   background-color: $crimson;
-
-  h2 {
-    flex-grow: 8;
-  }
-
-  p,
-  a {
-    flex-grow: 1;
-  }
 }
 
 #likepercentage {
-  text-align: left;
+  height: 50px;
+  @include flex-centred;
 }
 
 #externallink {
-  position: relative;
+  border: none;
+  &:link {
+    border: none;
+  }
+  &:active {
+    border: none;
+  }
 }
-
-#externallink > * {
-  position: absolute;
-  transform: translateY(-50%);
-}
-
 #newwindowicon {
-  height: 15px;
-  width: 15px;
-  right: 0;
+  height: 30px;
+  width: 30px;
 }
 
 #newwindowtext {
@@ -53,13 +48,18 @@
 
 .mediacontainer {
   position: relative;
-  height: 100%;
-  width: 100%;
+  @include full-size;
+  & > * {
+    position: absolute;
+    height: 100%;
+  }
 }
 
 // Text post styles
 
 .textpost {
+  width: 100%;
   text-align: justify;
   overflow-y: scroll;
+  padding: 2em;
 }

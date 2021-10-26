@@ -5,6 +5,25 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  // APP STYLES
+  a {
+    text-decoration: none;
+    border-bottom: 2px dashed;
+    &:link {
+      color: blue;
+      border-color: blue;
+    }
+    &:visited {
+      color: purple;
+      border-color: purple;
+    }
+    &:hover {
+      border: none;
+    }
+    &:active {
+      border: 2px dashed;
+    }
+  }
 }
 
 #post {
@@ -14,44 +33,4 @@
   display: grid;
   grid-template-rows: min-content 1fr 50px;
   overflow-x: hidden;
-}
-
-.posttitle {
-  margin: 0;
-  display: grid;
-  grid-template-columns: 1fr 8fr 1fr;
-  align-items: center;
-  min-height: min-content;
-}
-
-#likepercentage {
-  text-align: left;
-}
-
-#externallink {
-  position: relative;
-}
-
-#externallink > * {
-  position: absolute;
-  transform: translateY(-50%);
-}
-
-#newwindowicon {
-  height: 15px;
-  width: 15px;
-  right: 0;
-}
-
-/* TODO: Improve text disappearance / sizing */
-#newwindowtext {
-  font-size: 1vw;
-  display: block;
-  right: 25px;
-}
-
-@media screen and (max-width: 1000px) {
-  #newwindowtext {
-    display: none;
-  }
 }

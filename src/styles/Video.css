@@ -43,6 +43,10 @@ video {
   -webkit-box-shadow: -4px 4px 4px #cacaca;
           box-shadow: -4px 4px 4px #cacaca;
   border-style: inset;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 #playpause > img {
@@ -52,12 +56,9 @@ video {
 
 #volumecontrols {
   position: absolute;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
   left: 20px;
   bottom: 20px;
+  height: 60px;
   z-index: 2;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -68,7 +69,6 @@ video {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  position: relative;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -91,6 +91,10 @@ video {
   -webkit-box-shadow: -4px 4px 4px #cacaca;
           box-shadow: -4px 4px 4px #cacaca;
   border-style: inset;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 #volumecontrols p {

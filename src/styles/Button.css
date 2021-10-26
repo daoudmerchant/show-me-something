@@ -19,12 +19,21 @@
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-  -webkit-tap-highlight-color: transparent;
 }
 
 .buttoncontainer button:active {
-  -webkit-box-shadow: none;
-          box-shadow: none;
+  right: 4px;
+  top: 4px;
+  -webkit-box-shadow: -4px 4px 4px #cacaca;
+          box-shadow: -4px 4px 4px #cacaca;
   border-style: inset;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.buttoncontainer button:disabled {
+  opacity: 30%;
 }
 /*# sourceMappingURL=Button.css.map */

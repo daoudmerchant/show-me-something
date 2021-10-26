@@ -1,8 +1,8 @@
 @import "../constants/constants";
 
 #spinner {
-  height: 1em;
-  width: 1em;
+  height: 100px;
+  width: 100px;
   position: relative;
   @include flex-centred;
 }
@@ -10,8 +10,8 @@
 .antenna {
   position: absolute;
   top: 0;
-  height: 50%;
-  width: 100%;
+  height: 50px;
+  width: 60px;
 }
 
 .spinning {
@@ -50,12 +50,14 @@
   transform: rotate(10deg);
 }
 
+$bobble-size: 10px;
+
 .bobble {
   position: absolute;
-  top: 0.15em;
-  right: -0.2em;
-  height: 0.1em;
-  width: 0.1em;
+  top: 16px;
+  right: -10px;
+  height: $bobble-size;
+  width: $bobble-size;
   border-radius: 50%;
   background-color: white;
   border: 4px solid black;

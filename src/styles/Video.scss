@@ -36,16 +36,15 @@ video {
 
 #volumecontrols {
   position: absolute;
-  user-select: none;
   left: $media-button-margin;
   bottom: $media-button-margin;
+  height: $media-button-size;
   z-index: 2;
   display: flex;
 }
+
 #volumecontrols > * {
   display: flex;
-  position: relative;
-
   align-items: center;
   justify-content: center;
   background-color: white;
@@ -53,8 +52,8 @@ video {
   @include size-media-buttons;
   @include button-3d(
     $offset: (
-      "left": 10px,
-      "bottom": 10px,
+      "left": $media-button-margin,
+      "bottom": $media-button-margin,
     )
   );
 }

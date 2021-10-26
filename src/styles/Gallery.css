@@ -41,6 +41,10 @@
   -webkit-box-shadow: -4px 4px 4px #cacaca;
           box-shadow: -4px 4px 4px #cacaca;
   border-style: inset;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 .galleryright {
@@ -56,5 +60,9 @@
   -webkit-box-shadow: -4px 4px 4px #cacaca;
           box-shadow: -4px 4px 4px #cacaca;
   border-style: inset;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 /*# sourceMappingURL=Gallery.css.map */

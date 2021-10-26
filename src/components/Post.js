@@ -74,10 +74,12 @@ const Post = ({ showContent }) => {
     }
     if (currentPost.media.type === "text") {
       return (
-        <div className="textpost">
-          {insertLineBreaks(currentPost.media.content.text).map((string) => (
-            <ReactMarkdown linkTarget="_blank">{string}</ReactMarkdown>
-          ))}
+        <div className="mediacontainer">
+          <div className="textpost">
+            {insertLineBreaks(currentPost.media.content.text).map((string) => (
+              <ReactMarkdown linkTarget="_blank">{string}</ReactMarkdown>
+            ))}
+          </div>
         </div>
       );
     }
@@ -109,7 +111,14 @@ const Post = ({ showContent }) => {
   return (
     <div id="post">
       <div className="posttitle">
-        <p id="likepercentage">{currentPost.controversiality * 100}%</p>
+        <div
+          id="likepercentage"
+          style={{
+            background: `linear-gradient(to top, lime, lime ${currentPost.controversiality}%, red ${currentPost.controversiality}%, red)`,
+          }}
+        >
+          {currentPost.controversiality}%
+        </div>
         <h2>{currentPost.title}</h2>
         <a
           id="externallink"
@@ -117,7 +126,6 @@ const Post = ({ showContent }) => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <span id="newwindowtext">View on Reddit</span>
           <img
             id="newwindowicon"
             src={newwindowicon}

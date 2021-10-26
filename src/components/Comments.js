@@ -13,6 +13,7 @@ import { getCommentData } from "../API/reddit";
 
 // components
 import Prompt from "./Prompt";
+import Loading from "./Loading";
 
 const Comments = () => {
   const history = useHistory();
@@ -86,7 +87,7 @@ const Comments = () => {
             cancel={() => history.push("/settings")}
           />
         ) : (
-          <p>Loading comments...</p>
+          <Loading type="COMMENTS" />
         )}
       </div>
     </div>

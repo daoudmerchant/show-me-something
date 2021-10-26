@@ -21,7 +21,7 @@ export const getRedditData = async ({
       subreddit: child.data.subreddit,
       upvotes: child.data.ups,
       downvotes: child.data.downs,
-      controversiality: child.data.upvote_ratio,
+      controversiality: child.data.upvote_ratio * 100,
       id: child.data.id,
       NSFW: child.data.over_18,
       spoiler: child.data.spoiler,

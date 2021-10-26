@@ -61,7 +61,7 @@ function App() {
       },
       {
         state: currentCategory,
-        setState: currentCategory,
+        setState: setCurrentCategory,
       },
     ];
     data.forEach((dataset) => {

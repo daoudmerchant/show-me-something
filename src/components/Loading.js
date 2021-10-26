@@ -26,6 +26,11 @@ const Loading = ({ type }) => {
           text: "Loading image",
           className: "gettingposts",
         };
+      case "COMMENTS":
+        return {
+          text: "Fetching comments",
+          className: "gettingcomments",
+        };
     }
   })();
   return (

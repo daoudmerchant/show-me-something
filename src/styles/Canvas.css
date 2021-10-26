@@ -15,6 +15,29 @@
           align-items: center;
 }
 
+#canvas a {
+  text-decoration: none;
+  border-bottom: 2px dashed;
+}
+
+#canvas a:link {
+  color: blue;
+  border-color: blue;
+}
+
+#canvas a:visited {
+  color: purple;
+  border-color: purple;
+}
+
+#canvas a:hover {
+  border: none;
+}
+
+#canvas a:active {
+  border: 2px dashed;
+}
+
 #post {
   background-color: lightgoldenrodyellow;
   height: 100%;
@@ -25,52 +48,5 @@
       grid-template-rows: -webkit-min-content 1fr 50px;
       grid-template-rows: min-content 1fr 50px;
   overflow-x: hidden;
-}
-
-.posttitle {
-  margin: 0;
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: 1fr 8fr 1fr;
-      grid-template-columns: 1fr 8fr 1fr;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  min-height: -webkit-min-content;
-  min-height: -moz-min-content;
-  min-height: min-content;
-}
-
-#likepercentage {
-  text-align: left;
-}
-
-#externallink {
-  position: relative;
-}
-
-#externallink > * {
-  position: absolute;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-}
-
-#newwindowicon {
-  height: 15px;
-  width: 15px;
-  right: 0;
-}
-
-/* TODO: Improve text disappearance / sizing */
-#newwindowtext {
-  font-size: 1vw;
-  display: block;
-  right: 25px;
-}
-
-@media screen and (max-width: 1000px) {
-  #newwindowtext {
-    display: none;
-  }
 }
 /*# sourceMappingURL=Canvas.css.map */
