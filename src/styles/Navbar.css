@@ -12,8 +12,12 @@ nav {
           align-items: center;
 }
 
-nav > * {
+nav * {
   padding: 1rem;
+}
+
+nav a {
+  text-decoration: none;
 }
 
 #userbar {
@@ -34,8 +38,8 @@ nav > * {
 }
 
 .userpic {
-  height: 30px;
-  width: 30px;
+  height: 0px;
+  width: 0px;
   border-radius: 50%;
 }
 

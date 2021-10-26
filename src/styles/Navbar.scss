@@ -1,4 +1,4 @@
-@use "../constants/constants" as *;
+@import "../constants/constants";
 
 nav {
   height: 50px;
@@ -8,10 +8,14 @@ nav {
   * {
     padding: 1rem;
   }
+
+  a {
+    text-decoration: none;
+  }
 }
 
 #userbar {
-  height: 50px;
+  height: 40px;
   display: flex;
   align-items: center;
   border-radius: 20px;
@@ -24,8 +28,8 @@ nav {
 }
 
 .userpic {
-  height: 30px;
-  width: 30px;
+  height: 0px;
+  width: 0px;
   border-radius: 50%;
 }
 
