@@ -1,6 +1,8 @@
 import { useContext } from "react";
 import { RedditPostContext } from "../../constants/contexts";
 
+import "../../styles/Wikipedia.css";
+
 const Wikipedia = () => {
   const { currentPost } = useContext(RedditPostContext);
 

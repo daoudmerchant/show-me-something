@@ -2,6 +2,8 @@ import { useState, useEffect, useMemo } from "react";
 import { useMediaQuery } from "react-responsive";
 import _ from "lodash/";
 
+import "../styles/ButtonSettings.css";
+
 // utils
 import { DEFAULT_BUTTON } from "../constants/variables";
 import { fireCallbacks, getId } from "../utils";

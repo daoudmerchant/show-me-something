@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "AACA,AAAA,QAAQ,CAAC;ECOP,KAAK,EAAE,IAAI;EACX,MAAM,EAAE,IAAI;CDNb",
+    "sources": [
+        "Image.scss",
+        "../constants/_constants.scss"
+    ],
+    "names": [],
+    "file": "Image.css"
+}

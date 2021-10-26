@@ -1,4 +1,29 @@
+// GENERAL STYLES
+
+.App {
+  text-align: center;
+  display: grid;
+  grid-template-rows: 50px 1fr;
+  box-sizing: border-box;
+}
+
+#appcontainer {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr 140px;
+}
+
 button {
   border: none;
   cursor: pointer;
 }
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+// span {
+//     font-weight: bold;
+//     cursor: pointer;
+// }

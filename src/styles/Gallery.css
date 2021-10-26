@@ -1,0 +1,32 @@
+.gallerynav {
+  position: absolute;
+  top: 40%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: white;
+  height: 12vw;
+  width: 12vw;
+  border-radius: 50%;
+  z-index: 10;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  cursor: pointer;
+}
+
+.galleryleft {
+  left: 10px;
+}
+
+.galleryright {
+  right: 10px;
+}
+/*# sourceMappingURL=Gallery.css.map */

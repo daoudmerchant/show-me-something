@@ -1,0 +1,24 @@
+#userbuttonsettings {
+  margin-top: 1em;
+  height: min-content;
+}
+
+#userbuttonsettings,
+.editbutton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.editbutton {
+  width: 100%;
+}
+
+.editbutton > * {
+  margin: 1em 0;
+}
+
+.formuserbuttoncontainer {
+  height: 100px;
+  width: 300px;
+}

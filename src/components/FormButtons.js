@@ -1,3 +1,5 @@
+import "../styles/FormButtons.css";
+
 const FormButtons = ({ submitSuccess, isDifferent, cancel }) => {
   return (
     <div className="formbuttons">

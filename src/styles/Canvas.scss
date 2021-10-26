@@ -1,0 +1,57 @@
+#canvas {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#post {
+  background-color: lightgoldenrodyellow;
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-rows: min-content 1fr 50px;
+  overflow-x: hidden;
+}
+
+.posttitle {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 8fr 1fr;
+  align-items: center;
+  min-height: min-content;
+}
+
+#likepercentage {
+  text-align: left;
+}
+
+#externallink {
+  position: relative;
+}
+
+#externallink > * {
+  position: absolute;
+  transform: translateY(-50%);
+}
+
+#newwindowicon {
+  height: 15px;
+  width: 15px;
+  right: 0;
+}
+
+/* TODO: Improve text disappearance / sizing */
+#newwindowtext {
+  font-size: 1vw;
+  display: block;
+  right: 25px;
+}
+
+@media screen and (max-width: 1000px) {
+  #newwindowtext {
+    display: none;
+  }
+}

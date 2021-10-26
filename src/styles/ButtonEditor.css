@@ -1,0 +1,159 @@
+.buttoneditorform {
+  width: 100%;
+}
+
+.buttoneditorform > * {
+  margin: 1em 0;
+}
+
+.subredditlistitem {
+  position: relative;
+  display: -ms-grid;
+  display: grid;
+  grid-gap: 1em;
+  -ms-grid-columns: (1fr)[4];
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-areas: "delete subreddit subreddit duplicate" "validity validity validity validity";
+  margin: 1em;
+  -ms-grid-rows: 80px;
+      grid-template-rows: 80px;
+}
+
+.buttonstyle {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 80px;
+      grid-template-rows: 80px;
+}
+
+/* Grid area attribution */
+.deletesubredditbutton {
+  grid-area: "delete";
+}
+
+.subredditname,
+#newsubreddit {
+  grid-area: "subreddit";
+}
+
+.subredditvalidity {
+  grid-area: "validity";
+}
+
+.duplicatesubredditalert {
+  grid-area: "duplicate";
+}
+
+@media (min-width: 1250px) {
+  .subredditlistitem {
+    -ms-grid-columns: 2fr 3fr 3fr 1fr;
+        grid-template-columns: 2fr 3fr 3fr 1fr;
+        grid-template-areas: "delete subreddit validity duplicate";
+  }
+}
+
+.subredditname {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 6fr;
+      grid-template-columns: 1fr 6fr;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.subredditlistitem input,
+#newsubreddit,
+.formbuttons {
+  height: 100%;
+}
+
+.buttoneditorform input[type="text"] {
+  padding-left: 2em;
+}
+
+.subredditvalidity {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 3fr;
+      grid-template-columns: 1fr 3fr;
+}
+
+.subredditicon {
+  position: absolute;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.checkingstatus {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: 2em;
+  overflow: hidden;
+}
+
+.validsubredditdetails {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.validsubredditdetails {
+  line-height: 50%;
+}
+
+#newsubreddit {
+  -ms-grid-column: 2;
+      grid-column-start: 2;
+}
+
+.duplicatesubredditalert {
+  -ms-grid-column: 4;
+      grid-column-start: 4;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: 2.5em;
+  color: red;
+}
+
+.exclamationcontainer {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border: 4px solid red;
+}
+/*# sourceMappingURL=ButtonEditor.css.map */

@@ -1,6 +1,8 @@
 import { useContext } from "react";
 import { RedditPostContext } from "../constants/contexts";
 
+import "../styles/Canvas.css";
+
 // components
 import Post from "./Post";
 import Loading from "./Loading";

@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { checkSubredditExists } from "../API/reddit";
 
+import "../styles/ButtonEditor.css";
+
 import { DEFAULT_BUTTON } from "../constants/variables";
 
 import { getId } from "../utils";

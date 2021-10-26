@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 
+import "../../styles/Image.css";
+
 // components
 import Loading from "../Loading";
 
@@ -7,13 +9,14 @@ const Image = ({ currentImage, currentTitle }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => setIsLoaded(false), [currentImage]);
+  console.log(currentImage);
 
   return (
     <div className="mediacontainer">
       {isLoaded || <Loading type="IMAGE" />}
       <img
         style={{
-          aspectRatio: currentImage.width / currentImage.height,
+          aspectRatio: +currentImage.width / +currentImage.height,
           display: isLoaded ? undefined : "none",
         }}
         id="imgpost"

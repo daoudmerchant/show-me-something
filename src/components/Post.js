@@ -2,6 +2,8 @@ import { useContext, useState, useEffect, useMemo } from "react";
 import { RedditPostContext } from "../constants/contexts";
 import ReactMarkdown from "react-markdown";
 
+import "../styles/Post.css";
+
 // images
 import newwindowicon from "../images/newwindow.png";
 

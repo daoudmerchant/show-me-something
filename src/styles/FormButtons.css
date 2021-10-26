@@ -1,0 +1,10 @@
+.formbuttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.formbuttons > * {
+  margin: 0.5em;
+}
+/*# sourceMappingURL=FormButtons.css.map */

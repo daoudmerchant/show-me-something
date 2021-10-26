@@ -1,0 +1,17 @@
+.mediacontainer {
+  position: relative;
+  height: 100%;
+}
+
+#placeholder {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+// Text post styles
+
+.textpost {
+  text-align: justify;
+  overflow-y: scroll;
+}

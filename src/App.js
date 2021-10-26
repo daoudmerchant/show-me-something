@@ -10,7 +10,7 @@ import {
 } from "./API/firebase/firebase";
 
 // styles
-import "./App.css";
+import "./styles/App.css";
 
 // components
 import NavBar from "./components/NavBar";

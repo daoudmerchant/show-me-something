@@ -2,6 +2,8 @@ import { useState, memo, useEffect, useContext } from "react";
 import { useMediaQuery } from "react-responsive";
 import { RedditPostContext } from "../constants/contexts";
 
+import "../styles/ButtonBox.css";
+
 // components
 import Loading from "./Loading";
 import Button from "./Button";

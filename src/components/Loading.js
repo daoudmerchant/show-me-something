@@ -1,5 +1,7 @@
 import Snoo from "./Snoo";
 
+import "../styles/Loading.css";
+
 const Loading = ({ type }) => {
   const loadingData = (() => {
     /* eslint-disable */

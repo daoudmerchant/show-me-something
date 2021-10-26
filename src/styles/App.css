@@ -1,5 +1,28 @@
+.App {
+  text-align: center;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 50px 1fr;
+      grid-template-rows: 50px 1fr;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+#appcontainer {
+  height: 100%;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 1fr 140px;
+      grid-template-rows: 1fr 140px;
+}
+
 button {
   border: none;
   cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+  color: black;
 }
 /*# sourceMappingURL=App.css.map */

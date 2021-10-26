@@ -132,7 +132,7 @@ export const getRedditData = async ({
             },
           };
         }
-        if (!!child.data.gallery_data) {
+        if (child.data.is_gallery) {
           // Reddit image gallery
           const galleryKeys = child.data.gallery_data.items.map(
             (item) => item.media_id
