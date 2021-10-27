@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { signInWithGoogle } from "../API/firebase/firebase";
 
 import "../styles/Navbar.css";
@@ -19,15 +19,21 @@ const NavBar = ({ user, confirmWelcomed }) => {
 
   return (
     <nav>
-      <Link to="/" id="home">
+      <NavLink exact to="/" id="home" activeClassName="selected">
         ShowMeSomething
-      </Link>
-      <Link to="/about" onClick={confirmWelcomed}>
+      </NavLink>
+      <NavLink
+        exact
+        to="/about"
+        onClick={confirmWelcomed}
+        className="about"
+        activeClassName="selected"
+      >
         About
-      </Link>
+      </NavLink>
       {!user ? (
         <div
-          id="userbar"
+          className="userbar"
           onClick={() => {
             signInWithGoogle();
             confirmWelcomed();
@@ -41,30 +47,34 @@ const NavBar = ({ user, confirmWelcomed }) => {
           </div>
         </div>
       ) : (
-        <Link to="/settings" onClick={confirmWelcomed}>
-          <div id="userbar">
-            <div id="username">
-              {[
-                user.displayName[0],
-                user.displayName[user.displayName.length - 1],
-              ].map((name, i) => {
-                return <p className={`name${i + 1}`}>{name}</p>;
-              })}
-            </div>
-            {user.photoURL && canGetPic ? (
-              <img
-                className="userpic"
-                src={user.photoURL}
-                alt="user profile pic"
-                onError={() => setCanGetPic(false)}
-              />
-            ) : (
-              <div className="userpic">
-                <p>{user.displayName.map((name) => name.slice(0, 1))}</p>
-              </div>
-            )}
+        <NavLink
+          exact
+          to="/settings"
+          className="userbar"
+          onClick={confirmWelcomed}
+          activeClassName="selected"
+        >
+          <div id="username">
+            {[
+              user.displayName[0],
+              user.displayName[user.displayName.length - 1],
+            ].map((name, i) => {
+              return <p className={`name${i + 1}`}>{name}</p>;
+            })}
           </div>
-        </Link>
+          {user.photoURL && canGetPic ? (
+            <img
+              className="userpic"
+              src={user.photoURL}
+              alt="user profile pic"
+              onError={() => setCanGetPic(false)}
+            />
+          ) : (
+            <div className="userpic">
+              <p>{user.displayName.map((name) => name.slice(0, 1))}</p>
+            </div>
+          )}
+        </NavLink>
       )}
     </nav>
   );

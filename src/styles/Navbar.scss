@@ -4,10 +4,9 @@ nav {
   height: 50px;
   background-color: lightgoldenrodyellow;
   @include flex-centred;
-  padding: 0 10px;
 
   & > * {
-    padding: 1rem;
+    padding: 0 1rem;
   }
 
   a {
@@ -15,18 +14,29 @@ nav {
   }
 }
 
+.about,
+#home {
+  @include flex-centred;
+  height: 100%;
+}
+
 #home {
   font-weight: bold;
   font-size: larger;
 }
 
-#userbar {
+.userbar {
   height: 40px;
   display: flex;
   align-items: center;
   border-radius: 20px;
-  background-color: white;
   padding: 0 5px;
+  background-color: white;
+  margin: 0 10px;
+}
+
+.selected {
+  background-color: $gold;
 }
 
 #username {

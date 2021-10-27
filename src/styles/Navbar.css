@@ -10,15 +10,28 @@ nav {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  padding: 0 10px;
 }
 
 nav > * {
-  padding: 1rem;
+  padding: 0 1rem;
 }
 
 nav a {
   text-decoration: none;
+}
+
+.about,
+#home {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 100%;
 }
 
 #home {
@@ -26,7 +39,7 @@ nav a {
   font-size: larger;
 }
 
-#userbar {
+.userbar {
   height: 40px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -35,8 +48,13 @@ nav a {
       -ms-flex-align: center;
           align-items: center;
   border-radius: 20px;
-  background-color: white;
   padding: 0 5px;
+  background-color: white;
+  margin: 0 10px;
+}
+
+.selected {
+  background-color: #ffc37e;
 }
 
 #username {
