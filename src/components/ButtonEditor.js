@@ -400,14 +400,15 @@ const ButtonEditor = ({
           )}
         </div>
       </fieldset>
-      <div className="formbuttons">
-        <button type="button" onClick={cancel}>
+      <div className="formbuttons threebuttons">
+        <button type="button" onClick={cancel} className="cancel">
           Cancel
         </button>
         <button
           type="button"
           onClick={() => deleteButton(currentButton.id)}
           disabled={currentButton.text === DEFAULT_BUTTON.text}
+          className="delete"
         >
           Delete Button
         </button>
@@ -417,6 +418,7 @@ const ButtonEditor = ({
             keepChanges();
           }}
           disabled={!isValidEdit}
+          className="submit"
         >
           Confirm changes
         </button>

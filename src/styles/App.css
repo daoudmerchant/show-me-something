@@ -15,6 +15,10 @@
   font-size: 100%;
 }
 
+.App fieldset {
+  padding: 0;
+}
+
 .App main a,
 .App main .link {
   text-decoration: none;

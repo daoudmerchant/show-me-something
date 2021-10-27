@@ -6,6 +6,11 @@
   margin: 1em 0;
 }
 
+.buttoneditorform .formbuttons {
+  height: 4em;
+  margin: 0 1em;
+}
+
 .sublegend {
   font-size: 1.5rem;
 }
@@ -40,10 +45,9 @@ input[type="color"]::-webkit-color-swatch {
   position: relative;
   display: -ms-grid;
   display: grid;
-  grid-gap: 1em;
   -ms-grid-columns: (1fr)[4];
       grid-template-columns: repeat(4, 1fr);
-  margin: 1em;
+  padding: 1em;
   -ms-grid-rows: 80px;
       grid-template-rows: 80px;
 }
@@ -69,10 +73,6 @@ input[type="color"]::-webkit-color-swatch {
 .subredditlistitem input,
 #newsubreddit {
   height: 100%;
-}
-
-.buttoneditorform input[type="text"] {
-  padding-left: 2em;
 }
 
 .subredditvalidity {
