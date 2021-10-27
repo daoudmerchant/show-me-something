@@ -132,4 +132,9 @@ legend {
   background-color: #b3b3b3;
   color: lightblue;
 }
+
+.delete {
+  color: white;
+  background-color: red;
+}
 /*# sourceMappingURL=Settings.css.map */

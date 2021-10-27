@@ -15,14 +15,36 @@
   margin: $setting-margin;
 }
 
+input[type="color"] {
+  width: 2em;
+  height: 2em;
+  border: none;
+  outline: none;
+  border-radius: 50%;
+  -webkit-appearance: none;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 50%;
+}
+
+.fontselect {
+  font-size: 2em;
+}
+
 .subredditlistitem {
   position: relative;
   display: grid;
   grid-gap: 1em;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-areas:
-    "delete subreddit subreddit duplicate"
-    "validity validity validity validity";
+  // grid-template-areas:
+  //   "delete subreddit subreddit duplicate"
+  //   "validity validity validity validity";
   margin: 1em;
   grid-template-rows: 80px;
 }
@@ -33,26 +55,26 @@
 }
 
 /* Grid area attribution */
-.deletesubredditbutton {
-  grid-area: "delete";
-}
-.subredditname,
-#newsubreddit {
-  grid-area: "subreddit";
-}
-.subredditvalidity {
-  grid-area: "validity";
-}
-.duplicatesubredditalert {
-  grid-area: "duplicate";
-}
+// .deletesubredditbutton {
+//   grid-area: "delete";
+// }
+// .subredditname,
+// #newsubreddit {
+//   grid-area: "subreddit";
+// }
+// .subredditvalidity {
+//   grid-area: "validity";
+// }
+// .duplicatesubredditalert {
+//   grid-area: "duplicate";
+// }
 
-@media (min-width: 1250px) {
-  .subredditlistitem {
-    grid-template-columns: 2fr 3fr 3fr 1fr;
-    grid-template-areas: "delete subreddit validity duplicate";
-  }
-}
+// @media (min-width: 1250px) {
+//   .subredditlistitem {
+//     grid-template-columns: 2fr 3fr 3fr 1fr;
+//     grid-template-areas: "delete subreddit validity duplicate";
+//   }
+// }
 
 .subredditname {
   display: grid;

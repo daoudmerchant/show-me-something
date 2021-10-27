@@ -14,6 +14,28 @@
   margin: 1em;
 }
 
+input[type="color"] {
+  width: 2em;
+  height: 2em;
+  border: none;
+  outline: none;
+  border-radius: 50%;
+  -webkit-appearance: none;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 50%;
+}
+
+.fontselect {
+  font-size: 2em;
+}
+
 .subredditlistitem {
   position: relative;
   display: -ms-grid;
@@ -21,7 +43,6 @@
   grid-gap: 1em;
   -ms-grid-columns: (1fr)[4];
       grid-template-columns: repeat(4, 1fr);
-      grid-template-areas: "delete subreddit subreddit duplicate" "validity validity validity validity";
   margin: 1em;
   -ms-grid-rows: 80px;
       grid-template-rows: 80px;
@@ -35,31 +56,6 @@
 }
 
 /* Grid area attribution */
-.deletesubredditbutton {
-  grid-area: "delete";
-}
-
-.subredditname,
-#newsubreddit {
-  grid-area: "subreddit";
-}
-
-.subredditvalidity {
-  grid-area: "validity";
-}
-
-.duplicatesubredditalert {
-  grid-area: "duplicate";
-}
-
-@media (min-width: 1250px) {
-  .subredditlistitem {
-    -ms-grid-columns: 2fr 3fr 3fr 1fr;
-        grid-template-columns: 2fr 3fr 3fr 1fr;
-        grid-template-areas: "delete subreddit validity duplicate";
-  }
-}
-
 .subredditname {
   display: -ms-grid;
   display: grid;

@@ -3,7 +3,7 @@ import { checkSubredditExists } from "../API/reddit";
 
 import "../styles/ButtonEditor.css";
 
-import { DEFAULT_BUTTON } from "../constants/variables";
+import { DEFAULT_BUTTON, FONTS } from "../constants/variables";
 
 import { getId } from "../utils";
 
@@ -225,38 +225,67 @@ const ButtonEditor = ({
             )}
           </div>
           <div className="setting keyvaluepair">
-            <label>Text Colour:</label>
-            <input
-              type="color"
-              value={currentButton.style.color}
-              onInput={(e) => {
+            <label for="font">Font:</label>
+            <select
+              className="fontselect"
+              name="font"
+              onChange={(e) => {
                 editCurrentButton({
                   buttonId: currentButton.id,
                   value: e.target.value,
                   param: "style",
-                  subparam: "color",
+                  subparam: "font",
                 });
-                if (edited) return;
-                setEdited(true);
               }}
-            />
+              value={currentButton.style.font}
+              style={{ fontFamily: currentButton.style.font }}
+            >
+              {FONTS.map((font) => {
+                return (
+                  <option value={font} style={{ fontFamily: font }}>
+                    {font}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <div className="setting keyvaluepair">
+            <label>Text Colour:</label>
+            <div className="colorcontainer">
+              <input
+                type="color"
+                value={currentButton.style.color}
+                onInput={(e) => {
+                  editCurrentButton({
+                    buttonId: currentButton.id,
+                    value: e.target.value,
+                    param: "style",
+                    subparam: "color",
+                  });
+                  if (edited) return;
+                  setEdited(true);
+                }}
+              />
+            </div>
           </div>
           <div className="setting keyvaluepair">
             <label>Background Color:</label>
-            <input
-              type="color"
-              value={currentButton.style.backgroundColor}
-              onInput={(e) => {
-                editCurrentButton({
-                  buttonId: currentButton.id,
-                  value: e.target.value,
-                  param: "style",
-                  subparam: "backgroundColor",
-                });
-                if (edited) return;
-                setEdited(true);
-              }}
-            />
+            <div className="colorcontainer">
+              <input
+                type="color"
+                value={currentButton.style.backgroundColor}
+                onInput={(e) => {
+                  editCurrentButton({
+                    buttonId: currentButton.id,
+                    value: e.target.value,
+                    param: "style",
+                    subparam: "backgroundColor",
+                  });
+                  if (edited) return;
+                  setEdited(true);
+                }}
+              />
+            </div>
           </div>
         </div>
       </fieldset>
@@ -271,7 +300,7 @@ const ButtonEditor = ({
               >
                 <button
                   type="button"
-                  className="deletesubredditbutton"
+                  className="delete"
                   key={`delete${subreddit.name}`}
                   onClick={() => handleDeleteSubreddit(subreddit.id)}
                 >
