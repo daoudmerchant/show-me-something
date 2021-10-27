@@ -1,7 +1,25 @@
+@import "../constants/constants";
+
 .formbuttons {
-  display: flex;
+  display: grid;
+  grid-template-rows: $setting-height;
+  margin: 1em;
+  height: (2 * $setting-height);
+  button {
+    display: block;
+    flex-grow: 1;
+    flex-shrink: 0;
+    height: 100%;
+    font-family: $app-font;
+    font-size: 1.5em;
+    font-weight: bold;
+  }
 }
 
-.formbuttons > * {
-  margin: 0.5em;
+.submitsuccess {
+  grid-column-start: 1;
+  grid-column-end: -1;
+  padding: 0;
+  @include flex-centred;
+  font-size: 1.3em;
 }

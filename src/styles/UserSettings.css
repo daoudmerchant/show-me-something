@@ -1,0 +1,19 @@
+#usersettings input[type="text"],
+#usersettings select,
+#usersettings option,
+#usersettings .numbercontainer {
+  height: 100%;
+}
+
+#usersettings input,
+#usersettings select,
+#usersettings option {
+  padding-left: 2em;
+}
+
+#limitinput {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  height: 100%;
+}
+/*# sourceMappingURL=UserSettings.css.map */

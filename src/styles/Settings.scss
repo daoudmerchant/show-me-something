@@ -1,0 +1,95 @@
+@import "../constants/constants";
+
+#settingscontainer {
+  @include flex-centred;
+  flex-direction: column;
+}
+
+.settingsform {
+  background-color: lightblue;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.mainlegend {
+  font-size: 2em;
+  font-style: italic;
+  margin: 0.4em 0;
+}
+
+fieldset {
+  border: none;
+}
+
+.fieldsetcontainer {
+  position: relative;
+}
+
+legend {
+  display: inline-block;
+}
+
+.extradetails {
+  display: block;
+  font-style: italic;
+  letter-spacing: 0.5px;
+  padding: 20px;
+  margin: 0;
+}
+
+.warning {
+  color: red;
+}
+
+.keyvaluepair,
+.numbercontainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  position: relative;
+}
+
+.setting {
+  background-color: $form-background-color;
+  margin: 1em;
+}
+
+.keyvaluepair {
+  background-color: lightcoral;
+  height: $setting-height;
+  padding: 0;
+}
+
+.radiovalues {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  input:first-of-type {
+    margin-right: 20px;
+  }
+}
+
+// button styles
+
+.twobuttons {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.cancel {
+  color: $cancel-color;
+  border: 4px solid $cancel-color;
+  background-color: transparent;
+  &:disabled {
+    color: $disabled-color;
+    border-color: $disabled-color;
+  }
+}
+
+.submit {
+  color: white;
+  background-color: $confirm-color;
+  &:disabled {
+    background-color: $disabled-color;
+    color: $form-background-color;
+  }
+}

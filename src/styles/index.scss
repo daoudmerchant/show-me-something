@@ -1,3 +1,4 @@
+@import "../constants/constants";
 html,
 body,
 #root,
@@ -5,7 +6,7 @@ body,
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: Cormorant, Verdana, Geneva, Tahoma, sans-serif;
+  font-family: $app-font;
   font-size: 1.1rem;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

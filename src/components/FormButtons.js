@@ -2,19 +2,27 @@ import "../styles/FormButtons.css";
 
 const FormButtons = ({ submitSuccess, isDifferent, cancel }) => {
   return (
-    <div className="formbuttons">
-      <button type="button" disabled={!isDifferent} onClick={cancel}>
+    <div className="formbuttons twobuttons">
+      <div className="submitsuccess extradetails">
+        {submitSuccess ? (
+          <p className="successtext">Success!</p>
+        ) : submitSuccess === false ? (
+          <p className="failuretext">Oops, try again...</p>
+        ) : submitSuccess === null ? (
+          <p>...</p>
+        ) : null}
+      </div>
+      <button
+        type="button"
+        disabled={!isDifferent}
+        onClick={cancel}
+        className="cancel"
+      >
         Discard all changes
       </button>
-      <button type="submit" id="settingssubmit" disabled={!isDifferent}>
+      <button type="submit" className="submit" disabled={!isDifferent}>
         Save changes
       </button>
-      {submitSuccess !== undefined &&
-        (submitSuccess ? (
-          <p>Success!</p>
-        ) : submitSuccess === false ? (
-          <p>Failure!</p>
-        ) : null)}
     </div>
   );
 };

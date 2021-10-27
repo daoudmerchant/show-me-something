@@ -1,10 +1,42 @@
-// GENERAL STYLES
+@import "../constants/constants";
 
+// GENERAL STYLES
 .App {
   text-align: center;
   display: grid;
   grid-template-rows: 50px 1fr;
   box-sizing: border-box;
+
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+    font-size: 100%;
+  }
+
+  // APP STYLES
+  main {
+    a,
+    .link {
+      text-decoration: none;
+      border-bottom: 2px dashed;
+      cursor: pointer;
+      &:link {
+        color: blue;
+        border-color: blue;
+      }
+      &:visited {
+        color: purple;
+        border-color: purple;
+      }
+      &:hover {
+        border: none;
+      }
+      &:active {
+        border: 2px dashed;
+      }
+    }
+  }
 }
 
 #appcontainer {

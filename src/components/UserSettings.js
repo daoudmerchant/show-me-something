@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import _ from "lodash";
 
+import "../styles/UserSettings.css";
+
 import FormButtons from "./FormButtons";
 
 const UserSettings = ({ settings, updateFirebase }) => {
@@ -40,30 +42,34 @@ const UserSettings = ({ settings, updateFirebase }) => {
       handleFormChange(`${type}Prompt`, booleanValue);
     };
     return (
-      <fieldset>
-        <legend>{`Show content with the '${type}' flag':`}</legend>
-        <label for={`${type}Prompt`}>
-          <input
-            id={`${type}Prompt`}
-            type="radio"
-            name={type}
-            value="true"
-            checked={currentSettings[`${type}Prompt`] === true}
-            onChange={reportRadioChange}
-          />
-          On prompt
-        </label>
-        <label for={`${type}noprompt`}>
-          <input
-            id={`${type}noprompt`}
-            type="radio"
-            name={type}
-            value="false"
-            checked={currentSettings[`${type}Prompt`] === false}
-            onChange={reportRadioChange}
-          />
-          By default
-        </label>
+      <fieldset className="setting keyvaluepair">
+        <div className="legendcontainer">
+          <legend>{`Show content with the '${type}' flag':`}</legend>
+        </div>
+        <div className="radiovalues">
+          <label for={`${type}Prompt`}>
+            <input
+              id={`${type}Prompt`}
+              type="radio"
+              name={type}
+              value="true"
+              checked={currentSettings[`${type}Prompt`] === true}
+              onChange={reportRadioChange}
+            />
+            On prompt
+          </label>
+          <label for={`${type}noprompt`}>
+            <input
+              id={`${type}noprompt`}
+              type="radio"
+              name={type}
+              value="false"
+              checked={currentSettings[`${type}Prompt`] === false}
+              onChange={reportRadioChange}
+            />
+            By default
+          </label>
+        </div>
       </fieldset>
     );
   };
@@ -74,34 +80,38 @@ const UserSettings = ({ settings, updateFirebase }) => {
   const { filter, limit, timeframe } = currentSettings;
   return (
     <form
-      id="settingsform"
+      id="usersettings"
       onSubmit={(e) => {
         e.preventDefault();
+        setSubmitSuccess(null);
         updateFirebase({
           type: "SETTINGS",
           data: currentSettings,
           setSubmitSuccess,
         });
       }}
+      className="settingsform"
     >
-      <legend>Settings</legend>
+      <legend className="mainlegend">Settings</legend>
       <div className="setting">
-        <label htmlFor="filter">Filter by:</label>
-        <select
-          id="filterselect"
-          name="filter"
-          onChange={(e) => handleFormChange("filter", e.target.value)}
-          value={filter}
-        >
-          <option value="top">Top</option>
-          <option value="hot">Hot</option>
-          <option value="best">Best</option>
-          <option value="new">New</option>
-          <option value="rising">Rising</option>
-          <option value="controversial">Controversial</option>
-          <option value="random">Random</option>
-        </select>
-        <p>{`Show ${(() => {
+        <div className="keyvaluepair">
+          <label htmlFor="filter">Filter by:</label>
+          <select
+            id="filterselect"
+            name="filter"
+            onChange={(e) => handleFormChange("filter", e.target.value)}
+            value={filter}
+          >
+            <option value="top">Top</option>
+            <option value="hot">Hot</option>
+            <option value="best">Best</option>
+            <option value="new">New</option>
+            <option value="rising">Rising</option>
+            <option value="controversial">Controversial</option>
+            <option value="random">Random</option>
+          </select>
+        </div>
+        <p className="extradetails">{`Show ${(() => {
           // eslint-disable-next-line default-case
           switch (filter) {
             case "top":
@@ -122,28 +132,34 @@ const UserSettings = ({ settings, updateFirebase }) => {
         })()}`}</p>
       </div>
       <div className="setting">
-        <label htmlFor="limit">Content limit:</label>
-        <input
-          type="number"
-          id="limitinput"
-          name="limit"
-          min="1"
-          max="100"
-          value={limit}
-          onChange={(e) => {
-            handleFormChange("limit", e.target.value);
-          }}
-          onBlur={(e) => {
-            // handle empty field
-            const value = e.target.value;
-            if (value) return;
-            handleFormChange("limit", 1);
-          }}
-        />
-        <p>(up to 100)</p>
-        <aside>Note: a higher limit may lead to longer loading times</aside>
+        <div className="keyvaluepair">
+          <label htmlFor="limit">Content limit:</label>
+          <div className="numbercontainer">
+            <input
+              type="number"
+              id="limitinput"
+              name="limit"
+              min="1"
+              max="100"
+              value={limit}
+              onChange={(e) => {
+                handleFormChange("limit", e.target.value);
+              }}
+              onBlur={(e) => {
+                // handle empty field
+                const value = e.target.value;
+                if (value) return;
+                handleFormChange("limit", 1);
+              }}
+            />
+            <p>(up to 100)</p>
+          </div>
+        </div>
+        <aside className="extradetails warning">
+          Note: a higher limit may lead to longer loading times
+        </aside>
       </div>
-      <div className="setting">
+      <div className="setting keyvaluepair">
         <label htmlFor="timeframe">Timeframe:</label>
         <select
           id="timeframeselect"

@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AACE,aADW,CACX,KAAK,CAAA,AAAA,IAAC,CAAK,MAAM,AAAX;AADR,aAAa,CAEX,MAAM;AAFR,aAAa,CAGX,MAAM;AAHR,aAAa,CAIX,gBAAgB,CAAC;EACf,MAAM,EAAE,IAAI;CACb;;AANH,AAOE,aAPW,CAOX,KAAK;AAPP,aAAa,CAQX,MAAM;AARR,aAAa,CASX,MAAM,CAAC;EACL,YAAY,EAAE,GAAG;CAClB;;AAGH,AAAA,WAAW,CAAC;EACV,UAAU,EAAE,UAAU;EACtB,MAAM,EAAE,IAAI;CACb",
+    "sources": [
+        "UserSettings.scss"
+    ],
+    "names": [],
+    "file": "UserSettings.css"
+}

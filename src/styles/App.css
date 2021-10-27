@@ -8,6 +8,42 @@
           box-sizing: border-box;
 }
 
+.App input,
+.App select,
+.App textarea {
+  font-family: inherit;
+  font-size: 100%;
+}
+
+.App main a,
+.App main .link {
+  text-decoration: none;
+  border-bottom: 2px dashed;
+  cursor: pointer;
+}
+
+.App main a:link,
+.App main .link:link {
+  color: blue;
+  border-color: blue;
+}
+
+.App main a:visited,
+.App main .link:visited {
+  color: purple;
+  border-color: purple;
+}
+
+.App main a:hover,
+.App main .link:hover {
+  border: none;
+}
+
+.App main a:active,
+.App main .link:active {
+  border: 2px dashed;
+}
+
 #appcontainer {
   height: 100%;
   display: -ms-grid;

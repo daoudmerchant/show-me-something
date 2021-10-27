@@ -1,0 +1,18 @@
+#usersettings {
+  input[type="text"],
+  select,
+  option,
+  .numbercontainer {
+    height: 100%;
+  }
+  input,
+  select,
+  option {
+    padding-left: 2em;
+  }
+}
+
+#limitinput {
+  box-sizing: border-box;
+  height: 100%;
+}

@@ -250,8 +250,9 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
           setSubmitSuccess,
         });
       }}
+      className="settingsform"
     >
-      <legend>Button settings</legend>
+      <legend className="mainlegend">Button settings</legend>
       <p>{`${isTouchscreen ? "Tap" : "Click"} button to edit`}</p>
       <aside>
         New to Reddit? Check{" "}

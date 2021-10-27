@@ -63,8 +63,7 @@
 }
 
 .subredditlistitem input,
-#newsubreddit,
-.formbuttons {
+#newsubreddit {
   height: 100%;
 }
 

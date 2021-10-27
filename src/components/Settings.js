@@ -6,6 +6,8 @@ import {
   updateData,
 } from "../API/firebase/firebase";
 
+import "../styles/Settings.css";
+
 import { useHistory } from "react-router";
 
 // components
@@ -59,6 +61,7 @@ const Settings = ({
               signOutWithGoogle();
               history.push("/");
             }}
+            className="link"
           >
             here
           </span>{" "}
