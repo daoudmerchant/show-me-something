@@ -12,9 +12,9 @@ const NavBar = ({ user, confirmWelcomed }) => {
 
   // locataion
 
-  // media queries
-  const mediumScreen = useMediaQuery({ query: "(min-width: 430px)" });
-  const bigScreen = useMediaQuery({ query: "(min-width: 550px)" });
+  // // media queries
+  // const mediumScreen = useMediaQuery({ query: "(min-width: 430px)" });
+  // const bigScreen = useMediaQuery({ query: "(min-width: 550px)" });
   // TODO: Add listen for window resize
 
   return (
@@ -33,7 +33,9 @@ const NavBar = ({ user, confirmWelcomed }) => {
             confirmWelcomed();
           }}
         >
-          <p>Login</p>
+          <div id="username">
+            <p className="name1">Login</p>
+          </div>
           <div className="userpic">
             <p>?</p>
           </div>
@@ -41,11 +43,14 @@ const NavBar = ({ user, confirmWelcomed }) => {
       ) : (
         <Link to="/settings" onClick={confirmWelcomed}>
           <div id="userbar">
-            {mediumScreen && (
-              <p>
-                {bigScreen ? user.displayName.join(" ") : user.displayName[0]}
-              </p>
-            )}
+            <div id="username">
+              {[
+                user.displayName[0],
+                user.displayName[user.displayName.length - 1],
+              ].map((name, i) => {
+                return <p className={`name${i + 1}`}>{name}</p>;
+              })}
+            </div>
             {user.photoURL && canGetPic ? (
               <img
                 className="userpic"

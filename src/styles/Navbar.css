@@ -10,14 +10,20 @@ nav {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  padding: 0 10px;
 }
 
-nav * {
+nav > * {
   padding: 1rem;
 }
 
 nav a {
   text-decoration: none;
+}
+
+#home {
+  font-weight: bold;
+  font-size: larger;
 }
 
 #userbar {
@@ -33,13 +39,33 @@ nav a {
   padding: 0 5px;
 }
 
-#userbar p {
-  margin: 0 10px;
+#username {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#username p {
+  display: none;
+}
+
+@media screen and (min-width: 430px) {
+  #username .name1 {
+    display: inline-block;
+    padding: 0 10px;
+  }
+}
+
+@media screen and (min-width: 550px) {
+  #username .name2 {
+    display: inline-block;
+    padding-right: 10px;
+  }
 }
 
 .userpic {
-  height: 0px;
-  width: 0px;
+  height: 30px;
+  width: 30px;
   border-radius: 50%;
 }
 

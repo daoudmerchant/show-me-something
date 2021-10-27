@@ -4,14 +4,20 @@ nav {
   height: 50px;
   background-color: lightgoldenrodyellow;
   @include flex-centred;
+  padding: 0 10px;
 
-  * {
+  & > * {
     padding: 1rem;
   }
 
   a {
     text-decoration: none;
   }
+}
+
+#home {
+  font-weight: bold;
+  font-size: larger;
 }
 
 #userbar {
@@ -23,13 +29,28 @@ nav {
   padding: 0 5px;
 }
 
-#userbar p {
-  margin: 0 10px;
+#username {
+  display: flex;
+  p {
+    display: none;
+  }
+  .name1 {
+    @media screen and (min-width: 430px) {
+      display: inline-block;
+      padding: 0 10px;
+    }
+  }
+  .name2 {
+    @media screen and (min-width: 550px) {
+      display: inline-block;
+      padding-right: 10px;
+    }
+  }
 }
 
 .userpic {
-  height: 0px;
-  width: 0px;
+  height: 30px;
+  width: 30px;
   border-radius: 50%;
 }
 
