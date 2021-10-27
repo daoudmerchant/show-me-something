@@ -191,9 +191,9 @@ const ButtonEditor = ({
   return (
     <div className="buttoneditorform">
       <fieldset>
-        <legend>Style</legend>
+        <legend className="sublegend">Style</legend>
         <div className="buttonstyle">
-          <div>
+          <div className="setting keyvaluepair">
             <label>Name:</label>
             <input
               type="text"
@@ -218,9 +218,13 @@ const ButtonEditor = ({
                 setEdited(true);
               }}
             />
-            {isDuplicate && <p>Button name already exists!</p>}
           </div>
-          <div>
+          <div className="duplicatewarning">
+            {isDuplicate && (
+              <p className="warning">Button name already exists!</p>
+            )}
+          </div>
+          <div className="setting keyvaluepair">
             <label>Text Colour:</label>
             <input
               type="color"
@@ -237,7 +241,7 @@ const ButtonEditor = ({
               }}
             />
           </div>
-          <div>
+          <div className="setting keyvaluepair">
             <label>Background Color:</label>
             <input
               type="color"
@@ -257,7 +261,7 @@ const ButtonEditor = ({
         </div>
       </fieldset>
       <fieldset>
-        <legend>Subreddits:</legend>
+        <legend className="sublegend">Subreddits:</legend>
         <div className="subredditlist">
           {currentButton.subreddits.map((subreddit, j) => {
             return (

@@ -1,5 +1,22 @@
 @import "../constants/constants";
 
+input[type="text"],
+select,
+option,
+.numbercontainer {
+  height: 100%;
+}
+input:not([type="color"]),
+select,
+option {
+  padding-left: 2em;
+}
+
+input:not([type="color"]) {
+  box-sizing: border-box;
+  height: 100%;
+}
+
 #settingscontainer {
   @include flex-centred;
   flex-direction: column;
@@ -51,7 +68,7 @@ legend {
 
 .setting {
   background-color: $form-background-color;
-  margin: 1em;
+  margin: $setting-margin;
 }
 
 .keyvaluepair {

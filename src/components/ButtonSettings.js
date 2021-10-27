@@ -253,8 +253,10 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
       className="settingsform"
     >
       <legend className="mainlegend">Button settings</legend>
-      <p>{`${isTouchscreen ? "Tap" : "Click"} button to edit`}</p>
-      <aside>
+      <p className="extradetails">{`${
+        isTouchscreen ? "Tap" : "Click"
+      } a button to edit`}</p>
+      <aside className="extradetails">
         New to Reddit? Check{" "}
         <a
           href="https://www.reddit.com/r/ListOfSubreddits/wiki/listofsubreddits"
@@ -269,13 +271,11 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
         const keepChanges = () => confirmChanges(currentButton.id);
         return (
           <div className="editbutton">
-            <div className="formuserbuttoncontainer">
-              <Button
-                button={currentButton}
-                key={`button${currentButton.id}${i}`}
-                handleClick={() => toggleButtonEdit(currentButton.id)}
-              />
-            </div>
+            <Button
+              button={currentButton}
+              key={`button${currentButton.id}${i}`}
+              handleClick={() => toggleButtonEdit(currentButton.id)}
+            />
             {buttonsBeingEdited &&
               buttonsBeingEdited[currentButton.id] &&
               (() => {

@@ -6,6 +6,14 @@
   margin: 1em 0;
 }
 
+.sublegend {
+  font-size: 1.5rem;
+}
+
+.duplicatewarning {
+  margin: 1em;
+}
+
 .subredditlistitem {
   position: relative;
   display: -ms-grid;

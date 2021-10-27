@@ -12,6 +12,11 @@
 
 .editbutton {
   width: 100%;
+  .buttoncontainer {
+    height: 100px;
+    width: 300px;
+    margin: 0;
+  }
 }
 
 .editbutton > * {

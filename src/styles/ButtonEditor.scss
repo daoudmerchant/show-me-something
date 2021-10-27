@@ -1,8 +1,18 @@
+@import "../constants/constants";
+
 .buttoneditorform {
   width: 100%;
   & > * {
     margin: 1em 0;
   }
+}
+
+.sublegend {
+  font-size: 1.5rem;
+}
+
+.duplicatewarning {
+  margin: $setting-margin;
 }
 
 .subredditlistitem {
