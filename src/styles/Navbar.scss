@@ -2,7 +2,7 @@
 
 nav {
   height: 50px;
-  background-color: lightgoldenrodyellow;
+  background-color: $beige;
   @include flex-centred;
 
   & > * {

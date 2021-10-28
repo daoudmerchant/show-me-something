@@ -12,7 +12,7 @@ option {
   padding-left: 2em;
 }
 
-input:not([type="color"]) {
+input:not([type="color"]):not([type="radio"]) {
   box-sizing: border-box;
   height: 100%;
 }
@@ -23,7 +23,7 @@ input:not([type="color"]) {
 }
 
 .settingsform {
-  background-color: lightblue;
+  background-color: $blue;
   width: 100%;
   max-width: 1000px;
 }
@@ -67,12 +67,12 @@ legend {
 }
 
 .setting {
-  background-color: $form-background-color;
+  background-color: $beige;
   margin: $setting-margin;
 }
 
 .keyvaluepair {
-  background-color: lightcoral;
+  background-color: $crimson;
   height: $setting-height;
   padding: 0;
 }
@@ -111,7 +111,7 @@ legend {
   background-color: $confirm-color;
   &:disabled {
     background-color: $disabled-color;
-    color: $form-background-color;
+    color: $blue;
   }
 }
 

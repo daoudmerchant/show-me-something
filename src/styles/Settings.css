@@ -11,7 +11,7 @@ option {
   padding-left: 2em;
 }
 
-input:not([type="color"]) {
+input:not([type="color"]):not([type="radio"]) {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   height: 100%;
@@ -34,7 +34,7 @@ input:not([type="color"]) {
 }
 
 .settingsform {
-  background-color: lightblue;
+  background-color: #bbc6e9;
   width: 100%;
   max-width: 1000px;
 }
@@ -82,12 +82,12 @@ legend {
 }
 
 .setting {
-  background-color: lightblue;
+  background-color: #f7eae0;
   margin: 1em;
 }
 
 .keyvaluepair {
-  background-color: lightcoral;
+  background-color: #b3999e;
   height: 4em;
   padding: 0;
 }
@@ -135,7 +135,7 @@ legend {
 
 .submit:disabled {
   background-color: #b3b3b3;
-  color: lightblue;
+  color: #bbc6e9;
 }
 
 .delete {
