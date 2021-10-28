@@ -45,8 +45,7 @@ input[type="color"]::-webkit-color-swatch {
   position: relative;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: (1fr)[4];
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-areas: "delete subreddit subreddit icon" "info info info info";
   padding: 1em;
   -ms-grid-rows: 80px;
       grid-template-rows: 80px;
@@ -60,6 +59,23 @@ input[type="color"]::-webkit-color-swatch {
 }
 
 /* Grid area attribution */
+.deletesubredditbutton {
+  grid-area: "delete";
+}
+
+.subredditname,
+#newsubreddit {
+  grid-area: "subreddit";
+}
+
+.subredditvalidity {
+  grid-area: "validity";
+}
+
+.duplicatesubredditalert {
+  grid-area: "duplicate";
+}
+
 .subredditname {
   display: -ms-grid;
   display: grid;

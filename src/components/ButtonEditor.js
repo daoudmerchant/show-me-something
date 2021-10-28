@@ -42,7 +42,7 @@ const ButtonEditor = ({
   const duplicateSubreddit = useMemo(() => {
     let duplicate = false;
     currentButton.subreddits
-      .map((subreddit) => subreddit.name)
+      .map((subreddit) => subreddit.name.toLowerCase())
       .sort()
       .reduce((prevSubreddit, thisSubreddit) => {
         if (thisSubreddit === "") return false;
@@ -134,7 +134,11 @@ const ButtonEditor = ({
     const currentSubreddit = currentButton.subreddits.find(
       (subreddit) => subreddit.id === checkingSubreddit
     );
-    if (currentSubreddit.name === "") return;
+    if (
+      currentSubreddit.name === "" ||
+      currentSubreddit.name === duplicateSubreddit
+    )
+      return;
     let isSubscribed = true;
     // subreddit unattempted
     setSubredditValidity((prevValidity) => {
@@ -293,6 +297,10 @@ const ButtonEditor = ({
         <legend className="sublegend">Subreddits:</legend>
         <div className="subredditlist">
           {currentButton.subreddits.map((subreddit, j) => {
+            const thisSubredditValidity =
+              !!subredditValidity && subredditValidity[subreddit.id];
+            const subredditIsDuplicate =
+              subreddit.name.toLowerCase() === duplicateSubreddit;
             return (
               <div
                 className="subredditlistitem"
@@ -313,11 +321,6 @@ const ButtonEditor = ({
                     type="text"
                     value={subreddit.name}
                     onChange={(e) => {
-                      /*
-                      I need to double check the button AND the subreddit
-                      when I check the subreddit because something WEIRD
-                      was going on with the rendering
-                      */
                       editCurrentButton({
                         buttonId: currentButton.id,
                         value: e.target.value.toLowerCase(),
@@ -335,42 +338,47 @@ const ButtonEditor = ({
                     }
                   />
                 </div>
-                {!!subredditValidity &&
-                  !!subredditValidity[subreddit.id] &&
-                  !!subredditValidity[subreddit.id].attempted && (
-                    <div className="subredditvalidity">
-                      <div className="checkingstatus">
-                        {!subredditValidity[subreddit.id].resolved ? (
-                          <p>...</p>
-                        ) : !subredditValidity[subreddit.id].exists ? (
-                          <p>❌</p>
-                        ) : !!subredditValidity[subreddit.id].icon ? (
-                          <img
-                            className="subredditicon"
-                            src={subredditValidity[subreddit.id].icon}
-                            alt={subredditValidity[subreddit.id].subtitle}
-                          />
-                        ) : (
-                          <p>🙂</p>
-                        )}
-                      </div>
-                      {subredditValidity[subreddit.id].exists && (
-                        <div className="validsubredditdetails">
-                          <p>{subredditValidity[subreddit.id].subreddit}</p>
-                          {/* TODO: Hide subtitle if identical to subreddit? */}
-                          {subredditValidity[subreddit.id].subreddit !==
-                            subredditValidity[subreddit.id].subtitle && (
-                            <p>{subredditValidity[subreddit.id].subtitle}</p>
-                          )}
+                <div className="icon">
+                  {(() => {
+                    // Is duplicate
+                    if (subredditIsDuplicate)
+                      return (
+                        <div className="duplicatesubredditalert">
+                          <div className="exclamationcontainer">
+                            <p>!</p>
+                          </div>
                         </div>
-                      )}
-                    </div>
-                  )}
-                {subreddit.name === duplicateSubreddit && (
-                  <div className="duplicatesubredditalert">
-                    <div className="exclamationcontainer">
-                      <p>!</p>
-                    </div>
+                      );
+                    // Pre-existing, must exist
+                    if (!thisSubredditValidity) return <p>🙂</p>;
+                    // NEW EDIT
+                    // Hasn't been attempted
+                    if (!thisSubredditValidity.attempted) return null;
+                    // Hasn't been resolved
+                    if (!thisSubredditValidity.resolved) return <p>...</p>;
+                    // Resolved, doesn't exist
+                    if (!thisSubredditValidity.exists) return <p>🙁</p>;
+                    // Exists!
+                    // Has icon
+                    if (!!thisSubredditValidity.icon)
+                      return (
+                        <img
+                          className="subredditicon"
+                          src={subredditValidity[subreddit.id].icon}
+                          alt={subredditValidity[subreddit.id].subtitle}
+                        />
+                      );
+                    // Has no icon
+                    return <p>🙂</p>;
+                  })()}
+                </div>
+                {!!thisSubredditValidity && thisSubredditValidity.exists && (
+                  <div className="validsubredditdetails">
+                    <p>{subredditValidity[subreddit.id].subreddit}</p>
+                    {subredditValidity[subreddit.id].subreddit !==
+                      subredditValidity[subreddit.id].subtitle && (
+                      <p>{subredditValidity[subreddit.id].subtitle}</p>
+                    )}
                   </div>
                 )}
               </div>
