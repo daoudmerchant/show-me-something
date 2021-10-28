@@ -3,7 +3,7 @@
 .buttoneditorform {
   width: 100%;
   & > * {
-    margin: 1em 0;
+    margin: $setting-margin 0;
   }
 
   .formbuttons {
@@ -16,8 +16,20 @@
   font-size: 1.5rem;
 }
 
-.duplicatewarning {
-  margin: $setting-margin;
+.editbutton {
+  background-color: $blue;
+  width: 100%;
+  .buttoncontainer {
+    height: 100px;
+    width: 300px;
+    margin: 0;
+  }
+  &:not(div:last-of-type) {
+    margin-bottom: $setting-margin;
+  }
+  & > * {
+    margin: 1em 0;
+  }
 }
 
 input[type="color"] {
@@ -45,39 +57,33 @@ input[type="color"]::-webkit-color-swatch {
 .subredditlistitem {
   position: relative;
   display: grid;
+  grid-template-columns: repeat(4, 1fr);
   grid-template-areas:
     "delete subreddit subreddit icon"
     "info info info info";
-  padding: 1em;
+  background-color: $crimson;
+  margin: 1em;
   grid-template-rows: 80px;
+  // Grid area attribution
+  .delete {
+    grid-area: delete;
+  }
+  .subredditname,
+  #newsubreddit {
+    grid-area: subreddit;
+  }
+  .icon {
+    grid-area: icon;
+  }
+  .subredditvalidity {
+    grid-area: validity;
+  }
 }
 
 .buttonstyle {
   display: grid;
   grid-template-rows: 80px;
 }
-
-/* Grid area attribution */
-.deletesubredditbutton {
-  grid-area: "delete";
-}
-.subredditname,
-#newsubreddit {
-  grid-area: "subreddit";
-}
-.subredditvalidity {
-  grid-area: "validity";
-}
-.duplicatesubredditalert {
-  grid-area: "duplicate";
-}
-
-// @media (min-width: 1250px) {
-//   .subredditlistitem {
-//     grid-template-columns: 2fr 3fr 3fr 1fr;
-//     grid-template-areas: "delete subreddit validity duplicate";
-//   }
-// }
 
 .subredditname {
   display: grid;
@@ -90,17 +96,6 @@ input[type="color"]::-webkit-color-swatch {
   height: 100%;
 }
 
-.subredditvalidity {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-}
-
-.subredditicon {
-  position: absolute;
-  max-height: 100%;
-  max-width: 100%;
-}
-
 .checkingstatus {
   position: relative;
   display: flex;
@@ -110,19 +105,29 @@ input[type="color"]::-webkit-color-swatch {
   overflow: hidden;
 }
 
-.validsubredditdetails {
+.subredditdetails {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-
-.validsubredditdetails {
+  grid-column: 1 / -1;
+  background-color: $beige;
   line-height: 50%;
 }
 
-#newsubreddit {
-  grid-column-start: 2;
+.icon {
+  position: relative;
+  & > * {
+    @include transform-centred;
+    max-height: 100%;
+    max-width: 100%;
+  }
+  p {
+    display: block;
+    font-size: 2em;
+    width: 100%;
+    top: 0;
+  }
 }
 
 .duplicatesubredditalert {

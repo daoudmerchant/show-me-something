@@ -1,5 +1,6 @@
 #userbuttonsettings {
-  margin-top: 1em;
+  margin-top: $setting-margin;
+  padding: 0 $setting-margin;
   height: min-content;
 }
 

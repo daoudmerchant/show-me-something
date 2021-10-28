@@ -34,7 +34,7 @@ input:not([type="color"]):not([type="radio"]) {
 }
 
 .settingsform {
-  background-color: #bbc6e9;
+  background-color: #ffdcb4;
   width: 100%;
   max-width: 1000px;
 }
@@ -87,7 +87,7 @@ legend {
 }
 
 .keyvaluepair {
-  background-color: #b3999e;
+  background-color: #b89098;
   height: 4em;
   padding: 0;
 }
@@ -135,7 +135,7 @@ legend {
 
 .submit:disabled {
   background-color: #b3b3b3;
-  color: #bbc6e9;
+  color: #ffdcb4;
 }
 
 .delete {

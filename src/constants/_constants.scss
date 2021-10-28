@@ -1,9 +1,9 @@
 // variables
 $grey: rgb(104, 104, 104);
-$crimson: #b3999e;
+$crimson: #b89098;
 $brown: #59202e;
 $beige: #f7eae0;
-$gold: #ffc37e;
+$gold: #ffdcb4;
 $blue: #bbc6e9;
 
 $disabled-color: #b3b3b3;
@@ -34,12 +34,12 @@ $comment-border: $comment-border-width $comment-border-style
   align-items: center;
 }
 
-// @mixin transform-centred {
-//   position: absolute;
-//   left: 50%;
-//   top: 50%;
-//   transform: translate(-50%, -50%);
-// }
+@mixin transform-centred {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
 
 @mixin full-size {
   width: 100%;
@@ -66,6 +66,12 @@ $comment-border: $comment-border-width $comment-border-style
   object-fit: contain;
   position: absolute;
   transform: translateX(-50%);
+}
+
+@mixin form-parameter {
+  background-color: $crimson;
+  height: $setting-height;
+  padding: 0;
 }
 
 @mixin button-3d($offset: false) {

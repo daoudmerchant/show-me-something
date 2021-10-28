@@ -312,7 +312,7 @@ const ButtonEditor = ({
                   key={`delete${subreddit.name}`}
                   onClick={() => handleDeleteSubreddit(subreddit.id)}
                 >
-                  Delete subreddit
+                  Remove
                 </button>
                 <div className="subredditname" key={`subreddit${j}`}>
                   <p>r/</p>
@@ -372,14 +372,21 @@ const ButtonEditor = ({
                     return <p>🙂</p>;
                   })()}
                 </div>
-                {!!thisSubredditValidity && thisSubredditValidity.exists && (
-                  <div className="validsubredditdetails">
-                    <p>{subredditValidity[subreddit.id].subreddit}</p>
-                    {subredditValidity[subreddit.id].subreddit !==
-                      subredditValidity[subreddit.id].subtitle && (
-                      <p>{subredditValidity[subreddit.id].subtitle}</p>
-                    )}
+                {subredditIsDuplicate ? (
+                  <div className="extradetails subredditdetails">
+                    <p className="warning">Duplicate subreddit</p>
                   </div>
+                ) : (
+                  !!thisSubredditValidity &&
+                  thisSubredditValidity.exists && (
+                    <div className="extradetails subredditdetails">
+                      <p>{subredditValidity[subreddit.id].subreddit}</p>
+                      {subredditValidity[subreddit.id].subreddit !==
+                        subredditValidity[subreddit.id].subtitle && (
+                        <p>{subredditValidity[subreddit.id].subtitle}</p>
+                      )}
+                    </div>
+                  )
                 )}
               </div>
             );

@@ -23,7 +23,7 @@ input:not([type="color"]):not([type="radio"]) {
 }
 
 .settingsform {
-  background-color: $blue;
+  background-color: $gold;
   width: 100%;
   max-width: 1000px;
 }
@@ -72,9 +72,7 @@ legend {
 }
 
 .keyvaluepair {
-  background-color: $crimson;
-  height: $setting-height;
-  padding: 0;
+  @include form-parameter;
 }
 
 .radiovalues {
@@ -111,7 +109,7 @@ legend {
   background-color: $confirm-color;
   &:disabled {
     background-color: $disabled-color;
-    color: $blue;
+    color: $gold;
   }
 }
 
