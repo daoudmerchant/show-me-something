@@ -3,6 +3,7 @@
 .formbuttons {
   display: grid;
   grid-template-rows: $setting-height;
+  width: calc(100% - #{$setting-margin * 2});
   margin: 1em;
   height: (2 * $setting-height);
   button {
@@ -10,9 +11,7 @@
     flex-grow: 1;
     flex-shrink: 0;
     height: 100%;
-    font-family: $app-font;
-    font-size: 1.5em;
-    font-weight: bold;
+    @include form-button;
   }
 }
 

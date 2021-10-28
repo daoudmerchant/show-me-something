@@ -1,14 +1,5 @@
-export const DEFAULT_BUTTON = {
-  text: "Add New...",
-  style: {
-    color: "#000000",
-    backgroundColor: "#FFFFFF",
-    font: "",
-  },
-  subreddits: [],
-};
-
 export const FONTS = [
+  "Cormorant",
   "Ephesis",
   "Fleur de Leah",
   "Irish Grover",
@@ -16,3 +7,13 @@ export const FONTS = [
   "Prata",
   "Rubik Beastly",
 ];
+
+export const DEFAULT_BUTTON = {
+  text: "Add New...",
+  style: {
+    color: "#000000",
+    backgroundColor: "#FFFFFF",
+    font: FONTS[0],
+  },
+  subreddits: [],
+};

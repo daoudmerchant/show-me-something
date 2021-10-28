@@ -11,13 +11,17 @@
   margin: 0 1em;
 }
 
+.buttoneditorform .submit:disabled {
+  color: #bbc6e9;
+}
+
 .sublegend {
   font-size: 1.5rem;
 }
 
 .editbutton {
   background-color: #bbc6e9;
-  width: 100%;
+  width: calc(100% - 2em);
 }
 
 .editbutton .buttoncontainer {
@@ -91,6 +95,13 @@ input[type="color"]::-webkit-color-swatch {
 
 .subredditlistitem .subredditvalidity {
   grid-area: validity;
+}
+
+.subredditlistitem button {
+  font-family: Cormorant, Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 1.5em;
+  font-weight: bold;
+  font-size: 1.2em;
 }
 
 .buttonstyle {
@@ -167,7 +178,8 @@ input[type="color"]::-webkit-color-swatch {
   display: block;
   font-size: 2em;
   width: 100%;
-  top: 0;
+  height: 100%;
+  top: 25%;
 }
 
 .duplicatesubredditalert {

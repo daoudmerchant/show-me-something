@@ -5,6 +5,7 @@
 }
 
 .posttitle {
+  font-size: 2vh;
   margin: 0;
   padding: 0 2vw;
   display: -ms-grid;

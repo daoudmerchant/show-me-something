@@ -74,6 +74,12 @@ $comment-border: $comment-border-width $comment-border-style
   padding: 0;
 }
 
+@mixin form-button {
+  font-family: $app-font;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
 @mixin button-3d($offset: false) {
   border: 5px outset;
   box-shadow: -($button-outset / 2) ($button-outset / 2) white,

@@ -3,6 +3,7 @@
   display: grid;
   -ms-grid-rows: 4em;
       grid-template-rows: 4em;
+  width: calc(100% - 2em);
   margin: 1em;
   height: 8em;
 }

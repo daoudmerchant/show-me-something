@@ -47,10 +47,11 @@ export const signInWithGoogle = async () => {
     // const user = result.user;
     console.log(result.user);
   } catch (error) {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    const email = error.email;
-    const credential = GoogleAuthProvider.credentialFromError(error);
+    console.log(error);
+    // const errorCode = error.code;
+    // const errorMessage = error.message;
+    // const email = error.email;
+    // const credential = GoogleAuthProvider.credentialFromError(error);
   }
 };
 
