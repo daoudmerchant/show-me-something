@@ -11,7 +11,9 @@
     margin: 0 $setting-margin;
   }
 
-  .submit:disabled {
+  .submit:disabled,
+  .delete:disabled {
+    background-color: $disabled-color;
     color: $blue;
   }
 

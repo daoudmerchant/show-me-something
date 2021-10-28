@@ -215,7 +215,6 @@ const ButtonEditor = ({
               }
               maxLength="12"
               placeholder="Add button text..."
-              required
               onChange={(e) => {
                 const value = e.target.value;
                 const textValue =
@@ -336,7 +335,6 @@ const ButtonEditor = ({
                       setCheckingSubreddit(subreddit.id);
                     }}
                     placeholder="Add a subreddit..."
-                    required={j === 0}
                     ref={
                       newSubredditAdded &&
                       j === currentButton.subreddits.length - 1
@@ -440,7 +438,8 @@ const ButtonEditor = ({
         </button>
         <button
           type="button"
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             keepChanges();
           }}
           disabled={!isValidEdit}

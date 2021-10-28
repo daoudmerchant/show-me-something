@@ -11,7 +11,9 @@
   margin: 0 1em;
 }
 
-.buttoneditorform .submit:disabled {
+.buttoneditorform .submit:disabled,
+.buttoneditorform .delete:disabled {
+  background-color: #b3b3b3;
   color: #bbc6e9;
 }
 
