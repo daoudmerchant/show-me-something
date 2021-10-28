@@ -216,21 +216,31 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
     );
   };
 
-  const strippedButtons =
-    referenceButtons &&
-    referenceButtons
-      .map(({ id, ...button }) => {
-        return {
-          ...button,
-          subreddits: button.subreddits.map(({ id, name }) => name),
-        };
-      })
-      .slice(0, -1);
+  const stripButton_s = (button_s) => {
+    const _stripButton = (button) => {
+      const { id, ...restOfButton } = button;
+      return {
+        ...restOfButton,
+        subreddits: button.subreddits.map(({ id, name }) => name),
+      };
+    };
+    if (button_s.length) {
+      // array
+      return button_s.slice(0, -1).map((button) => _stripButton(button));
+    }
+    // object
+    return _stripButton(button_s);
+  };
+
+  const strippedButtons = useMemo(() => {
+    if (!referenceButtons) return;
+    return stripButton_s(referenceButtons);
+  }, [JSONreferenceButtons]);
 
   const containsNewButtons = useMemo(() => {
     if (!referenceButtons) return;
     return !_.isEqual(strippedButtons, buttons);
-  }, [JSONbuttons, JSONreferenceButtons, strippedButtons]);
+  }, [JSONbuttons, JSONreferenceButtons]);
 
   if (!currentButtons) return <p>Loading your buttons...</p>;
 
@@ -275,7 +285,11 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
               buttonsBeingEdited[currentButton.id] &&
               (() => {
                 const originalButton = buttons[i];
-                const modified = !_.isEqual(currentButton, originalButton);
+                const strippedCurrentButton = stripButton_s(currentButton);
+                const modified = !_.isEqual(
+                  strippedCurrentButton,
+                  originalButton
+                );
                 return (
                   <ButtonEditor
                     key={`editor${currentButton.id}${i}`}

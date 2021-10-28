@@ -47,7 +47,7 @@ const UserSettings = ({ settings, updateFirebase }) => {
           <legend>{`Prompt before showing '${type}' posts:`}</legend>
         </div>
         <div className="radiovalues">
-          <label for={`${type}Prompt`}>
+          <label htmlFor={`${type}Prompt`}>
             <input
               id={`${type}Prompt`}
               type="radio"
@@ -58,7 +58,7 @@ const UserSettings = ({ settings, updateFirebase }) => {
             />
             Yes
           </label>
-          <label for={`${type}noprompt`}>
+          <label htmlFor={`${type}noprompt`}>
             <input
               id={`${type}noprompt`}
               type="radio"

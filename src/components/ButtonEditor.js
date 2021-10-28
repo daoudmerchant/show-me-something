@@ -23,7 +23,6 @@ const ButtonEditor = ({
   const [subredditValidity, setSubredditValidity] = useState(null);
   const [edited, setEdited] = useState(false);
   const [newSubredditAdded, setNewSubredditAdded] = useState(false);
-  const [isValidEdit, setIsValidEdit] = useState(false);
 
   const lastSubredditRef = useRef();
 
@@ -56,8 +55,8 @@ const ButtonEditor = ({
   }, [subredditsJSON]);
 
   // check if valid each render
-  useEffect(() => {
-    // console.log(modified);
+  const isValidEdit = useMemo(() => {
+    console.log(modified);
     // console.log(!isDuplicate);
     // console.log(!!currentButton.text);
     // console.log(currentButton !== DEFAULT_BUTTON.text);
@@ -82,29 +81,37 @@ const ButtonEditor = ({
       // has no subreddits
       !currentButton.subreddits.length ||
       // has duplicate subreddits
-      !!duplicateSubreddit
-      // ||
-      // // contains unsuccessful validity checks
-      // subredditValidity
-      //   .filter((validity) => !!validity)
-      //   .some((validity) => {
-      //     return !validity.attempt || !validity.resolved || !validity.exists;
-      //   })
+      !!duplicateSubreddit ||
+      // contains unsuccessful validity checks
+      (() => {
+        const currentValidityChecks =
+          !!subredditValidity &&
+          currentButton.subreddits
+            .map((subreddit) => subredditValidity[subreddit.id])
+            .filter((validity) => !!validity);
+        console.log(currentValidityChecks);
+        console.log(!!currentValidityChecks.length);
+        return (
+          !!currentValidityChecks.length &&
+          currentValidityChecks.some((validity) => {
+            console.log(validity);
+            return !validity.attempt || !validity.resolved || !validity.exists;
+          })
+        );
+      })()
     ) {
-      if (!isValidEdit) return; // works?
-      setIsValidEdit(false);
-      return;
+      console.log("INVALID EDIT");
+      return false;
     }
-    setIsValidEdit(true);
+    console.log("VALID EDIT");
+    return true;
   }, [
-    currentButton.text,
-    currentButton.style,
-    currentButton.subreddits,
     modified,
-    isValidEdit,
-    subredditValidity,
     isDuplicate,
+    currentButton.text,
+    currentButton.subreddits,
     duplicateSubreddit,
+    subredditValidity,
   ]);
 
   const handleDeleteSubreddit = (subredditId) => {
@@ -229,7 +236,7 @@ const ButtonEditor = ({
             )}
           </div>
           <div className="setting keyvaluepair">
-            <label for="font">Font:</label>
+            <label htmlFor="font">Font:</label>
             <select
               className="fontselect"
               name="font"
