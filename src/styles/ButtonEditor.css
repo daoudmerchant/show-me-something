@@ -123,8 +123,10 @@ input[type="color"]::-webkit-color-swatch {
 .buttonstyle {
   display: -ms-grid;
   display: grid;
-  -ms-grid-rows: 80px;
-      grid-template-rows: 80px;
+}
+
+.buttonstyle .setting:not(:first-child) {
+  margin-top: 0;
 }
 
 .subredditname {

@@ -204,36 +204,40 @@ const ButtonEditor = ({
       <fieldset>
         <legend className="sublegend">Style</legend>
         <div className="buttonstyle">
-          <div className="setting keyvaluepair">
-            <label>Name:</label>
-            <input
-              type="text"
-              value={
-                currentButton.text === DEFAULT_BUTTON.text
-                  ? ""
-                  : currentButton.text
-              }
-              maxLength="12"
-              placeholder="Add button text..."
-              onChange={(e) => {
-                const value = e.target.value;
-                const textValue =
-                  value.length === 1 ? value.toUpperCase() : value;
-                editCurrentButton({
-                  buttonId: currentButton.id,
-                  value: textValue,
-                  param: "text",
-                });
-                if (edited) return;
-                setEdited(true);
-              }}
-            />
-          </div>
-          <div className="duplicatewarning">
+          <div className="setting">
+            <div className="keyvaluepair">
+              <label>Name:</label>
+              <input
+                type="text"
+                value={
+                  currentButton.text === DEFAULT_BUTTON.text
+                    ? ""
+                    : currentButton.text
+                }
+                maxLength="12"
+                placeholder="Add button text..."
+                onChange={(e) => {
+                  const value = e.target.value;
+                  const textValue =
+                    value.length === 1 ? value.toUpperCase() : value;
+                  editCurrentButton({
+                    buttonId: currentButton.id,
+                    value: textValue,
+                    param: "text",
+                  });
+                  if (edited) return;
+                  setEdited(true);
+                }}
+              />
+            </div>
+
             {isDuplicate && (
-              <p className="warning">Button name already exists!</p>
+              <p className="extradetails warning">
+                Button name already exists!
+              </p>
             )}
           </div>
+
           <div className="setting keyvaluepair">
             <label htmlFor="font">Font:</label>
             <select

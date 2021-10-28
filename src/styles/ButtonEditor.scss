@@ -104,7 +104,9 @@ input[type="color"]::-webkit-color-swatch {
 
 .buttonstyle {
   display: grid;
-  grid-template-rows: 80px;
+  .setting:not(:first-child) {
+    margin-top: 0;
+  }
 }
 
 .subredditname {
