@@ -18,7 +18,6 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
   const [referenceButtons, setReferenceButtons] = useState(null);
   const [currentButtons, setCurrentButtons] = useState(null);
   const [buttonsBeingEdited, setButtonsBeingEdited] = useState(null);
-  const [buttonValidity, setButtonValidity] = useState(null);
 
   // media query
   const isTouchscreen = useMediaQuery({ query: "(hover: none)" });
@@ -52,11 +51,7 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
       buttons.forEach((button) => (obj[button.id] = false));
       return obj;
     };
-    fireCallbacks(
-      getObjWithFalseIdParams,
-      setButtonsBeingEdited,
-      setButtonValidity
-    );
+    fireCallbacks(getObjWithFalseIdParams, setButtonsBeingEdited);
   };
 
   const getNewButton = (id) => {
@@ -91,7 +86,7 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
     const _addNewButtonProp = (obj) => {
       return { ...obj, [newId]: false };
     };
-    fireCallbacks(_addNewButtonProp, setButtonsBeingEdited, setButtonValidity);
+    fireCallbacks(_addNewButtonProp, setButtonsBeingEdited);
   }, [buttonsBeingEdited, currentButtons]);
 
   // Show / hide button editor
@@ -209,7 +204,7 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
       delete newObj[id];
       return newObj;
     };
-    fireCallbacks(_removeIdParam, setButtonValidity, setButtonsBeingEdited);
+    fireCallbacks(_removeIdParam, setButtonsBeingEdited);
     if (!submitSuccess) return;
     setSubmitSuccess(undefined);
   };

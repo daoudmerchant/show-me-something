@@ -44,7 +44,7 @@ const UserSettings = ({ settings, updateFirebase }) => {
     return (
       <fieldset className="setting keyvaluepair">
         <div className="legendcontainer">
-          <legend>{`Show content with the '${type}' flag':`}</legend>
+          <legend>{`Prompt before showing '${type}' posts:`}</legend>
         </div>
         <div className="radiovalues">
           <label for={`${type}Prompt`}>
@@ -56,7 +56,7 @@ const UserSettings = ({ settings, updateFirebase }) => {
               checked={currentSettings[`${type}Prompt`] === true}
               onChange={reportRadioChange}
             />
-            On prompt
+            Yes
           </label>
           <label for={`${type}noprompt`}>
             <input
@@ -67,7 +67,7 @@ const UserSettings = ({ settings, updateFirebase }) => {
               checked={currentSettings[`${type}Prompt`] === false}
               onChange={reportRadioChange}
             />
-            By default
+            No
           </label>
         </div>
       </fieldset>
@@ -143,7 +143,12 @@ const UserSettings = ({ settings, updateFirebase }) => {
               max="100"
               value={limit}
               onChange={(e) => {
-                handleFormChange("limit", e.target.value);
+                // TODO: Improve limit range handling
+                let value = e.target.value;
+                if (value === "0" || value.length === 4) return;
+                if (+value > 100) value = "100";
+                if (value !== "" && +value <= 0) value = "1";
+                handleFormChange("limit", value);
               }}
               onBlur={(e) => {
                 // handle empty field

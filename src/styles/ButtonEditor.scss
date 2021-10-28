@@ -14,6 +14,11 @@
   .submit:disabled {
     color: $blue;
   }
+
+  input:not([type="color"]),
+  select {
+    width: 100%;
+  }
 }
 
 .sublegend {
@@ -61,7 +66,7 @@ input[type="color"]::-webkit-color-swatch {
 .subredditlistitem {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 50px repeat(2, 1fr) 80px;
   grid-template-areas:
     "delete subreddit subreddit icon"
     "info info info info";
@@ -85,7 +90,13 @@ input[type="color"]::-webkit-color-swatch {
 
   button {
     @include form-button;
-    font-size: 1.2em;
+  }
+  .delete {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-left: 10px;
+    align-self: center;
   }
 }
 
@@ -96,7 +107,7 @@ input[type="color"]::-webkit-color-swatch {
 
 .subredditname {
   display: grid;
-  grid-template-columns: 1fr 6fr;
+  grid-template-columns: 1fr 7fr;
   align-items: center;
 }
 
@@ -121,7 +132,6 @@ input[type="color"]::-webkit-color-swatch {
   justify-content: center;
   grid-column: 1 / -1;
   background-color: $beige;
-  line-height: 50%;
 }
 
 .icon {
@@ -142,9 +152,6 @@ input[type="color"]::-webkit-color-swatch {
 
 .duplicatesubredditalert {
   grid-column-start: 4;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   font-size: 2.5em;
   color: red;
 }

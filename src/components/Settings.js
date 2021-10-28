@@ -58,8 +58,8 @@ const Settings = ({
           <span
             onClick={() => {
               resetAllData();
-              signOutWithGoogle();
               history.push("/");
+              signOutWithGoogle();
             }}
             className="link"
           >

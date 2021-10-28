@@ -312,7 +312,7 @@ const ButtonEditor = ({
                   key={`delete${subreddit.name}`}
                   onClick={() => handleDeleteSubreddit(subreddit.id)}
                 >
-                  Remove
+                  ✕
                 </button>
                 <div className="subredditname" key={`subreddit${j}`}>
                   <p>r/</p>
@@ -381,8 +381,12 @@ const ButtonEditor = ({
                   thisSubredditValidity.exists && (
                     <div className="extradetails subredditdetails">
                       <p>{subredditValidity[subreddit.id].subreddit}</p>
-                      {subredditValidity[subreddit.id].subreddit !==
-                        subredditValidity[subreddit.id].subtitle && (
+                      {subredditValidity[
+                        subreddit.id
+                      ].subreddit.toLowerCase() !==
+                        subredditValidity[
+                          subreddit.id
+                        ].subtitle.toLowerCase() && (
                         <p>{subredditValidity[subreddit.id].subtitle}</p>
                       )}
                     </div>
