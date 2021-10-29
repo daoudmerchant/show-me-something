@@ -1,12 +1,11 @@
 import { useContext } from "react";
 import { RedditPostContext } from "../constants/contexts";
 import { useMediaQuery } from "react-responsive";
-import { isSignedIn } from "../API/firebase/firebase";
 
 import "../styles/Canvas.css";
 
 // constants
-import { WELCOME } from "../constants/sitetext";
+import { WELCOME, FINISHED } from "../constants/sitetext";
 
 // components
 import Info from "./Info";
@@ -14,7 +13,7 @@ import Post from "./Post";
 import Loading from "./Loading";
 
 const Canvas = ({ welcomed, showContent }) => {
-  const { fetchingPosts, finishedList, currentPost } =
+  const { fetchingPosts, thisListFinished, currentPost } =
     useContext(RedditPostContext);
   // media query
   const isTouchscreen = useMediaQuery({ query: "(hover: none)" });
@@ -24,7 +23,7 @@ const Canvas = ({ welcomed, showContent }) => {
         if (!welcomed)
           return <Info text={WELCOME(isTouchscreen ? "tap" : "click")} />;
         if (fetchingPosts) return <Loading type="POSTS" />;
-        if (!!finishedList) return <div>Finished!</div>;
+        if (thisListFinished) return <Info text={FINISHED} />;
         if (!currentPost)
           return (
             <div>{`${isTouchscreen ? "Tap" : "Click"} below to begin 👇`}</div>

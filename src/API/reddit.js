@@ -77,9 +77,10 @@ export const getRedditData = async ({
           };
         }
         if (child.data.post_hint === "hosted:video") {
-          const videoUrl =
-            child.data.media.reddit_video.fallback_url.slice(0, -16) +
-            "nonsense";
+          const videoUrl = child.data.media.reddit_video.fallback_url.slice(
+            0,
+            -16
+          );
           return {
             type: "video",
             local: true,
@@ -94,17 +95,7 @@ export const getRedditData = async ({
         }
         if (child.data.post_hint === "rich:video") {
           // linked video
-          // let url;
-          // if (child.data.media.oembed.provider_name === "Gfycat") {
-          //   url = child.data.media.oembed.thumbnail_url
-          //     .split("-")[0]
-          //     .concat("-mobile.mp4");
-          // }
-          // if (child.data.media.oembed.provider_name === "YouTube") {
-          //   url = child.data.media.oembed.html.split("\\")[5];
-          // }
-          alert("Rich video " + child.data.media.oembed.provider_name);
-          console.log(child.data);
+          // console.log(child.data);
           return {
             type: "video",
             local: false,

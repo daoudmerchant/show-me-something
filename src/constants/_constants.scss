@@ -52,6 +52,11 @@ $max-info-width: 1000px;
   height: $media-button-size;
 }
 
+@mixin spaced-italics {
+  font-style: italic;
+  letter-spacing: 0.05em;
+}
+
 @mixin full-height {
   height: 100%;
 }

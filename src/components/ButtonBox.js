@@ -16,7 +16,7 @@ const ButtonBox = ({ buttons }) => {
   const [firstButtonIndex, setFirstButtonIndex] = useState(0);
   const [currentButtons, setCurrentButtons] = useState(null);
 
-  const { getNextPost, finishedList } = useContext(RedditPostContext);
+  const { getNextPost, finishedLists } = useContext(RedditPostContext);
 
   const handleButtonRight = () => {
     setFirstButtonIndex(
@@ -89,7 +89,7 @@ const ButtonBox = ({ buttons }) => {
         <Button
           key={`button${button.id}${i}`}
           button={button}
-          isDisabled={finishedList && finishedList === button.text}
+          isDisabled={finishedLists[button.text]}
           handleClick={() => {
             getNextPost({
               subreddits: button.subreddits,

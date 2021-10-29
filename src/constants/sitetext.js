@@ -77,13 +77,15 @@ export const FINISHED = [
     body: ["Looks like you finished this content."],
   },
   {
-    header: "Wait, how do I get more?",
+    header: "Er... How do I get more?",
     body: [
-      "Head to ",
-      <Link exact to="/settings">
-        settings
-      </Link>,
-      " to increase how many posts are pulled from Reddit.",
+      [
+        "Head to ",
+        <Link exact to="/settings">
+          settings
+        </Link>,
+        " to increase how many posts are pulled from Reddit.",
+      ],
     ],
   },
 ];

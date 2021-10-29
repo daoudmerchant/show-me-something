@@ -9,4 +9,32 @@
 .promptbuttons .cancel {
   margin-right: 1em;
 }
+
+#promptcontainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#prompt {
+  max-width: 1000px;
+}
+
+#prompt aside {
+  margin-top: 3em;
+  padding: 0.5em 1em;
+  background-color: white;
+}
+
+#prompt aside h3 {
+  font-size: 1.3em;
+  font-style: italic;
+  letter-spacing: 0.05em;
+}
 /*# sourceMappingURL=Prompt.css.map */

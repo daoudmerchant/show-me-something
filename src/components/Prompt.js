@@ -104,33 +104,35 @@ const Prompt = ({ type, confirm, cancel }) => {
     };
   };
   return (
-    <form
-      id="prompt"
-      onSubmit={(e) => {
-        e.preventDefault();
-        confirm();
-      }}
-    >
-      <h1>{content[type].emoji}</h1>
-      <h2>{content[type].header}</h2>
-      <p>{content[type].body || flagWarning}</p>
-      <div className="promptbuttons">
-        <button
-          type="button"
-          className="cancel"
-          onClick={stopPropagation(cancel || getNextPost)}
-        >
-          {content[type].cancellation || "Skip this post"}
-        </button>
-        <button type="submit" className="submit" onClick={stopPropagation()}>
-          {content[type].confirmation}
-        </button>
-      </div>
-      <aside>
-        <h3>{content[type].help.question}</h3>
-        <p>{content[type].help.answer}</p>
-      </aside>
-    </form>
+    <div id="promptcontainer">
+      <form
+        id="prompt"
+        onSubmit={(e) => {
+          e.preventDefault();
+          confirm();
+        }}
+      >
+        <h1>{content[type].emoji}</h1>
+        <h2>{content[type].header}</h2>
+        <p>{content[type].body || flagWarning}</p>
+        <div className="promptbuttons">
+          <button
+            type="button"
+            className="cancel"
+            onClick={stopPropagation(cancel || getNextPost)}
+          >
+            {content[type].cancellation || "Skip this post"}
+          </button>
+          <button type="submit" className="submit" onClick={stopPropagation()}>
+            {content[type].confirmation}
+          </button>
+        </div>
+        <aside>
+          <h3>{content[type].help.question}</h3>
+          <p>{content[type].help.answer}</p>
+        </aside>
+      </form>
+    </div>
   );
 };
 

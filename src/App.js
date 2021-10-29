@@ -38,7 +38,7 @@ function App() {
   const [welcomed, setWelcomed] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
   const [redditLists, setRedditLists] = useState(null);
-  console.log(settings);
+  const [finishedLists, setFinishedLists] = useState({});
 
   const confirmWelcomed = useCallback(() => {
     if (welcomed) return;
@@ -134,7 +134,9 @@ function App() {
   );
 
   const getNextPost = useCallback(
-    async ({ subreddits, category }) => {
+    async (
+      { subreddits, category } = { subreddits: null, category: currentCategory }
+    ) => {
       const refreshRedditList = async (subreddits, category) => {
         const getSubredditList = async (subreddit) => {
           const redditResponse = await getRedditData({
@@ -161,34 +163,46 @@ function App() {
           };
         });
       };
+      // executed code
       if (category !== currentCategory) setCurrentCategory(category);
       if (!categoryExists(category) && !fetchingPosts) {
         setFetchingPosts(true);
         await refreshRedditList(subreddits, category);
         setFetchingPosts(false);
-      } else if (categoryExists(category) && !listFinished(category)) {
-        const incrementIndex = (category) => {
-          setRedditLists((prevLists) => {
-            return {
-              ...prevLists,
-              [category]: {
-                ...prevLists[category],
-                index: prevLists[category].index + 1,
-              },
-            };
-          });
-        };
-        incrementIndex(category);
+      } else if (categoryExists(category)) {
+        if (
+          redditLists[category].index ===
+          redditLists[category].list.length - 1
+        ) {
+          // finished the post
+          setFinishedLists((prevLists) => ({
+            ...prevLists,
+            [category]: true,
+          }));
+        } else {
+          const incrementIndex = (category) => {
+            setRedditLists((prevLists) => {
+              return {
+                ...prevLists,
+                [category]: {
+                  ...prevLists[category],
+                  index: prevLists[category].index + 1,
+                },
+              };
+            });
+          };
+          incrementIndex(category);
+        }
       }
       return () => setFetchingPosts(false);
     },
     [
-      categoryExists,
       currentCategory,
+      categoryExists,
       fetchingPosts,
-      listFinished,
-      settings,
       confirmWelcomed,
+      settings,
+      redditLists,
     ]
   );
 
@@ -199,7 +213,8 @@ function App() {
       ? redditLists[currentCategory].list[redditLists[currentCategory].index]
       : null,
     fetchingPosts,
-    finishedList: categoryExists() && listFinished(),
+    finishedLists,
+    thisListFinished: finishedLists[currentCategory],
   };
   return (
     <div className="App">

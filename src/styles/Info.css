@@ -16,4 +16,8 @@
   font-style: italic;
   letter-spacing: 0.05em;
 }
+
+.infoheader:not(:first-of-type) {
+  margin-top: 2em;
+}
 /*# sourceMappingURL=Info.css.map */
