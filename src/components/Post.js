@@ -23,41 +23,44 @@ const FLAGS = ["NSFW", "spoiler"];
 
 const Post = ({ showContent }) => {
   const { currentPost } = useContext(RedditPostContext);
-  const [visibleNSFW, setVisibleNSFW] = useState(null);
-  const [visibleSpoiler, setVisibleSpoiler] = useState(null);
+  const [NSFWvisible, setNSFWVisible] = useState(false);
+  const [spoilerVisible, setSpoilerVisible] = useState(false);
 
-  const postHasNoFlags = FLAGS.every((flag) => !currentPost[flag]);
-
-  // namespace props and state for functional access
-  const userVisibility = useMemo(
-    () => ({
-      NSFW: !showContent.promptOnNSFW,
-      spoiler: !showContent.promptOnSpoiler,
-    }),
-    [showContent]
-  );
+  const postHasNoFlags = FLAGS.every((flag) => {
+    return !currentPost[flag];
+  });
 
   const postVisibility = useMemo(
     () => ({
-      visibleNSFW,
-      denyVisibleNSFW: () => setVisibleNSFW(false),
-      confirmVisibleNSFW: () => setVisibleNSFW(true),
-      visiblespoiler: visibleSpoiler,
-      denyVisiblespoiler: () => setVisibleSpoiler(false),
-      confirmVisiblespoiler: () => setVisibleSpoiler(true),
+      NSFW: {
+        visibility: NSFWvisible,
+        confirm: () => setNSFWVisible(true),
+        deny: () => setNSFWVisible(false),
+      },
+      spoiler: {
+        visibility: spoilerVisible,
+        confirm: () => setSpoilerVisible(true),
+        deny: () => setNSFWVisible(false),
+      },
     }),
-    [visibleNSFW, visibleSpoiler]
+    [NSFWvisible, spoilerVisible]
   );
 
   // set content visibility state on render
   useEffect(() => {
     if (!showContent || postHasNoFlags) return;
     FLAGS.forEach((flag) => {
-      userVisibility[flag]
-        ? postVisibility[`confirmVisible${flag}`]()
-        : postVisibility[`denyVisible${flag}`]();
+      if (!showContent[`${flag}prompt`]) postVisibility[flag].confirm();
     });
-  }, [postHasNoFlags, postVisibility, showContent, userVisibility]);
+  }, [postHasNoFlags, postVisibility, showContent]);
+
+  // reset visibility on next post
+  useEffect(() => {
+    if (!showContent || postHasNoFlags) return;
+    FLAGS.forEach((flag) => {
+      if (showContent[`${flag}prompt`]) postVisibility[flag].deny();
+    });
+  }, [currentPost]);
 
   // CONTENT
   const Content = () => {
@@ -90,7 +93,6 @@ const Post = ({ showContent }) => {
       return <Wikipedia />;
     }
     if (currentPost.media.type === "website") {
-      console.log(currentPost);
       return <p>TODO: External link to website</p>;
     }
     return (
@@ -106,7 +108,7 @@ const Post = ({ showContent }) => {
   );
 
   // show no content before state initialisation
-  if (!postHasNoFlags && (visibleNSFW === null || visibleSpoiler === null))
+  if (!postHasNoFlags && (NSFWvisible === null || spoilerVisible === null))
     return null;
 
   return (
@@ -140,12 +142,12 @@ const Post = ({ showContent }) => {
         }
         for (let i = 0; i < FLAGS.length; i++) {
           if (currentPost[FLAGS[i]])
-            return postVisibility[`visible${FLAGS[i]}`] ? (
+            return postVisibility[FLAGS[i]].visibility ? (
               <PostBody />
             ) : (
               <Prompt
                 type={FLAGS[i]}
-                confirm={() => postVisibility[`setVisible${FLAGS[i]}`](true)}
+                confirm={postVisibility[FLAGS[i]].confirm}
               />
             );
         }

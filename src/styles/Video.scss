@@ -7,6 +7,10 @@ video {
 
 .hostedvideo {
   @include full-size;
+  & > * {
+    left: 0;
+    top: 0;
+  }
 }
 
 #playpause {

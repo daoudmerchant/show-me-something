@@ -107,7 +107,9 @@ legend {
 .submit {
   color: white;
   background-color: $confirm-color;
+  border: 4px solid $confirm-color;
   &:disabled {
+    border-color: $disabled-color;
     background-color: $disabled-color;
     color: $gold;
   }

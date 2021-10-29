@@ -13,6 +13,11 @@ video {
   height: 100%;
 }
 
+.hostedvideo > * {
+  left: 0;
+  top: 0;
+}
+
 #playpause {
   position: absolute;
   right: 20px;

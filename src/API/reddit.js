@@ -77,10 +77,9 @@ export const getRedditData = async ({
           };
         }
         if (child.data.post_hint === "hosted:video") {
-          const videoUrl = child.data.media.reddit_video.fallback_url.slice(
-            0,
-            -16
-          );
+          const videoUrl =
+            child.data.media.reddit_video.fallback_url.slice(0, -16) +
+            "nonsense";
           return {
             type: "video",
             local: true,

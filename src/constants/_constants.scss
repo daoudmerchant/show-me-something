@@ -56,13 +56,6 @@ $max-info-width: 1000px;
   height: 100%;
 }
 
-@mixin parent-percentages {
-  position: relative;
-  & & {
-    position: relative;
-  }
-}
-
 @mixin fit-and-centre-media {
   object-fit: contain;
   position: absolute;

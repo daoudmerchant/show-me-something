@@ -1,16 +1,14 @@
 import { useContext } from "react";
 
+import "../styles/Prompt.css";
+
 // context
 import { RedditPostContext } from "../constants/contexts";
 
-const Bold = ({ children }) => (
-  <span style={{ fontWeight: "bold" }}>{children}</span>
-);
+const Bold = ({ children }) => <span className="bold">{children}</span>;
 const Important = ({ children }) => (
   <span className="important">{children}</span>
 );
-const Spoiler = <Bold>Spoiler</Bold>;
-const NSFW = <Bold>NSFW</Bold>;
 
 const Prompt = ({ type, confirm, cancel }) => {
   const { getNextPost, currentPost } = useContext(RedditPostContext);
@@ -25,10 +23,10 @@ const Prompt = ({ type, confirm, cancel }) => {
       emoji: "🤫",
       header: "Shhhhhh...",
       help: {
-        question: ["What is a ", <Spoiler />, "?"],
+        question: ["What is a ", <Bold>Spoiler</Bold>, "?"],
         answer: [
           "A ",
-          <Spoiler />,
+          <Bold>Spoiler</Bold>,
           "is content which may reveal details about a piece of media which could 'spoil' the surprise",
         ],
       },
@@ -38,9 +36,9 @@ const Prompt = ({ type, confirm, cancel }) => {
       emoji: "😳",
       header: "Oh my...",
       help: {
-        question: ["What does ", <NSFW />, " stand for?"],
+        question: ["What does ", <Bold>NSFW</Bold>, " stand for?"],
         answer: [
-          <NSFW />,
+          <Bold>NSFW</Bold>,
           " stands for ",
           <Bold>N</Bold>,
           "ot ",
@@ -117,10 +115,14 @@ const Prompt = ({ type, confirm, cancel }) => {
       <h2>{content[type].header}</h2>
       <p>{content[type].body || flagWarning}</p>
       <div className="promptbuttons">
-        <button type="button" onClick={stopPropagation(cancel || getNextPost)}>
+        <button
+          type="button"
+          className="cancel"
+          onClick={stopPropagation(cancel || getNextPost)}
+        >
           {content[type].cancellation || "Skip this post"}
         </button>
-        <button type="submit" onClick={stopPropagation()}>
+        <button type="submit" className="submit" onClick={stopPropagation()}>
           {content[type].confirmation}
         </button>
       </div>

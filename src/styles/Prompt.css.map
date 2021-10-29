@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "AAEA,AACE,cADY,CACZ,MAAM,CAAC;EACL,WAAW,ECQJ,SAAS,EAAE,OAAO,EAAE,MAAM,EAAE,MAAM,EAAE,UAAU;EDPrD,SAAS,EAAE,KAAK;EAChB,MAAM,EAAE,IAAI;EACZ,OAAO,EAAE,GAAG;EACZ,WAAW,EAAE,IAAI;CAClB;;AAPH,AAQE,cARY,CAQZ,OAAO,CAAC;EACN,YAAY,EAAE,GAAG;CAClB",
+    "sources": [
+        "Prompt.scss",
+        "../constants/_constants.scss"
+    ],
+    "names": [],
+    "file": "Prompt.css"
+}

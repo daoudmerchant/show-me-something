@@ -131,9 +131,11 @@ legend {
 .submit {
   color: white;
   background-color: #72e772;
+  border: 4px solid #72e772;
 }
 
 .submit:disabled {
+  border-color: #b3b3b3;
   background-color: #b3b3b3;
   color: #ffdcb4;
 }

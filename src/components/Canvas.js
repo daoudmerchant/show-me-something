@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { RedditPostContext } from "../constants/contexts";
 import { useMediaQuery } from "react-responsive";
+import { isSignedIn } from "../API/firebase/firebase";
 
 import "../styles/Canvas.css";
 

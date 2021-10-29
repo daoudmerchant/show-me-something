@@ -38,6 +38,7 @@ function App() {
   const [welcomed, setWelcomed] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
   const [redditLists, setRedditLists] = useState(null);
+  console.log(settings);
 
   const confirmWelcomed = useCallback(() => {
     if (welcomed) return;
@@ -213,8 +214,8 @@ function App() {
                     welcomed={welcomed}
                     showContent={
                       settings && {
-                        promptOnNSFW: settings.promptOnNSFW,
-                        promptOnSpoiler: settings.promptOnSpoiler,
+                        NSFWprompt: settings.NSFWPrompt,
+                        spoilerPrompt: settings.spoilerPrompt,
                       }
                     }
                   />
