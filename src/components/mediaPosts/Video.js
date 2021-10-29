@@ -15,9 +15,8 @@ const Video = () => {
   console.log(currentPost);
 
   useEffect(() => {
-    setIsLoaded(false);
+    currentPost.media.local ? setIsLoaded(false) : setIsLoaded(true);
   }, [currentPost]);
-
   // refs
   const vidRef = useRef();
   const audioRef = useRef();
@@ -63,9 +62,7 @@ const Video = () => {
             ref={vidRef}
             className="video"
             style={{ display: isLoaded ? undefined : "none" }}
-            onLoadedData={() => {
-              setIsLoaded(true);
-            }}
+            onLoadedData={() => setIsLoaded(true)}
           >
             <source
               src={currentPost.media.content.videourl}
@@ -99,12 +96,10 @@ const Video = () => {
         // video from outside Reddit, no choice...
         <div
           className="hostedvideo"
-          dangerouslySetInnerHTML={{ __html: currentPost.media.content.html }}
-          style={{ display: isLoaded ? undefined : "none" }}
-          // TODO: Check onload function!
-          onLoad={() => {
-            setIsLoaded(true);
+          dangerouslySetInnerHTML={{
+            __html: currentPost.media.content.html,
           }}
+          style={{ display: isLoaded ? undefined : "none" }}
         />
       )}
     </div>

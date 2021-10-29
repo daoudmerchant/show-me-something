@@ -1,6 +1,7 @@
 import "../styles/FormButtons.css";
 
 const FormButtons = ({ submitSuccess, isDifferent, cancel }) => {
+  console.log(submitSuccess);
   return (
     <div className="formbuttons twobuttons">
       <div className="submitsuccess extradetails">
@@ -8,9 +9,10 @@ const FormButtons = ({ submitSuccess, isDifferent, cancel }) => {
           <p className="successtext">Success!</p>
         ) : submitSuccess === false ? (
           <p className="failuretext">Oops, try again...</p>
-        ) : submitSuccess === null ? (
+        ) : submitSuccess === undefined ? (
           <p>...</p>
-        ) : null}
+        ) : // null
+        null}
       </div>
       <button
         type="button"

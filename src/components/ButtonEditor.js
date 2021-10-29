@@ -219,7 +219,7 @@ const ButtonEditor = ({
                 onChange={(e) => {
                   const value = e.target.value;
                   const textValue =
-                    value.length === 1 ? value.toUpperCase() : value;
+                    value.slice(0, 1).toUpperCase() + value.slice(1);
                   editCurrentButton({
                     buttonId: currentButton.id,
                     value: textValue,
@@ -316,14 +316,16 @@ const ButtonEditor = ({
                 className="subredditlistitem"
                 key={currentButton.id + subreddit.id}
               >
-                <button
-                  type="button"
-                  className="delete"
-                  key={`delete${subreddit.name}`}
-                  onClick={() => handleDeleteSubreddit(subreddit.id)}
-                >
-                  ✕
-                </button>
+                <div className="deletesubredditcontainer">
+                  <button
+                    type="button"
+                    className="delete"
+                    key={`delete${subreddit.name}`}
+                    onClick={() => handleDeleteSubreddit(subreddit.id)}
+                  >
+                    ✕
+                  </button>
+                </div>
                 <div className="subredditname" key={`subreddit${j}`}>
                   <p>r/</p>
                   <input
@@ -405,8 +407,8 @@ const ButtonEditor = ({
             );
           })}
           {currentButton.subreddits.length < MAX_SUBREDDITS && (
-            <div className="subredditlistitem">
-              <div className="subredditname" id="newsubreddit">
+            <div className="subredditlistitem newsubreddit">
+              <div className="subredditname">
                 <p>r/</p>
                 <input
                   type="text"

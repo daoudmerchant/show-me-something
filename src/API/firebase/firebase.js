@@ -82,6 +82,7 @@ export const getData = (() => {
     const docRef = doc(db, "users", UID);
     try {
       const docSnap = await getDoc(docRef);
+      console.log(docSnap);
       if (docSnap.exists()) {
         return docSnap.data();
       } else {

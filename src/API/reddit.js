@@ -150,14 +150,18 @@ export const getRedditData = async ({
             },
           };
         }
+        const textPostData = {
+          type: "text",
+          content: {
+            text: child.data.selftext,
+          },
+        };
+        if (child.data.post_hint === "self") {
+          return textPostData;
+        }
         if (child.data.post_hint === undefined) {
           if (child.data.url.includes("reddit")) {
-            return {
-              type: "text",
-              content: {
-                text: child.data.selftext,
-              },
-            };
+            return textPostData;
           }
           if (child.data.url.includes("wikipedia")) {
             return {

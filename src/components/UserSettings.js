@@ -7,7 +7,7 @@ import FormButtons from "./FormButtons";
 
 const UserSettings = ({ settings, updateFirebase }) => {
   const [currentSettings, setCurrentSettings] = useState(null);
-  const [submitSuccess, setSubmitSuccess] = useState(undefined);
+  const [submitSuccess, setSubmitSuccess] = useState(null);
 
   const resetSettings = () => {
     const clonedSettings = _.cloneDeep(settings);
@@ -22,7 +22,7 @@ const UserSettings = ({ settings, updateFirebase }) => {
 
   // reset submit success on mount
   useEffect(() => {
-    setSubmitSuccess(undefined);
+    setSubmitSuccess(null);
   }, []);
 
   const handleFormChange = (category, value) => {
@@ -33,7 +33,7 @@ const UserSettings = ({ settings, updateFirebase }) => {
       };
     });
     if (!submitSuccess) return;
-    setSubmitSuccess(undefined);
+    setSubmitSuccess(null);
   };
 
   const BooleanOptions = ({ type }) => {
@@ -83,7 +83,7 @@ const UserSettings = ({ settings, updateFirebase }) => {
       id="usersettings"
       onSubmit={(e) => {
         e.preventDefault();
-        setSubmitSuccess(null);
+        setSubmitSuccess(undefined);
         updateFirebase({
           type: "SETTINGS",
           data: currentSettings,

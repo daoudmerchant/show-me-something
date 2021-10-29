@@ -97,8 +97,6 @@ input[type="color"]::-webkit-color-swatch {
     border-radius: 50%;
     width: 40px;
     height: 40px;
-    margin-left: 10px;
-    align-self: center;
   }
 }
 
@@ -107,6 +105,11 @@ input[type="color"]::-webkit-color-swatch {
   .setting:not(:first-child) {
     margin-top: 0;
   }
+}
+
+.deletesubredditcontainer {
+  background-color: $blue;
+  @include flex-centred;
 }
 
 .subredditname {
@@ -118,6 +121,13 @@ input[type="color"]::-webkit-color-swatch {
 .subredditlistitem input,
 #newsubreddit {
   height: 100%;
+}
+
+.newsubreddit {
+  background-color: $blue;
+  .subredditname {
+    background-color: $crimson;
+  }
 }
 
 .checkingstatus {

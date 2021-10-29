@@ -114,10 +114,6 @@ input[type="color"]::-webkit-color-swatch {
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  margin-left: 10px;
-  -ms-flex-item-align: center;
-      -ms-grid-row-align: center;
-      align-self: center;
 }
 
 .buttonstyle {
@@ -127,6 +123,19 @@ input[type="color"]::-webkit-color-swatch {
 
 .buttonstyle .setting:not(:first-child) {
   margin-top: 0;
+}
+
+.deletesubredditcontainer {
+  background-color: #bbc6e9;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .subredditname {
@@ -142,6 +151,14 @@ input[type="color"]::-webkit-color-swatch {
 .subredditlistitem input,
 #newsubreddit {
   height: 100%;
+}
+
+.newsubreddit {
+  background-color: #bbc6e9;
+}
+
+.newsubreddit .subredditname {
+  background-color: #b89098;
 }
 
 .checkingstatus {

@@ -14,7 +14,7 @@ import ButtonEditor from "./ButtonEditor";
 import FormButtons from "./FormButtons";
 
 const ButtonSettings = ({ buttons, updateFirebase }) => {
-  const [submitSuccess, setSubmitSuccess] = useState(undefined);
+  const [submitSuccess, setSubmitSuccess] = useState(null);
   const [referenceButtons, setReferenceButtons] = useState(null);
   const [currentButtons, setCurrentButtons] = useState(null);
   const [buttonsBeingEdited, setButtonsBeingEdited] = useState(null);
@@ -66,7 +66,7 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
 
   // reset submit success on mount
   useEffect(() => {
-    setSubmitSuccess(undefined);
+    setSubmitSuccess(null);
   }, []);
 
   // tack on new button to current buttons
@@ -96,6 +96,8 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
       newButtonsBeingEdited[id] = !prevButtonsBeingEdited[id];
       return newButtonsBeingEdited;
     });
+    if (!submitSuccess) return;
+    setSubmitSuccess(null);
   };
 
   // Toggle button edit (reset buttons on hide)
@@ -177,7 +179,7 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
       return newButtons;
     });
     if (!submitSuccess) return;
-    setSubmitSuccess(undefined);
+    setSubmitSuccess(null);
   };
 
   const deleteCurrentButtonSubreddit = (buttonId, subredditId) => {
@@ -206,7 +208,7 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
     };
     fireCallbacks(_removeIdParam, setButtonsBeingEdited);
     if (!submitSuccess) return;
-    setSubmitSuccess(undefined);
+    setSubmitSuccess(null);
   };
 
   const checkForDuplicateButton = (text) => {
@@ -234,13 +236,19 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
 
   const strippedButtons = useMemo(() => {
     if (!referenceButtons) return;
+    console.log("Stripping buttons");
     return stripButton_s(referenceButtons);
   }, [JSONreferenceButtons]);
 
   const containsNewButtons = useMemo(() => {
     if (!referenceButtons) return;
-    return !_.isEqual(strippedButtons, buttons);
-  }, [JSONbuttons, JSONreferenceButtons]);
+    console.log("Comparing stripped buttons");
+    console.log(strippedButtons);
+    console.log(buttons);
+    const buttonsAreEdited = !_.isEqual(strippedButtons, buttons);
+    console.log(buttonsAreEdited);
+    return buttonsAreEdited;
+  }, [JSONbuttons, JSONreferenceButtons, strippedButtons]);
 
   if (!currentButtons) return <p>Loading your buttons...</p>;
 
@@ -249,6 +257,7 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
       id="userbuttonsettings"
       onSubmit={(e) => {
         e.preventDefault();
+        setSubmitSuccess(undefined);
         updateFirebase({
           type: "BUTTONS",
           data: strippedButtons,

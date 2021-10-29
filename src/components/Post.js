@@ -90,6 +90,7 @@ const Post = ({ showContent }) => {
       return <Wikipedia />;
     }
     if (currentPost.media.type === "website") {
+      console.log(currentPost);
       return <p>TODO: External link to website</p>;
     }
     return (
