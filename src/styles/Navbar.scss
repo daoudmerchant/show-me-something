@@ -12,6 +12,7 @@ nav {
   a {
     text-decoration: none;
     border: none;
+    color: black;
   }
 }
 
@@ -49,13 +50,13 @@ nav {
   .name1 {
     @media screen and (min-width: 430px) {
       display: inline-block;
-      padding: 0 10px;
+      padding: 0 0.5em;
     }
   }
   .name2 {
     @media screen and (min-width: 550px) {
       display: inline-block;
-      padding-right: 10px;
+      padding-right: 0.5em;
     }
   }
 }

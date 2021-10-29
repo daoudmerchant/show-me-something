@@ -136,7 +136,6 @@ const Post = ({ showContent }) => {
       </div>
       {(() => {
         if (postHasNoFlags) {
-          console.log("No flags!");
           return <PostBody />;
         }
         for (let i = 0; i < FLAGS.length; i++) {

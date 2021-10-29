@@ -1,0 +1,19 @@
+@import "../constants/constants";
+
+#infobox {
+  max-width: $max-info-width;
+  text-align: left;
+  p,
+  h2 {
+    margin-left: 2rem;
+  }
+}
+
+.question {
+  font-style: italic;
+}
+
+.infoheader {
+  font-style: italic;
+  letter-spacing: 0.05em;
+}

@@ -1,0 +1,7 @@
+@import "../constants/constants";
+
+#aboutcontainer {
+  @include full-size;
+  display: flex;
+  justify-content: center;
+}

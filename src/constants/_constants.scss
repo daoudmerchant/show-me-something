@@ -26,6 +26,7 @@ $comment-border-color: $gold;
 $comment-border-width: 2px;
 $comment-border: $comment-border-width $comment-border-style
   $comment-border-color;
+$max-info-width: 1000px;
 
 // mix-ins
 @mixin flex-centred {
