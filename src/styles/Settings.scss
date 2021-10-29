@@ -10,6 +10,9 @@ input:not([type="color"]),
 select,
 option {
   padding-left: 2em;
+  @media screen and (max-width: $small-screen) {
+    padding-left: 1em;
+  }
 }
 
 input:not([type="color"]):not([type="radio"]) {
@@ -26,6 +29,7 @@ input:not([type="color"]):not([type="radio"]) {
   background-color: $gold;
   width: 100%;
   max-width: $max-info-width;
+  margin-bottom: $setting-margin;
 }
 
 .mainlegend {

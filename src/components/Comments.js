@@ -66,12 +66,12 @@ const Comments = () => {
       } comments`}</div>
       <div id="commentcontainer">
         {!!comments ? (
-          comments.map((comment) => {
+          comments.map((comment, i) => {
             if (!comment.content || !comment.author) {
               return;
             }
             return (
-              <div className="commentbox">
+              <div className="commentbox" key={`comment${i}`}>
                 <div className="commentcontent">
                   <ReactMarkdown>{comment.content}</ReactMarkdown>
                 </div>

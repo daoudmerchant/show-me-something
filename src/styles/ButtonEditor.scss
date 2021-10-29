@@ -43,6 +43,10 @@
   }
 }
 
+.editnewbutton {
+  background-color: transparent;
+}
+
 input[type="color"] {
   width: 2em;
   height: 2em;
@@ -97,6 +101,10 @@ input[type="color"]::-webkit-color-swatch {
     border-radius: 50%;
     width: 40px;
     height: 40px;
+    @media screen and (max-width: $small-screen) {
+      width: 30px;
+      height: 30px;
+    }
   }
 }
 

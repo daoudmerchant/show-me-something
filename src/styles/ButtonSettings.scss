@@ -1,6 +1,7 @@
+@import "../constants/constants";
+
 #userbuttonsettings {
   margin-top: $setting-margin;
-  padding: 0 $setting-margin;
   height: min-content;
 }
 
@@ -9,19 +10,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.editbutton {
-  width: 100%;
-  .buttoncontainer {
-    height: 100px;
-    width: 300px;
-    margin: 0;
-  }
-}
-
-.editbutton > * {
-  margin: 1em 0;
 }
 
 .formuserbuttoncontainer {

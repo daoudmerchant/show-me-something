@@ -3,6 +3,7 @@
   /* position: relative; */
   display: -ms-grid;
   display: grid;
+  background-color: #f7eae0;
 }
 
 .buttonnav {

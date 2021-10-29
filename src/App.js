@@ -39,6 +39,8 @@ function App() {
   const [currentCategory, setCurrentCategory] = useState(null);
   const [redditLists, setRedditLists] = useState(null);
   const [finishedLists, setFinishedLists] = useState({});
+  console.log(settings);
+  console.log(redditLists);
 
   const confirmWelcomed = useCallback(() => {
     if (welcomed) return;
@@ -125,20 +127,13 @@ function App() {
     [currentCategory, redditLists]
   );
 
-  const listFinished = useCallback(
-    (category = currentCategory) =>
-      redditLists[category].index === redditLists[category].list.length
-        ? category
-        : false,
-    [currentCategory, redditLists]
-  );
-
   const getNextPost = useCallback(
     async (
       { subreddits, category } = { subreddits: null, category: currentCategory }
     ) => {
       const refreshRedditList = async (subreddits, category) => {
         const getSubredditList = async (subreddit) => {
+          console.log(settings.limit);
           const redditResponse = await getRedditData({
             ...settings,
             subreddit,
@@ -174,12 +169,13 @@ function App() {
           redditLists[category].index ===
           redditLists[category].list.length - 1
         ) {
-          // finished the post
+          // finished the list
           setFinishedLists((prevLists) => ({
             ...prevLists,
             [category]: true,
           }));
         } else {
+          // increment index
           const incrementIndex = (category) => {
             setRedditLists((prevLists) => {
               return {

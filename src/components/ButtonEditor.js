@@ -89,8 +89,6 @@ const ButtonEditor = ({
           currentButton.subreddits
             .map((subreddit) => subredditValidity[subreddit.id])
             .filter((validity) => !!validity);
-        console.log(currentValidityChecks);
-        console.log(!!currentValidityChecks.length);
         return (
           !!currentValidityChecks.length &&
           currentValidityChecks.some((validity) => {
@@ -256,7 +254,7 @@ const ButtonEditor = ({
             >
               {FONTS.map((font) => {
                 return (
-                  <option value={font} style={{ fontFamily: font }}>
+                  <option key={font} value={font} style={{ fontFamily: font }}>
                     {font}
                   </option>
                 );

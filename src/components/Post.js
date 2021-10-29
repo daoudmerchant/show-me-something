@@ -30,8 +30,6 @@ const Post = ({ showContent }) => {
     return !currentPost[flag];
   });
 
-  console.log(currentPost);
-
   const postVisibility = useMemo(
     () => ({
       NSFW: {

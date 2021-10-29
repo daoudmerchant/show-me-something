@@ -278,8 +278,12 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
       </aside>
       {currentButtons.map((currentButton, i) => {
         const keepChanges = () => confirmChanges(currentButton.id);
+        const isNewButton = currentButton.text === DEFAULT_BUTTON.text;
         return (
-          <div className="editbutton">
+          <div
+            className={`editbutton${isNewButton ? " editnewbutton" : ""}`}
+            key={currentButton.id}
+          >
             <Button
               button={currentButton}
               key={`button${currentButton.id}${i}`}

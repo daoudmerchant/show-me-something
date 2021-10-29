@@ -7,21 +7,24 @@ export const getRedditData = async ({
   try {
     const data = await (
       await fetch(
-        `https://www.reddit.com/r/${subreddit}/${filter}.json?limit=${limit}&t=${timeframe}&raw_json=1`
+        `https://www.reddit.com/r/${subreddit}/${filter}.json?limit=${
+          // TODO: Work out if it's pulling random amounts because
+          // of me or because of Reddit
+          limit
+        }&t=${timeframe}&raw_json=1`
       )
     ).json();
     // TODO: Improve error handling on Reddit down
     if (data.error === 404) {
       return [];
     }
-    //zs
     const parsedData = data.data.children.map((child) => ({
       title: child.data.title,
       text: child.data.selftext,
       subreddit: child.data.subreddit,
       upvotes: child.data.ups,
       downvotes: child.data.downs,
-      controversiality: child.data.upvote_ratio * 100,
+      controversiality: parseInt(child.data.upvote_ratio * 100),
       id: child.data.id,
       NSFW: child.data.over_18,
       spoiler: child.data.spoiler,

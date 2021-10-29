@@ -19,20 +19,6 @@
           align-items: center;
 }
 
-.editbutton {
-  width: 100%;
-}
-
-.editbutton .buttoncontainer {
-  height: 100px;
-  width: 300px;
-  margin: 0;
-}
-
-.editbutton > * {
-  margin: 1em 0;
-}
-
 .formuserbuttoncontainer {
   height: 100px;
   width: 300px;
