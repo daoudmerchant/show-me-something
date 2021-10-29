@@ -87,10 +87,17 @@
   height: 100%;
   text-align: justify;
   overflow-y: scroll;
-  padding: 2em 0;
 }
 
 .textpost > * {
   margin: 1em 2em;
+}
+
+.textpost > *:first-child {
+  margin-top: 2em;
+}
+
+.textpost > *:last-child {
+  margin-bottom: 2em;
 }
 /*# sourceMappingURL=Post.css.map */

@@ -1,3 +1,15 @@
+#promptcontainer {
+  overflow-y: scroll;
+  grid-row: 2 / -1;
+}
+
+.promptbuttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 0 1em;
+}
+
 .promptbuttons button {
   font-family: Cormorant, Verdana, Geneva, Tahoma, sans-serif;
   font-size: 1.1em;
@@ -7,19 +19,19 @@
 }
 
 .promptbuttons .cancel {
-  margin-right: 1em;
+  margin: 0 1em 0 0;
 }
 
-#promptcontainer {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+@media screen and (orientation: portrait) {
+  .promptbuttons {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .promptbuttons .cancel {
+    margin: 0 0 1em 0;
+  }
 }
 
 #prompt {

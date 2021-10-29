@@ -1,11 +1,16 @@
 #infobox {
   max-width: 1000px;
+  padding: 0 2em;
   text-align: left;
 }
 
 #infobox p,
 #infobox h2 {
   margin-left: 2rem;
+}
+
+#infobox p {
+  line-height: 1.5em;
 }
 
 .question {

@@ -30,6 +30,8 @@ const Post = ({ showContent }) => {
     return !currentPost[flag];
   });
 
+  console.log(currentPost);
+
   const postVisibility = useMemo(
     () => ({
       NSFW: {
@@ -93,7 +95,19 @@ const Post = ({ showContent }) => {
       return <Wikipedia />;
     }
     if (currentPost.media.type === "website") {
-      return <p>TODO: External link to website</p>;
+      return (
+        <p>
+          View external content at source{" "}
+          <a
+            href={currentPost.media.content.url}
+            rel="noreferrer"
+            target="_blank"
+          >
+            here
+          </a>
+          .
+        </p>
+      );
     }
     return (
       <p>{`Oops, I haven't got round to handling "${currentPost.type}" yet... Sorry!`}</p>

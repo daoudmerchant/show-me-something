@@ -81,9 +81,13 @@ const ButtonBox = ({ buttons }) => {
       }}
     >
       {needsNavigation && (
-        <div className="buttonnav left" onClick={handleButtonLeft}>
+        <button
+          type="button"
+          className="buttonnav left"
+          onClick={handleButtonLeft}
+        >
           ◄
-        </div>
+        </button>
       )}
       {currentButtons?.map((button, i) => (
         <Button
@@ -99,9 +103,13 @@ const ButtonBox = ({ buttons }) => {
         />
       ))}
       {needsNavigation && (
-        <div className="buttonnav right" onClick={handleButtonRight}>
+        <button
+          type="button"
+          className="buttonnav right"
+          onClick={handleButtonRight}
+        >
           ►
-        </div>
+        </button>
       )}
     </div>
   ) : (

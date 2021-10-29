@@ -14,8 +14,8 @@ export const ABOUT = [
       <span className="question">
         Avid Redditor but waste hours every time you visit?
       </span>,
-      "...Give this a try.",
-      "Press a button at the bottom to see a piece of content. " +
+      "... Give this a try.",
+      "Press a category button to see a piece of content. " +
         "One tap, one piece of content. No adverts, no " +
         "'browsing'; think of it like a Reddit Pez dispenser 🙂.",
       [
@@ -40,7 +40,7 @@ export const ABOUT = [
       [
         "Please note that this app ",
         <span className="bold">does not</span>,
-        " filter content, and ",
+        " block content, and ",
         <span className="bold">
           may contain material unsuitable for people under 18 years
         </span>,

@@ -63,7 +63,11 @@ legend {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   align-items: center;
-  position: relative;
+}
+
+.numbercontainer p {
+  height: min-content;
+  margin: 0;
 }
 
 .setting {
