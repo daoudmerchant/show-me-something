@@ -24,6 +24,8 @@
   text-decoration: none;
   border-bottom: 2px dashed;
   cursor: pointer;
+  color: blue;
+  border-color: blue;
 }
 
 .App main a:link,

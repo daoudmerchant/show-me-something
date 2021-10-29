@@ -92,7 +92,7 @@ const UserSettings = ({ settings, updateFirebase }) => {
       }}
       className="settingsform"
     >
-      <legend className="mainlegend">Settings</legend>
+      <legend className="mainlegend">General Settings</legend>
       <div className="setting">
         <div className="keyvaluepair">
           <label htmlFor="filter">Filter by:</label>

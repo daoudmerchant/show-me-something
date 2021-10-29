@@ -42,8 +42,11 @@ const Settings = ({
   if (!isSignedIn()) {
     return (
       <p>
-        Please <span onClick={signInWithGoogle}>sign in</span> to change your
-        settings
+        Please{" "}
+        <span className="link" onClick={signInWithGoogle}>
+          sign in
+        </span>{" "}
+        to change your settings
       </p>
     );
   }

@@ -18,6 +18,7 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
   const [referenceButtons, setReferenceButtons] = useState(null);
   const [currentButtons, setCurrentButtons] = useState(null);
   const [buttonsBeingEdited, setButtonsBeingEdited] = useState(null);
+  console.log(buttons);
 
   // media query
   const isTouchscreen = useMediaQuery({ query: "(hover: none)" });
@@ -62,7 +63,7 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
   useEffect(() => {
     if (!buttons) return;
     resetAll();
-  }, []);
+  }, [JSONbuttons]);
 
   // reset submit success on mount
   useEffect(() => {
@@ -236,18 +237,12 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
 
   const strippedButtons = useMemo(() => {
     if (!referenceButtons) return;
-    console.log("Stripping buttons");
     return stripButton_s(referenceButtons);
   }, [JSONreferenceButtons]);
 
   const containsNewButtons = useMemo(() => {
     if (!referenceButtons) return;
-    console.log("Comparing stripped buttons");
-    console.log(strippedButtons);
-    console.log(buttons);
-    const buttonsAreEdited = !_.isEqual(strippedButtons, buttons);
-    console.log(buttonsAreEdited);
-    return buttonsAreEdited;
+    return !_.isEqual(strippedButtons, buttons);
   }, [JSONbuttons, JSONreferenceButtons, strippedButtons]);
 
   if (!currentButtons) return <p>Loading your buttons...</p>;
@@ -266,7 +261,7 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
       }}
       className="settingsform"
     >
-      <legend className="mainlegend">Button settings</legend>
+      <legend className="mainlegend">Button Settings</legend>
       <p className="extradetails">{`${
         isTouchscreen ? "Tap" : "Click"
       } a button to edit`}</p>

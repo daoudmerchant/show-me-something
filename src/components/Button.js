@@ -9,7 +9,12 @@ const Button = ({ button, isDisabled, handleClick }) => {
   };
   return (
     <div className="buttoncontainer">
-      <button style={style} disabled={isDisabled} onClick={handleClick}>
+      <button
+        type="button"
+        style={style}
+        disabled={isDisabled}
+        onClick={handleClick}
+      >
         {button.text || "..."}
       </button>
     </div>
