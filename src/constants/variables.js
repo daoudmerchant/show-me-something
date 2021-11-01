@@ -6,6 +6,9 @@ export const FONTS = [
   "PT Mono",
   "Prata",
   "Rubik Beastly",
+  "Griffy",
+  "Creepster",
+  "Finger Paint",
 ];
 
 export const DEFAULT_BUTTON = {
