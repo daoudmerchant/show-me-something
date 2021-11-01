@@ -57,7 +57,8 @@ const ButtonBox = ({ buttons }) => {
   const needsNavigation = buttons && buttons.length > buttonCount;
 
   useEffect(() => {
-    if (!buttons) return;
+    if (buttons === undefined) return;
+    if (buttons === null) return <p>Oops no buttons!</p>;
     if (firstButtonIndex + buttonCount <= buttons.length) {
       setCurrentButtons([...buttons].splice(firstButtonIndex, buttonCount));
       return;

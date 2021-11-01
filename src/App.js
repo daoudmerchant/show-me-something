@@ -32,8 +32,8 @@ function App() {
     observed: false,
   });
   const [user, setUser] = useState(undefined);
-  const [buttons, setButtons] = useState(null);
-  const [settings, setSettings] = useState(null);
+  const [buttons, setButtons] = useState(undefined);
+  const [settings, setSettings] = useState(undefined);
   const [fetchingPosts, setFetchingPosts] = useState(false);
   const [welcomed, setWelcomed] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
@@ -103,8 +103,14 @@ function App() {
       let isSubscribed = true;
       const data = await fn(arg);
       if (isSubscribed) {
-        setButtons(data.buttons);
-        setSettings(data.settings);
+        if (!!data) {
+          setSettings(data.settings);
+          setButtons(data.buttons);
+          return;
+        }
+        // failed to fetch
+        setSettings(null);
+        setButtons(null);
       }
       return () => (isSubscribed = false);
     },

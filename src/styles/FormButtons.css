@@ -26,6 +26,13 @@
       grid-column-start: 1;
   grid-column-end: -1;
   padding: 0;
+  position: relative;
+  font-size: 1.3em;
+}
+
+.submitsuccess > * {
+  margin: 0;
+  height: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -35,6 +42,6 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  font-size: 1.3em;
+  background-color: #f7eae0;
 }
 /*# sourceMappingURL=FormButtons.css.map */

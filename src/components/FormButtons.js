@@ -11,6 +11,8 @@ const FormButtons = ({ submitSuccess, isDifferent, cancel }) => {
           <p className="failuretext">Oops, try again...</p>
         ) : submitSuccess === undefined ? (
           <p>...</p>
+        ) : isDifferent ? (
+          <p className="warning">Warning: Unsaved changes will be lost</p>
         ) : // null
         null}
       </div>
