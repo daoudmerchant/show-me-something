@@ -15,6 +15,24 @@ const breakpoints = [0, 720, 850, 1000, 1200, 1400];
 const ButtonBox = ({ buttons }) => {
   const [firstButtonIndex, setFirstButtonIndex] = useState(0);
   const [currentButtons, setCurrentButtons] = useState(null);
+  // handle window resize
+  const [dimensions, setDimensions] = useState({
+    height: window.innerHeight,
+    width: window.innerWidth,
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setDimensions({
+        height: window.innerHeight,
+        width: window.innerWidth,
+      });
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const { getNextPost, finishedLists } = useContext(RedditPostContext);
 
@@ -75,6 +93,7 @@ const ButtonBox = ({ buttons }) => {
   return buttons ? (
     <div
       id="buttonbox"
+      key={`${dimensions.width}x${dimensions.height}`}
       style={{
         gridTemplateColumns: `${
           needsNavigation ? "1fr " : ""
