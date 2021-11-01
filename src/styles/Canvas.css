@@ -15,8 +15,15 @@
           align-items: center;
 }
 
+#canvas #promptcontainer {
+  -ms-flex-item-align: start;
+      -ms-grid-row-align: start;
+      align-self: start;
+  height: 100%;
+}
+
 #post {
-  background-color: lightgoldenrodyellow;
+  background-color: #f7eae0;
   height: 100%;
   width: 100%;
   display: -ms-grid;

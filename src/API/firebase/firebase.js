@@ -4,12 +4,9 @@ import {
   getFirestore,
   collection,
   getDoc,
-  getDocs,
   setDoc,
   updateDoc,
   doc,
-  query,
-  orderBy,
 } from "firebase/firestore";
 import {
   getAuth,

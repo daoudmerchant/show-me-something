@@ -1,3 +1,5 @@
+@import "../constants/constants";
+
 #canvas {
   flex: 1;
   overflow: auto;
@@ -5,10 +7,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  #promptcontainer {
+    align-self: start;
+    height: 100%;
+  }
 }
 
 #post {
-  background-color: lightgoldenrodyellow;
+  background-color: $beige;
   height: 100%;
   width: 100%;
   display: grid;

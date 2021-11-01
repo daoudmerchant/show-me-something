@@ -59,7 +59,12 @@ const NavBar = ({ user, confirmWelcomed }) => {
               user.displayName[0],
               user.displayName[user.displayName.length - 1],
             ].map((name, i) => {
-              return <p className={`name${i + 1}`}>{name}</p>;
+              const nameId = "name" + (i + 1);
+              return (
+                <p className={nameId} key={nameId}>
+                  {name}
+                </p>
+              );
             })}
           </div>
           {user.photoURL && canGetPic ? (

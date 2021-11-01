@@ -37,10 +37,8 @@ function App() {
   const [fetchingPosts, setFetchingPosts] = useState(false);
   const [welcomed, setWelcomed] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
-  const [redditLists, setRedditLists] = useState(null);
+  const [redditLists, setRedditLists] = useState(undefined);
   const [finishedLists, setFinishedLists] = useState({});
-  console.log(settings);
-  console.log(redditLists);
 
   const confirmWelcomed = useCallback(() => {
     if (welcomed) return;
@@ -135,11 +133,14 @@ function App() {
 
   const getNextPost = useCallback(
     async (
-      { subreddits, category } = { subreddits: null, category: currentCategory }
+      { subreddits, category } = {
+        subreddits: buttons.find((button) => button.text === currentCategory)
+          .subreddits,
+        category: currentCategory,
+      }
     ) => {
       const refreshRedditList = async (subreddits, category) => {
         const getSubredditList = async (subreddit) => {
-          console.log(settings.limit);
           const redditResponse = await getRedditData({
             ...settings,
             subreddit,
@@ -150,7 +151,17 @@ function App() {
         let subredditLists = [];
         for (let i = 0; i < subreddits.length; i++) {
           const subredditList = await getSubredditList(subreddits[i]);
+          // failed
+          if (!subredditList) {
+            continue;
+          }
+          // succeeded
           subredditLists = [...subredditLists, ...subredditList];
+        }
+        if (!subredditLists.length) {
+          // all failed
+          setRedditLists(null);
+          return false;
         }
         // randomise list
         const randomisedSubredditLists = shuffleArray(subredditLists);
@@ -163,6 +174,7 @@ function App() {
             },
           };
         });
+        return true;
       };
       // executed code
       if (category !== currentCategory) setCurrentCategory(category);
@@ -211,9 +223,12 @@ function App() {
   // CONTEXT VALUES
   const RedditContextValue = {
     getNextPost,
-    currentPost: categoryExists()
-      ? redditLists[currentCategory].list[redditLists[currentCategory].index]
-      : null,
+    currentPost:
+      redditLists === null
+        ? null
+        : categoryExists()
+        ? redditLists[currentCategory].list[redditLists[currentCategory].index]
+        : undefined,
     fetchingPosts,
     finishedLists,
     thisListFinished: finishedLists[currentCategory],

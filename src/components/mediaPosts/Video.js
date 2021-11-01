@@ -12,7 +12,6 @@ import Loading from "../Loading";
 const Video = () => {
   const { currentPost } = useContext(RedditPostContext);
   const [isLoaded, setIsLoaded] = useState(false);
-  console.log(currentPost);
 
   useEffect(() => {
     currentPost.media.local ? setIsLoaded(false) : setIsLoaded(true);
