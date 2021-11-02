@@ -8,26 +8,24 @@ Written in React (hook-based) with React Router Dom and styled with Sass for des
 
 ## Functionality
 
-[X] View video (hosted and embedded), images, image galleries and text posts
-[X] View top comments
-[X] Pull 'buttons' from Google Firebase
-[X] Create user accounts via Google Sign-In
-[X] Create and modify user 'buttons'
-
-- [x] Manage Firebase data
-- [x] Form validation checks on edit
-
-[X] Error handling for contacting Reddit and loading content
-[X] Adaptive for mobile and desktop users
+- [x] View video (hosted and embedded), images, image galleries and text posts
+- [x] View top comments
+- [x] Pull 'buttons' from Google Firebase
+- [x] Create user accounts via Google Sign-In
+- [x] Create and modify user 'buttons'
+  - [x] Manage Firebase data
+  - [x] Form validation checks on edit
+- [x] Error handling for contacting Reddit and loading content
+- [x] Adaptive for mobile and desktop users
 
 ## Possible future improvement
 
-[ ] Reorder user buttons
-[ ] Restructure database in to sub-collections and sub-documents
-[ ] Error handling for contacting database
-[ ] Alternative sign-in methods
-[ ] Improved UI / assets
-[ ] Refactor in Typescript
+- [ ] Reorder user buttons
+- [ ] Restructure database in to sub-collections and sub-documents
+- [ ] Error handling for contacting database
+- [ ] Alternative sign-in methods
+- [ ] Improved UI / assets
+- [ ] Refactor in Typescript
 
 ### Concept
 
@@ -38,7 +36,7 @@ The concept of this project was to create something which 'served' Reddit to non
 - Exploring Reddit API endpoint for post data
 - Avoiding excessive calls to Reddit API / excessive reads/writes to database
 - Creating the most reusable component structure
-- First project to use Sass (inc. functions) - previously used styled components
+- First project to use Sass - previously used styled components
 - Balancing use of `props` and `useContext` logically
 - Creating a 'feel' which translates across mobile and desktop
 - User-friendly error-handling
