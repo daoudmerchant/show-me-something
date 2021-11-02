@@ -31,5 +31,5 @@
 }
 
 .buttoncontainer button:disabled {
-  opacity: 30%;
+  opacity: 50%;
 }
