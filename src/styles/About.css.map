@@ -1,6 +1,6 @@
 {
     "version": 3,
-    "mappings": "AAEA,AAAA,eAAe,CAAC;EC8Cd,KAAK,EAAE,IAAI;EACX,MAAM,EAAE,IAAI;ED7CZ,OAAO,EAAE,IAAI;EACb,eAAe,EAAE,MAAM;CACxB",
+    "mappings": "AAEA,AAAA,eAAe,CAAC;EC+Cd,KAAK,EAAE,IAAI;EACX,MAAM,EAAE,IAAI;ED9CZ,OAAO,EAAE,IAAI;EACb,eAAe,EAAE,MAAM;CACxB",
     "sources": [
         "About.scss",
         "../constants/_constants.scss"

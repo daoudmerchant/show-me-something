@@ -38,11 +38,11 @@ export const getInitStatus = () => !!app;
 const provider = new GoogleAuthProvider();
 export const signInWithGoogle = async () => {
   try {
-    const result = await signInWithPopup(getAuth(), provider);
+    // const result =
+    await signInWithPopup(getAuth(), provider);
     // const credential = GoogleAuthProvider.credentialFromResult(result);
     // const token = credential.accessToken;
     // const user = result.user;
-    console.log(result.user);
   } catch (error) {
     console.log(error);
     // const errorCode = error.code;
@@ -79,11 +79,12 @@ export const getData = (() => {
     const docRef = doc(db, "users", UID);
     try {
       const docSnap = await getDoc(docRef);
-      console.log(docSnap);
       if (docSnap.exists()) {
         return docSnap.data();
       } else {
-        // Would be a Cloud Function if not a free user
+        // new user
+        // write defaults to user document
+        // (would be a Cloud Function if not a free user)
         const usersRef = collection(db, "users");
         await setDoc(doc(usersRef, UID), defaultData);
         return defaultData;

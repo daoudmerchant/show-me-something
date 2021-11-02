@@ -1,7 +1,7 @@
 @import "../constants/constants";
 
 nav {
-  height: 50px;
+  height: $nav-height;
   background-color: $beige;
   @include flex-centred;
 
@@ -27,14 +27,17 @@ nav {
   font-size: larger;
 }
 
+$user-margin: 5px;
+$user-height: ($nav-height - (2 * $user-margin));
+
 .userbar {
-  height: 40px;
+  height: $user-height;
   display: flex;
   align-items: center;
-  border-radius: 20px;
-  padding: 0 5px;
+  border-radius: ($user-height / 2);
+  padding: 0 $user-margin;
   background-color: white;
-  margin: 0 10px;
+  margin: 0 (2 * $user-margin);
   cursor: pointer;
 }
 
@@ -61,9 +64,11 @@ nav {
   }
 }
 
+$user-pic-length: ($user-height - (2 * $user-margin));
+
 .userpic {
-  height: 30px;
-  width: 30px;
+  height: $user-pic-length;
+  width: $user-pic-length;
   border-radius: 50%;
 }
 

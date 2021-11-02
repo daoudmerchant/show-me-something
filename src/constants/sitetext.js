@@ -20,13 +20,9 @@ export const ABOUT = [
         "'browsing'; think of it like a Reddit Pez dispenser 🙂.",
       [
         "Head back ",
-        <Link exact to="/">
-          home
-        </Link>,
+        <Link to="/">home</Link>,
         " to get started, and when you're ready, head to the ",
-        <Link exact to="/settings">
-          settings
-        </Link>,
+        <Link to="/settings">settings</Link>,
         " page to sign in, customise what Reddit content you see " +
           " and create your own buttons.",
       ],
@@ -56,13 +52,9 @@ export const WELCOME = (clickOrTap) => [
     body: [
       [
         "Check the ",
-        <Link exact to="/about">
-          about
-        </Link>,
+        <Link to="/about">about</Link>,
         " page, head straight to ",
-        <Link exact to="/settings">
-          settings
-        </Link>,
+        <Link to="/settings">settings</Link>,
         " to customise your experience or simply ",
         clickOrTap,
         " a button below to get started 👇",
@@ -81,9 +73,7 @@ export const FINISHED = [
     body: [
       [
         "Head to ",
-        <Link exact to="/settings">
-          settings
-        </Link>,
+        <Link to="/settings">settings</Link>,
         " to increase how many posts are pulled from Reddit.",
       ],
     ],

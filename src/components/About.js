@@ -13,11 +13,7 @@ const About = () => {
   return (
     <>
       <p>
-        Click{" "}
-        <Link exact to="/">
-          here
-        </Link>{" "}
-        to head back
+        Click <Link to="/">here</Link> to head back
       </p>
       <div id="aboutcontainer">
         <Info text={ABOUT} />

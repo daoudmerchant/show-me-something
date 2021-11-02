@@ -11,7 +11,7 @@
   margin: 0;
   padding: 0 2vw;
   display: grid;
-  grid-template-columns: 50px 1fr 50px;
+  grid-template-columns: $nav-height 1fr $comment-height;
   justify-content: center;
   align-items: center;
   grid-gap: 10px;

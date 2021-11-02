@@ -14,10 +14,6 @@ export const getRedditData = async ({
         }&t=${timeframe}&raw_json=1`
       )
     ).json();
-    // TODO: Improve error handling on Reddit down
-    if (data.error === 404) {
-      return [];
-    }
     const parsedData = data.data.children.map((child) => ({
       title: child.data.title,
       text: child.data.selftext,
@@ -61,7 +57,7 @@ export const getRedditData = async ({
                 },
               };
             }
-            alert(`Untreated Imgur content ${child.data.url}`);
+            console.log(`Untreated Imgur content ${child.data.url}`);
             console.log(child.data);
           }
           if (child.data.url.includes("wikipedia")) {
@@ -208,7 +204,6 @@ export const checkSubredditExists = async (subreddit) => {
     const data = await (
       await fetch(`https://www.reddit.com/r/${subreddit}/about.json`)
     ).json();
-    console.log(data);
     return {
       exists: true,
       subreddit: data.data.display_name,
@@ -216,6 +211,7 @@ export const checkSubredditExists = async (subreddit) => {
       icon: data.data.icon_img || data.data.header_img || null,
     };
   } catch (error) {
+    console.log(error);
     return {
       exists: false,
     };
