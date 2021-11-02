@@ -83,7 +83,7 @@ $max-info-width: 1000px;
   font-weight: bold;
 }
 
-@mixin button-3d($offset: false) {
+@mixin button-3d {
   border: 5px outset;
   box-shadow: -($button-outset / 2) ($button-outset / 2) white,
     -($button-outset) $button-outset ($button-outset * 2) $grey;
@@ -91,25 +91,10 @@ $max-info-width: 1000px;
   -webkit-tap-highlight-color: transparent;
 
   &:active {
-    @if $offset {
-      @each $direction, $value in $offset {
-        @if $direction == "right" {
-          right: calc($value + $button-outset);
-        } @else if $direction == "left" {
-          left: calc($value - $button-outset);
-        } @else if $direction == "top" {
-          top: calc($value + $button-outset);
-        } @else if $direction == "bottom" {
-          bottom: calc($value - $button-outset);
-        }
-      }
-    } @else {
-      // no provided offset
-      right: $button-outset;
-      top: $button-outset;
-    }
+    right: $button-outset;
+    bottom: -$button-outset;
     box-shadow: -($button-outset) $button-outset $button-outset rgb(202, 202, 202);
     border-style: inset;
-    user-select: none;
   }
+  user-select: none;
 }

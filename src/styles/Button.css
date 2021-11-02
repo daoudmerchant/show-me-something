@@ -9,28 +9,25 @@
   -webkit-box-shadow: -2px 2px white, -4px 4px 8px #686868;
           box-shadow: -2px 2px white, -4px 4px 8px #686868;
   -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   position: relative;
   font-size: 2em;
   line-height: 1em;
   display: block;
   border-radius: 25px / 50%;
   text-shadow: 5px 5px 7px #686868;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 
 .buttoncontainer button:active {
   right: 4px;
-  top: 4px;
+  bottom: -4px;
   -webkit-box-shadow: -4px 4px 4px #cacaca;
           box-shadow: -4px 4px 4px #cacaca;
   border-style: inset;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
 }
 
 .buttoncontainer button:disabled {

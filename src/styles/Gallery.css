@@ -34,17 +34,23 @@
   -webkit-box-shadow: -2px 2px white, -4px 4px 8px #686868;
           box-shadow: -2px 2px white, -4px 4px 8px #686868;
   -webkit-tap-highlight-color: transparent;
-}
-
-.galleryleft:active {
-  left: calc($value - $button-outset);
-  -webkit-box-shadow: -4px 4px 4px #cacaca;
-          box-shadow: -4px 4px 4px #cacaca;
-  border-style: inset;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+}
+
+.galleryleft:active {
+  right: 4px;
+  bottom: -4px;
+  -webkit-box-shadow: -4px 4px 4px #cacaca;
+          box-shadow: -4px 4px 4px #cacaca;
+  border-style: inset;
+}
+
+.galleryleft:active {
+  left: 16px;
+  bottom: 16px;
 }
 
 .galleryright {
@@ -53,15 +59,21 @@
   -webkit-box-shadow: -2px 2px white, -4px 4px 8px #686868;
           box-shadow: -2px 2px white, -4px 4px 8px #686868;
   -webkit-tap-highlight-color: transparent;
-}
-
-.galleryright:active {
-  right: calc($value + $button-outset);
-  -webkit-box-shadow: -4px 4px 4px #cacaca;
-          box-shadow: -4px 4px 4px #cacaca;
-  border-style: inset;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+}
+
+.galleryright:active {
+  right: 4px;
+  bottom: -4px;
+  -webkit-box-shadow: -4px 4px 4px #cacaca;
+          box-shadow: -4px 4px 4px #cacaca;
+  border-style: inset;
+}
+
+.galleryright:active {
+  right: 24px;
+  bottom: 16px;
 }

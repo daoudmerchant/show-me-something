@@ -19,20 +19,18 @@
 
 .galleryleft {
   left: $media-button-margin;
-  @include button-3d(
-    $offset: (
-      "left",
-      $media-button-margin,
-    )
-  );
+  @include button-3d;
+  &:active {
+    left: $media-button-margin - $button-outset;
+    bottom: $media-button-margin - $button-outset;
+  }
 }
 
 .galleryright {
   right: $media-button-margin;
-  @include button-3d(
-    $offset: (
-      "right",
-      $media-button-margin,
-    )
-  );
+  @include button-3d;
+  &:active {
+    right: $media-button-margin + $button-outset;
+    bottom: $media-button-margin - $button-outset;
+  }
 }

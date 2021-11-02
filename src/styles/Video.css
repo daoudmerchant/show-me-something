@@ -29,6 +29,10 @@ video {
   -webkit-box-shadow: -2px 2px white, -4px 4px 8px #686868;
           box-shadow: -2px 2px white, -4px 4px 8px #686868;
   -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   border: 5px solid white;
   border-radius: 50%;
   background-color: white;
@@ -44,15 +48,16 @@ video {
 }
 
 #playpause:active {
-  right: calc($value + $button-outset);
-  bottom: calc($value - $button-outset);
+  right: 4px;
+  bottom: -4px;
   -webkit-box-shadow: -4px 4px 4px #cacaca;
           box-shadow: -4px 4px 4px #cacaca;
   border-style: inset;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+}
+
+#playpause:active {
+  right: 24px;
+  bottom: 16px;
 }
 
 #playpause > img {
@@ -83,24 +88,25 @@ video {
           justify-content: center;
   background-color: white;
   border: 5px solid black;
+  position: relative;
   width: 60px;
   height: 60px;
   border: 5px outset;
   -webkit-box-shadow: -2px 2px white, -4px 4px 8px #686868;
           box-shadow: -2px 2px white, -4px 4px 8px #686868;
   -webkit-tap-highlight-color: transparent;
-}
-
-#volumecontrols > *:active {
-  left: calc($value - $button-outset);
-  bottom: calc($value - $button-outset);
-  -webkit-box-shadow: -4px 4px 4px #cacaca;
-          box-shadow: -4px 4px 4px #cacaca;
-  border-style: inset;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+}
+
+#volumecontrols > *:active {
+  right: 4px;
+  bottom: -4px;
+  -webkit-box-shadow: -4px 4px 4px #cacaca;
+          box-shadow: -4px 4px 4px #cacaca;
+  border-style: inset;
 }
 
 #volumecontrols p {
