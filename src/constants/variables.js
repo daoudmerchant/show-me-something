@@ -20,3 +20,10 @@ export const DEFAULT_BUTTON = {
   },
   subreddits: [],
 };
+
+export const MAX_SUBREDDITS = 3;
+
+// TODO: Adjust and increase breakpoints
+export const BREAKPOINTS = [0, 720, 850, 1000, 1200, 1400];
+
+export const FLAGS = ["NSFW", "spoiler"];

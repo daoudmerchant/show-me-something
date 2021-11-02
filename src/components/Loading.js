@@ -1,9 +1,12 @@
-import Snoo from "./Snoo";
-
+// styles
 import "../styles/Loading.css";
+
+// components
+import Snoo from "./Snoo";
 
 const Loading = ({ type }) => {
   const loadingData = (() => {
+    // limited types, no fall-through needed
     /* eslint-disable */
     switch (type) {
       case "POSTS":

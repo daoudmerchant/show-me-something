@@ -1,26 +1,37 @@
 import { useState, memo, useEffect, useContext } from "react";
 import { useMediaQuery } from "react-responsive";
-import { RedditPostContext } from "../constants/contexts";
 
+// styles
 import "../styles/ButtonBox.css";
+
+// constants
+import { BREAKPOINTS } from "../constants/variables";
+
+// context
+import { RedditPostContext } from "../constants/contexts";
 
 // components
 import Loading from "./Loading";
 import Button from "./Button";
 
-// constants
-// TODO: Adjust and increase breakpoints
-const breakpoints = [0, 720, 850, 1000, 1200, 1400];
-
 const ButtonBox = ({ buttons }) => {
+  // STATE
   const [firstButtonIndex, setFirstButtonIndex] = useState(0);
   const [currentButtons, setCurrentButtons] = useState(null);
-  // handle window resize
   const [dimensions, setDimensions] = useState({
     height: window.innerHeight,
     width: window.innerWidth,
   });
 
+  // CONTEXT
+  const { getNextPost, finishedLists } = useContext(RedditPostContext);
+
+  // reset state on button change
+  useEffect(() => {
+    setFirstButtonIndex(0);
+  }, [buttons]);
+
+  // rerender on window resize
   useEffect(() => {
     const handleResize = () => {
       setDimensions({
@@ -34,8 +45,6 @@ const ButtonBox = ({ buttons }) => {
     };
   }, []);
 
-  const { getNextPost, finishedLists } = useContext(RedditPostContext);
-
   const handleButtonRight = () => {
     setFirstButtonIndex(
       (firstButtonIndex + currentButtons.length) % buttons.length
@@ -47,19 +56,20 @@ const ButtonBox = ({ buttons }) => {
     );
   };
 
+  // calculate number of visible buttons based on screen size
   let breakpointQueries = [];
   // for loop as useMediaQuery cannot be used in callback
-  for (let i = 0; i < breakpoints.length; i++) {
+  for (let i = 0; i < BREAKPOINTS.length; i++) {
     breakpointQueries.push(
       // allow loop at render as allows button count to depend upon breakpoints
-      useMediaQuery({ query: `(min-width: ${breakpoints[i]}px)` }) // eslint-disable-line
+      useMediaQuery({ query: `(min-width: ${BREAKPOINTS[i]}px)` }) // eslint-disable-line
     );
   }
   const currentBreakpoint = breakpointQueries.indexOf(false);
   const maxButtonCount =
-    currentBreakpoint === -1 ? breakpoints.length : currentBreakpoint;
-
+    currentBreakpoint === -1 ? BREAKPOINTS.length : currentBreakpoint;
   const buttonCount = buttons && Math.min(maxButtonCount, buttons.length);
+  const needsNavigation = buttons && buttons.length > buttonCount;
 
   /*
     TODO: Replace with %-based solution, e.g.
@@ -72,8 +82,8 @@ const ButtonBox = ({ buttons }) => {
       return buttonArray;
     })
   */
-  const needsNavigation = buttons && buttons.length > buttonCount;
 
+  // set state based on button calculation
   useEffect(() => {
     if (buttons === undefined) return;
     if (buttons === null) return <p>Oops no buttons!</p>;
@@ -85,10 +95,6 @@ const ButtonBox = ({ buttons }) => {
     let endButtons = [...buttons].splice(0, buttonCount - startButtons.length);
     setCurrentButtons([...startButtons, ...endButtons]);
   }, [firstButtonIndex, buttonCount, buttons]);
-
-  useEffect(() => {
-    setFirstButtonIndex(0);
-  }, [buttons]);
 
   return buttons ? (
     <div

@@ -1,3 +1,4 @@
+// styles
 import "../styles/Button.css";
 
 const Button = ({ button, isDisabled, handleClick }) => {

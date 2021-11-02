@@ -1,29 +1,22 @@
 import { useState } from "react";
-import { useMediaQuery } from "react-responsive";
-
 import { NavLink } from "react-router-dom";
-import { signInWithGoogle } from "../API/firebase";
 
+// styles
 import "../styles/Navbar.css";
+
+// APIs
+import { signInWithGoogle } from "../API/firebase";
 
 const NavBar = ({ user, confirmWelcomed }) => {
   // state
   const [canGetPic, setCanGetPic] = useState(true);
 
-  // locataion
-
-  // // media queries
-  // const mediumScreen = useMediaQuery({ query: "(min-width: 430px)" });
-  // const bigScreen = useMediaQuery({ query: "(min-width: 550px)" });
-  // TODO: Add listen for window resize
-
   return (
     <nav>
-      <NavLink exact to="/" id="home" activeClassName="selected">
+      <NavLink to="/" id="home" activeClassName="selected">
         ShowMeSomething
       </NavLink>
       <NavLink
-        exact
         to="/about"
         onClick={confirmWelcomed}
         className="about"
@@ -48,7 +41,6 @@ const NavBar = ({ user, confirmWelcomed }) => {
         </div>
       ) : (
         <NavLink
-          exact
           to="/settings"
           className="userbar"
           onClick={confirmWelcomed}

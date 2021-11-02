@@ -1,13 +1,16 @@
 import { useState, useEffect, useMemo, useRef } from "react";
+
+// APIs
 import { checkSubredditExists } from "../API/reddit";
 
+// styles
 import "../styles/ButtonEditor.css";
 
-import { DEFAULT_BUTTON, FONTS } from "../constants/variables";
+// constants
+import { DEFAULT_BUTTON, FONTS, MAX_SUBREDDITS } from "../constants/variables";
 
+// utils
 import { getId } from "../utils";
-
-const MAX_SUBREDDITS = 3;
 
 const ButtonEditor = ({
   currentButton,
@@ -19,11 +22,13 @@ const ButtonEditor = ({
   keepChanges,
   isDuplicate,
 }) => {
+  // STATE
   const [checkingSubreddit, setCheckingSubreddit] = useState(null);
   const [subredditValidity, setSubredditValidity] = useState(null);
   const [edited, setEdited] = useState(false);
   const [newSubredditAdded, setNewSubredditAdded] = useState(false);
 
+  // Refs
   const lastSubredditRef = useRef();
 
   // dependencies
@@ -36,7 +41,7 @@ const ButtonEditor = ({
       blankValidity[subreddit.id] = null;
     });
     setSubredditValidity(blankValidity);
-  }, []);
+  }, []); // eslint-disable-line
 
   const duplicateSubreddit = useMemo(() => {
     let duplicate = false;
@@ -52,23 +57,12 @@ const ButtonEditor = ({
         return thisSubreddit;
       }, false);
     return duplicate;
+    // use JSON dependency for deep object dependency
+    // eslint-disable-next-line
   }, [subredditsJSON]);
 
   // check if valid each render
   const isValidEdit = useMemo(() => {
-    console.log(modified);
-    // console.log(!isDuplicate);
-    // console.log(!!currentButton.text);
-    // console.log(currentButton !== DEFAULT_BUTTON.text);
-    // console.log(!!currentButton.subreddits.length);
-    // console.log(!duplicateSubreddit);
-    // console.log(
-    //   subredditValidity
-    //     .filter((validity) => !!validity)
-    //     .every((validity) => {
-    //       return !!validity.attempt || validity.resolved || validity.exists;
-    //     })
-    // );
     if (
       // is not modified
       !modified ||
@@ -98,10 +92,8 @@ const ButtonEditor = ({
         );
       })()
     ) {
-      console.log("INVALID EDIT");
       return false;
     }
-    console.log("VALID EDIT");
     return true;
   }, [
     modified,
@@ -115,7 +107,7 @@ const ButtonEditor = ({
   const handleDeleteSubreddit = (subredditId) => {
     // remove subreddit from currentButton
     deleteCurrentButtonSubreddit(currentButton.id, subredditId);
-    // update local state
+    // UPDATE LOCAL STATE
     setCheckingSubreddit(null);
     // TODO: Manage delete subreddit while checking another(!)
     setSubredditValidity((prevSubredditValidity) => {
@@ -125,7 +117,7 @@ const ButtonEditor = ({
     });
   };
 
-  // Focus on last subreddit a new box was just made
+  // Focus on last subreddit if a new box was just made
   useEffect(() => {
     if (!newSubredditAdded || !lastSubredditRef.current) return;
     lastSubredditRef.current.focus();
@@ -133,12 +125,13 @@ const ButtonEditor = ({
     setTimeout(() => setNewSubredditAdded(false), 0);
   }, [newSubredditAdded, setNewSubredditAdded]);
 
-  // Check if subreddit exists on edit
+  // CHECK SUBREDDIT VAILIDITY ON EDIT
   useEffect(() => {
     if (!checkingSubreddit) return;
     const currentSubreddit = currentButton.subreddits.find(
       (subreddit) => subreddit.id === checkingSubreddit
     );
+    // ignore if duplicate or empty
     if (
       currentSubreddit.name === "" ||
       currentSubreddit.name === duplicateSubreddit
@@ -195,6 +188,8 @@ const ButtonEditor = ({
       clearTimeout(timeout);
       isSubscribed = false;
     };
+    // use JSON dependency for deep object dependency
+    // eslint-disable-next-line
   }, [checkingSubreddit, subredditsJSON]);
 
   return (

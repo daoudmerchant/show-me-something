@@ -1,3 +1,4 @@
+// styles
 import "../styles/Snoo.css";
 
 const Snoo = ({ spinning }) => {

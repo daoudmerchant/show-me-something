@@ -1,15 +1,23 @@
 import { useState, useEffect, useContext } from "react";
-import { RedditPostContext } from "../../constants/contexts";
 
+// styles
 import "../../styles/Gallery.css";
+
+// context
+import { RedditPostContext } from "../../constants/contexts";
 
 // components
 import Image from "./Image";
 
 const Gallery = () => {
+  // state
   const [galleryIndex, setGalleryIndex] = useState(0);
+
+  // context
   const { currentPost } = useContext(RedditPostContext);
 
+  // state management
+  // reset state on post change
   useEffect(() => {
     setGalleryIndex(0);
   }, [currentPost]);

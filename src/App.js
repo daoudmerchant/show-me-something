@@ -8,18 +8,18 @@ import { getData, initFirebaseAuth, getInitStatus } from "./API/firebase";
 // styles
 import "./styles/App.css";
 
+// utils
+import { shuffleArray } from "./utils";
+
+// context
+import { RedditPostContext } from "./constants/contexts";
+
 // components
 import NavBar from "./components/NavBar";
 import About from "./components/About";
 import Canvas from "./components/Canvas";
 import Settings from "./components/Settings";
 import ButtonBox from "./components/ButtonBox";
-
-// contexts
-import { RedditPostContext } from "./constants/contexts";
-
-// utils
-import { shuffleArray } from "./utils";
 
 function App() {
   // STATE
@@ -32,17 +32,17 @@ function App() {
   const [settings, setSettings] = useState(undefined);
   const [fetchingPosts, setFetchingPosts] = useState(false);
   const [welcomed, setWelcomed] = useState(false);
-  const [currentCategory, setCurrentCategory] = useState(null);
+  const [currentCategory, setCurrentCategory] = useState(undefined);
   const [redditLists, setRedditLists] = useState(undefined);
   const [finishedLists, setFinishedLists] = useState({});
 
+  // state handlers
   const confirmWelcomed = useCallback(() => {
     if (welcomed) return;
     setWelcomed(true);
   }, [welcomed]);
 
   const resetAllData = useCallback(() => {
-    // TODO: Update
     const data = [
       {
         state: buttons,
@@ -63,7 +63,7 @@ function App() {
     ];
     data.forEach((dataset) => {
       if (!dataset.state) return;
-      dataset.setState(null);
+      dataset.setState(undefined);
     });
   }, [buttons, currentCategory, redditLists, settings]);
 
@@ -90,7 +90,7 @@ function App() {
     setFirebaseReady((prevStatus) => ({ ...prevStatus, observed: true }));
   }, [firebaseReady]);
 
-  // Firebase query
+  // QUERY DATABASE
   const getFirebaseData = useCallback(
     async (fn, arg) => {
       resetAllData();
@@ -118,6 +118,8 @@ function App() {
       return;
     }
     getFirebaseData(getData.userData, user.uid);
+    // only run on user change
+    // eslint-disable-next-line
   }, [user]);
 
   // REDDIT
@@ -127,6 +129,7 @@ function App() {
     [currentCategory, redditLists]
   );
 
+  // Pull Reddit post data / increment index
   const getNextPost = useCallback(
     async (
       { subreddits, category } = {
@@ -175,10 +178,12 @@ function App() {
       // executed code
       if (category !== currentCategory) setCurrentCategory(category);
       if (!categoryExists(category) && !fetchingPosts) {
+        // Category not yet pulled
         setFetchingPosts(true);
         await refreshRedditList(subreddits, category);
         setFetchingPosts(false);
       } else if (categoryExists(category)) {
+        // Category pulled
         if (
           redditLists[category].index ===
           redditLists[category].list.length - 1
@@ -206,6 +211,8 @@ function App() {
       }
       return () => setFetchingPosts(false);
     },
+    // Ignore 'buttons' from dependency array to avoid recursion
+    // eslint-disable-next-line
     [
       currentCategory,
       categoryExists,
@@ -229,6 +236,7 @@ function App() {
     finishedLists,
     thisListFinished: finishedLists[currentCategory],
   };
+
   return (
     <div className="App">
       <Router>

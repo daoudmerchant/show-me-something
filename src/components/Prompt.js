@@ -1,15 +1,19 @@
 import { useContext } from "react";
 
+// styles
 import "../styles/Prompt.css";
+
+// constants
+import { PROMPT } from "../constants/sitetext";
 
 // context
 import { RedditPostContext } from "../constants/contexts";
 
-import { PROMPT } from "../constants/sitetext";
-
 const Prompt = ({ type, confirm, cancel }) => {
+  // context
   const { getNextPost } = useContext(RedditPostContext);
 
+  // text
   const promptText = PROMPT[type];
 
   const stopPropagation = (cb) => {
@@ -18,6 +22,7 @@ const Prompt = ({ type, confirm, cancel }) => {
       cb?.();
     };
   };
+
   return (
     <div id="promptcontainer">
       <form

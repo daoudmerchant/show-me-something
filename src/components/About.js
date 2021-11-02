@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
 
-import { ABOUT } from "../constants/sitetext";
-
+// styles
 import "../styles/About.css";
 
+// constants
+import { ABOUT } from "../constants/sitetext";
+
+// components
 import Info from "./Info";
 
 const About = () => {

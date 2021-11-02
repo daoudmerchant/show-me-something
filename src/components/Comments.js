@@ -3,29 +3,31 @@ import { useMediaQuery } from "react-responsive";
 import { useHistory } from "react-router";
 import ReactMarkdown from "react-markdown";
 
+// API
+import { getCommentData } from "../API/reddit";
+
+// styles
 import "../styles/Comments.css";
 
 // context
 import { RedditPostContext } from "../constants/contexts";
-
-// API
-import { getCommentData } from "../API/reddit";
 
 // components
 import Prompt from "./Prompt";
 import Loading from "./Loading";
 
 const Comments = () => {
-  const history = useHistory();
-
   // state
   const [clicked, setClicked] = useState(false);
   const [comments, setComments] = useState(null);
 
+  // history
+  const history = useHistory();
+
   // context
   const { currentPost } = useContext(RedditPostContext);
 
-  // functions
+  // state management
   const toggleClicked = () => setClicked((prevClicked) => !prevClicked);
 
   // media query
@@ -68,6 +70,9 @@ const Comments = () => {
         {!!comments ? (
           comments.map((comment, i) => {
             if (!comment.content || !comment.author) {
+              // adding conditional return to .map to prevent
+              // two array functions for efficiency
+              // eslint-disable-next-line
               return;
             }
             return (

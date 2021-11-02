@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+// styles
 import "../../styles/Image.css";
 
 // components
@@ -7,9 +8,11 @@ import Loading from "../Loading";
 import Prompt from "../Prompt";
 
 const Image = ({ currentImage, currentTitle }) => {
+  // state
   const [isLoaded, setIsLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
 
+  // reset state on image change
   useEffect(() => {
     setIsLoaded(false);
     setFailed(false);

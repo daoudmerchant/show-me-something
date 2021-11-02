@@ -1,14 +1,20 @@
 import { useContext, useState, useEffect, useMemo } from "react";
-import { RedditPostContext } from "../constants/contexts";
 import ReactMarkdown from "react-markdown";
 
+// styles
 import "../styles/Post.css";
 
-// images
-import newwindowicon from "../images/newwindow.png";
+// constants
+import { FLAGS } from "../constants/variables";
 
 // utils
 import { insertLineBreaks } from "../utils";
+
+// context
+import { RedditPostContext } from "../constants/contexts";
+
+// images
+import newwindowicon from "../images/newwindow.png";
 
 // components
 import Prompt from "./Prompt";
@@ -18,14 +24,13 @@ import Video from "./mediaPosts/Video";
 import Wikipedia from "./mediaPosts/Wikipedia";
 import Comments from "./Comments";
 
-// constants
-const FLAGS = ["NSFW", "spoiler"];
-
 const Post = ({ showContent }) => {
+  // state
   const { currentPost } = useContext(RedditPostContext);
   const [NSFWvisible, setNSFWVisible] = useState(false);
   const [spoilerVisible, setSpoilerVisible] = useState(false);
 
+  // variables
   const postHasNoFlags = FLAGS.every((flag) => {
     return !currentPost[flag];
   });
@@ -60,56 +65,57 @@ const Post = ({ showContent }) => {
     FLAGS.forEach((flag) => {
       if (showContent[`${flag}prompt`]) postVisibility[flag].deny();
     });
+    // only run on post chage
+    // eslint-disable-next-line
   }, [currentPost]);
 
   // CONTENT
   const Content = () => {
-    if (currentPost.media.type === "image") {
-      return (
-        <Image
-          currentImage={currentPost.media.content}
-          currentTitle={currentPost.title}
-        />
-      );
-    }
-    if (currentPost.media.type === "gallery") {
-      return <Gallery />;
-    }
-    if (currentPost.media.type === "text") {
-      return (
-        <div className="mediacontainer">
-          <div className="textpost">
-            {insertLineBreaks(currentPost.media.content.text).map((string) => (
-              <ReactMarkdown linkTarget="_blank">{string}</ReactMarkdown>
-            ))}
+    switch (currentPost.media.type) {
+      case "image":
+        return (
+          <Image
+            currentImage={currentPost.media.content}
+            currentTitle={currentPost.title}
+          />
+        );
+      case "gallery":
+        return <Gallery />;
+      case "text":
+        return (
+          <div className="mediacontainer">
+            <div className="textpost">
+              {insertLineBreaks(currentPost.media.content.text).map(
+                (string) => (
+                  <ReactMarkdown linkTarget="_blank">{string}</ReactMarkdown>
+                )
+              )}
+            </div>
           </div>
-        </div>
-      );
+        );
+      case "video":
+        return <Video />;
+      case "wikipedia":
+        return <Wikipedia />;
+      case "website":
+        return (
+          <p>
+            View external content at source{" "}
+            <a
+              href={currentPost.media.content.url}
+              rel="noreferrer"
+              target="_blank"
+            >
+              here
+            </a>
+            .
+          </p>
+        );
+      default:
+        return (
+          <p>{`Oops, I haven't got round to handling "${currentPost.type}" posts yet... Sorry!`}</p>
+        );
     }
-    if (currentPost.media.type === "video") {
-      return <Video />;
-    }
-    if (currentPost.media.type === "wikipedia") {
-      return <Wikipedia />;
-    }
-    if (currentPost.media.type === "website") {
-      return (
-        <p>
-          View external content at source{" "}
-          <a
-            href={currentPost.media.content.url}
-            rel="noreferrer"
-            target="_blank"
-          >
-            here
-          </a>
-          .
-        </p>
-      );
-    }
-    return (
-      <p>{`Oops, I haven't got round to handling "${currentPost.type}" yet... Sorry!`}</p>
-    );
   };
 
   const PostBody = () => (

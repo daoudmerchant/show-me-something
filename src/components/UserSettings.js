@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import _ from "lodash";
 
+// styles
 import "../styles/UserSettings.css";
 
+// components
 import FormButtons from "./FormButtons";
 
 const UserSettings = ({ settings, updateFirebase }) => {
+  // state
   const [currentSettings, setCurrentSettings] = useState(null);
   const [submitSuccess, setSubmitSuccess] = useState(null);
 
+  // state management
   const resetSettings = () => {
     const clonedSettings = _.cloneDeep(settings);
     setCurrentSettings(clonedSettings);
@@ -18,6 +22,8 @@ const UserSettings = ({ settings, updateFirebase }) => {
   useEffect(() => {
     if (!settings) return;
     resetSettings();
+    // only run on settings change
+    // eslint-disable-next-line
   }, [settings]);
 
   // reset submit success on mount
@@ -77,7 +83,10 @@ const UserSettings = ({ settings, updateFirebase }) => {
   if (!currentSettings) {
     return <p>Loading your settings...</p>;
   }
+
+  // currentSettings must exist
   const { filter, limit, timeframe } = currentSettings;
+
   return (
     <form
       id="usersettings"

@@ -1,28 +1,41 @@
 import { useContext, useRef, useState, useEffect } from "react";
+
+// styles
+import "../../styles/Video.css";
+
+// context
 import { RedditPostContext } from "../../constants/contexts";
 
+// images
 import PlayPause from "../../images/playpause.png";
 import AudioIcon from "../../images/audio-icon.png";
-
-import "../../styles/Video.css";
 
 // components
 import Loading from "../Loading";
 import Prompt from "../Prompt";
 
 const Video = () => {
-  const { currentPost } = useContext(RedditPostContext);
+  // state
+  const [hasAudio, setHasAudio] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
 
-  useEffect(() => {
-    currentPost.media.local ? setIsLoaded(false) : setIsLoaded(true);
-    setFailed(false);
-  }, [currentPost]);
+  // context
+  const { currentPost } = useContext(RedditPostContext);
+
   // refs
   const vidRef = useRef();
   const audioRef = useRef();
 
+  // state management
+  // reset state on post change
+  useEffect(() => {
+    currentPost.media.local ? setIsLoaded(false) : setIsLoaded(true);
+    setFailed(false);
+    setHasAudio(true);
+  }, [currentPost]);
+
+  // media controls avoid state management for fewer renders
   const playAndPause = () => {
     const isPlaying = !vidRef.current.paused;
     const playOrPause = isPlaying ? "pause" : "play";
@@ -76,8 +89,12 @@ const Video = () => {
             />
             Sorry, your browser doesn't support embedded videos.
           </video>
-          {currentPost.media.content.audiourl && (
-            <audio ref={audioRef} style={{ display: "none" }}>
+          {currentPost.media.content.audiourl && hasAudio && (
+            <audio
+              ref={audioRef}
+              style={{ display: "none" }}
+              onError={() => setHasAudio(false)}
+            >
               <source
                 src={currentPost.media.content.audiourl}
                 type="audio/mp4"

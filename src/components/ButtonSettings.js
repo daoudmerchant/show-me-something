@@ -2,10 +2,13 @@ import { useState, useEffect, useMemo } from "react";
 import { useMediaQuery } from "react-responsive";
 import _ from "lodash/";
 
+// styles
 import "../styles/ButtonSettings.css";
 
-// utils
+// constants
 import { DEFAULT_BUTTON } from "../constants/variables";
+
+// utils
 import { fireCallbacks, getId } from "../utils";
 
 // components
@@ -18,7 +21,6 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
   const [referenceButtons, setReferenceButtons] = useState(null);
   const [currentButtons, setCurrentButtons] = useState(null);
   const [buttonsBeingEdited, setButtonsBeingEdited] = useState(null);
-  console.log(buttons);
 
   // media query
   const isTouchscreen = useMediaQuery({ query: "(hover: none)" });
@@ -27,10 +29,49 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
   const JSONbuttons = JSON.stringify(buttons);
   const JSONreferenceButtons = JSON.stringify(referenceButtons);
 
-  // Not handling repeat IDs because... Really, the likelihood...
-  // Using premade IDs would involve another setState and another render
+  // helper functions
+  const getNewButton = (id) => {
+    return { ..._.cloneDeep(DEFAULT_BUTTON), id: id || getId() };
+  };
+
+  const findItemIndex = (array, id) => {
+    return array.findIndex((obj) => obj.id === id);
+  };
+
+  const checkForDuplicateButton = (text) => {
+    return (
+      currentButtons.filter((currentButton) => currentButton.text === text)
+        .length > 1
+    );
+  };
+
+  // strip IDs off of buttons
+  const stripButton_s = (button_s) => {
+    const _stripButton = (button) => {
+      const { id, ...restOfButton } = button;
+      return {
+        ...restOfButton,
+        subreddits: button.subreddits.map(({ id, name }) => name),
+      };
+    };
+    if (button_s.length) {
+      // array
+      return button_s.slice(0, -1).map((button) => _stripButton(button));
+    }
+    // object
+    return _stripButton(button_s);
+  };
+
+  // state management
+  // reset submit success on mount
+  useEffect(() => {
+    setSubmitSuccess(null);
+  }, []);
 
   const resetAll = () => {
+    // apply IDs to buttons and subreddits for local management
+    // Not handling repeat IDs because... Really, the likelihood...
+    // TODO: Replace with '_.uniqueid()'-based solution
     const defaultButtons = [
       ..._.cloneDeep(buttons).map((button) => ({
         ...button,
@@ -54,41 +95,6 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
     };
     fireCallbacks(getObjWithFalseIdParams, setButtonsBeingEdited);
   };
-
-  const getNewButton = (id) => {
-    return { ..._.cloneDeep(DEFAULT_BUTTON), id: id || getId() };
-  };
-
-  // Set state on render
-  useEffect(() => {
-    if (!buttons) return;
-    resetAll();
-  }, [JSONbuttons]);
-
-  // reset submit success on mount
-  useEffect(() => {
-    setSubmitSuccess(null);
-  }, []);
-
-  // tack on new button to current buttons
-  useEffect(() => {
-    if (!currentButtons) return;
-    const lastCurrentButton = currentButtons[currentButtons.length - 1];
-    if (
-      lastCurrentButton.text === DEFAULT_BUTTON.text ||
-      buttonsBeingEdited[lastCurrentButton.id] === true
-    )
-      return;
-    const newId = getId();
-    const _addNewButton = (prevButtons) => {
-      return [...prevButtons, getNewButton(newId)];
-    };
-    fireCallbacks(_addNewButton, setCurrentButtons, setReferenceButtons);
-    const _addNewButtonProp = (obj) => {
-      return { ...obj, [newId]: false };
-    };
-    fireCallbacks(_addNewButtonProp, setButtonsBeingEdited);
-  }, [buttonsBeingEdited, currentButtons]);
 
   // Show / hide button editor
   const toggleButtonBeingEdited = (id) => {
@@ -115,8 +121,36 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
     toggleButtonBeingEdited(id);
   };
 
+  // Set state on render
+  useEffect(() => {
+    if (!buttons) return;
+    resetAll();
+    // use JSON dependency for deep object dependency
+    // eslint-disable-next-line
+  }, [JSONbuttons]);
+
+  // tack on new button to current buttons if necessary
+  useEffect(() => {
+    if (!currentButtons) return;
+    const lastCurrentButton = currentButtons[currentButtons.length - 1];
+    if (
+      lastCurrentButton.text === DEFAULT_BUTTON.text ||
+      buttonsBeingEdited[lastCurrentButton.id] === true
+    )
+      return;
+    const newId = getId();
+    const _addNewButton = (prevButtons) => {
+      return [...prevButtons, getNewButton(newId)];
+    };
+    fireCallbacks(_addNewButton, setCurrentButtons, setReferenceButtons);
+    const _addNewButtonProp = (obj) => {
+      return { ...obj, [newId]: false };
+    };
+    fireCallbacks(_addNewButtonProp, setButtonsBeingEdited);
+  }, [buttonsBeingEdited, currentButtons]);
+
   const confirmChanges = (id) => {
-    const editedIndex = currentButtons.findIndex((button) => button.id === id);
+    const editedIndex = findItemIndex(currentButtons, id);
     setReferenceButtons((prevButtons) => {
       if (editedIndex < 0) {
         // Pre-existing button
@@ -130,10 +164,6 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
       return newButtons;
     });
     toggleButtonBeingEdited(id);
-  };
-
-  const findItemIndex = (array, id) => {
-    return array.findIndex((obj) => obj.id === id);
   };
 
   // update current buttons on edit
@@ -212,37 +242,18 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
     setSubmitSuccess(null);
   };
 
-  const checkForDuplicateButton = (text) => {
-    return (
-      currentButtons.filter((currentButton) => currentButton.text === text)
-        .length > 1
-    );
-  };
-
-  const stripButton_s = (button_s) => {
-    const _stripButton = (button) => {
-      const { id, ...restOfButton } = button;
-      return {
-        ...restOfButton,
-        subreddits: button.subreddits.map(({ id, name }) => name),
-      };
-    };
-    if (button_s.length) {
-      // array
-      return button_s.slice(0, -1).map((button) => _stripButton(button));
-    }
-    // object
-    return _stripButton(button_s);
-  };
-
   const strippedButtons = useMemo(() => {
     if (!referenceButtons) return;
     return stripButton_s(referenceButtons);
+    // use JSON dependency for deep object dependency
+    // eslint-disable-next-line
   }, [JSONreferenceButtons]);
 
   const containsNewButtons = useMemo(() => {
     if (!referenceButtons) return;
     return !_.isEqual(strippedButtons, buttons);
+    // use JSON dependency for deep object dependency
+    // eslint-disable-next-line
   }, [JSONbuttons, JSONreferenceButtons, strippedButtons]);
 
   if (!currentButtons) return <p>Loading your buttons...</p>;
@@ -289,6 +300,7 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
               key={`button${currentButton.id}${i}`}
               handleClick={() => toggleButtonEdit(currentButton.id)}
             />
+            {/* Only render editor if necessary for increased performance */}
             {buttonsBeingEdited &&
               buttonsBeingEdited[currentButton.id] &&
               (() => {
