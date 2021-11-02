@@ -1,4 +1,6 @@
-# ShowMeSomething
+# [Live Demo](https://daoudmerchant.github.io/show-me-something/#/)
+
+## ShowMeSomething
 
 [comment]: <> (TODO: add live demo)
 
@@ -6,7 +8,7 @@ Reddit content viewer using the Reddit API, customisable using Google Firebase w
 
 Written in React (hook-based) with React Router Dom and styled with Sass for desktop and mobile.
 
-## Functionality
+### Functionality
 
 - [x] View video (hosted and embedded), images, image galleries and text posts
 - [x] View top comments
@@ -18,7 +20,7 @@ Written in React (hook-based) with React Router Dom and styled with Sass for des
 - [x] Error handling for contacting Reddit and loading content
 - [x] Adaptive for mobile and desktop users
 
-## Possible future improvement
+### Possible future improvement
 
 - [ ] Reorder user buttons
 - [ ] Restructure database in to sub-collections and sub-documents
@@ -27,11 +29,11 @@ Written in React (hook-based) with React Router Dom and styled with Sass for des
 - [ ] Improved UI / assets
 - [ ] Refactor in Typescript
 
-### Concept
+#### Concept
 
 The concept of this project was to create something which 'served' Reddit to non-Reddit users in a way which trimmed all unnecessary information, made accessing content instant, encouraged content consumption over '[doomscrolling](https://en.wikipedia.org/wiki/Doomscrolling)' and used a database with user accounts to manage how the experience both looks and behaves (with an emphasis on customisability). Specifically, I wanted to get my hands dirty with the Reddit API (for which there is very little endpoint documentation), working with `fetch` and digging through the JSON myself rather than defaulting to a [library](https://github.com/not-an-aardvark/snoowrap) to do it for me, as well as managing a Firebase database.
 
-### Challenges
+#### Challenges
 
 - Exploring Reddit API endpoint for post data
 - Avoiding excessive calls to Reddit API / excessive reads/writes to database

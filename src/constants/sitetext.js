@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 
+import { MAX_SUBREDDITS } from "./variables";
+
 export const ABOUT = [
   {
     header: "Wait... What is this?",
@@ -18,14 +20,31 @@ export const ABOUT = [
       "Press a category button to see a piece of content. " +
         "One tap, one piece of content. No adverts, no " +
         "'browsing'; think of it like a Reddit Pez dispenser 🙂.",
+      "Each button aggregates up to " +
+        MAX_SUBREDDITS +
+        " 'subreddits' (think communities), mixes up their " +
+        "content and serves an item up each time you press " +
+        "it.",
       [
         "Head back ",
         <Link to="/">home</Link>,
         " to get started, and when you're ready, head to the ",
         <Link to="/settings">settings</Link>,
-        " page to sign in, customise what Reddit content you see " +
-          " and create your own buttons.",
+        " page to sign in, adjust what Reddit content you see " +
+          " and customise and create your own buttons. There are " +
+          "thousands of Reddit communities... Type something that " +
+          "interests you in the button editor and see if it " +
+          "exists, or check out ",
+        <a
+          href="https://www.reddit.com/r/ListOfSubreddits/wiki/listofsubreddits"
+          target="_blank"
+          rel="noreferrer"
+        >
+          this directory
+        </a>,
+        " to find exactly what scratches your itch.",
       ],
+      "Have fun!",
     ],
   },
   {
