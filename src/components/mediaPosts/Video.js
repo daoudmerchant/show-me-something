@@ -1,7 +1,7 @@
 import { useContext, useRef, useState, useEffect } from "react";
 
 // styles
-import "../../styles/Video.css";
+import "../../styles/Video.min.css";
 
 // context
 import { RedditPostContext } from "../../constants/contexts";

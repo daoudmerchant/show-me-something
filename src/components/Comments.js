@@ -7,7 +7,7 @@ import ReactMarkdown from "react-markdown";
 import { getCommentData } from "../API/reddit";
 
 // styles
-import "../styles/Comments.css";
+import "../styles/Comments.min.css";
 
 // context
 import { RedditPostContext } from "../constants/contexts";

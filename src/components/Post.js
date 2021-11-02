@@ -2,7 +2,7 @@ import { useContext, useState, useEffect, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 
 // styles
-import "../styles/Post.css";
+import "../styles/Post.min.css";
 
 // constants
 import { FLAGS } from "../constants/variables";

@@ -3,7 +3,7 @@ import { useMediaQuery } from "react-responsive";
 import _ from "lodash/";
 
 // styles
-import "../styles/ButtonSettings.css";
+import "../styles/ButtonSettings.min.css";
 
 // constants
 import { DEFAULT_BUTTON } from "../constants/variables";

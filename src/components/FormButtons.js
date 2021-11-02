@@ -1,5 +1,5 @@
 // styles
-import "../styles/FormButtons.css";
+import "../styles/FormButtons.min.css";
 
 const FormButtons = ({ submitSuccess, isDifferent, cancel }) => {
   return (

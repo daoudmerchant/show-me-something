@@ -1,5 +1,5 @@
 // styles
-import "../styles/Loading.css";
+import "../styles/Loading.min.css";
 
 // components
 import Snoo from "./Snoo";

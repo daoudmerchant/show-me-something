@@ -1,7 +1,7 @@
 import { useContext } from "react";
 
 // styles
-import "../styles/Prompt.css";
+import "../styles/Prompt.min.css";
 
 // constants
 import { PROMPT } from "../constants/sitetext";

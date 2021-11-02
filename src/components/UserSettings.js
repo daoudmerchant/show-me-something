@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import _ from "lodash";
 
 // styles
-import "../styles/UserSettings.css";
+import "../styles/UserSettings.min.css";
 
 // components
 import FormButtons from "./FormButtons";

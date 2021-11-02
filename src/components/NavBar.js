@@ -2,7 +2,7 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 // styles
-import "../styles/Navbar.css";
+import "../styles/Navbar.min.css";
 
 // APIs
 import { signInWithGoogle } from "../API/firebase";
@@ -13,7 +13,7 @@ const NavBar = ({ user, confirmWelcomed }) => {
 
   return (
     <nav>
-      <NavLink to="/" id="home" activeClassName="selected">
+      <NavLink exact to="/" id="home" activeClassName="selected">
         ShowMeSomething
       </NavLink>
       <NavLink

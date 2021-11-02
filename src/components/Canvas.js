@@ -3,7 +3,7 @@ import { useHistory } from "react-router";
 import { useMediaQuery } from "react-responsive";
 
 // styles
-import "../styles/Canvas.css";
+import "../styles/Canvas.min.css";
 
 // constants
 import { WELCOME, FINISHED } from "../constants/sitetext";

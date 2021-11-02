@@ -1,5 +1,5 @@
 // styles
-import "../styles/Snoo.css";
+import "../styles/Snoo.min.css";
 
 const Snoo = ({ spinning }) => {
   return (

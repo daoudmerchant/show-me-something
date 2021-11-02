@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 // styles
-import "../../styles/Image.css";
+import "../../styles/Image.min.css";
 
 // components
 import Loading from "../Loading";

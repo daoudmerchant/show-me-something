@@ -73,14 +73,14 @@ nav a {
 @media screen and (min-width: 430px) {
   #username .name1 {
     display: inline-block;
-    padding: 0 0.5em;
+    padding: 0 0.3em;
   }
 }
 
 @media screen and (min-width: 550px) {
   #username .name2 {
     display: inline-block;
-    padding-right: 0.5em;
+    padding-right: 0.3em;
   }
 }
 
@@ -107,4 +107,3 @@ div.userpic {
 #home {
   margin-right: auto;
 }
-/*# sourceMappingURL=Navbar.css.map */

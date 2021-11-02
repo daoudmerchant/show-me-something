@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 
 // styles
-import "../../styles/Gallery.css";
+import "../../styles/Gallery.min.css";
 
 // context
 import { RedditPostContext } from "../../constants/contexts";

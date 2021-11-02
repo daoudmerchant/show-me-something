@@ -2,7 +2,7 @@ import { useState, memo, useEffect, useContext } from "react";
 import { useMediaQuery } from "react-responsive";
 
 // styles
-import "../styles/ButtonBox.css";
+import "../styles/ButtonBox.min.css";
 
 // constants
 import { BREAKPOINTS } from "../constants/variables";

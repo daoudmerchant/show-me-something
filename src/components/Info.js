@@ -1,5 +1,5 @@
 // styles
-import "../styles/Info.css";
+import "../styles/Info.min.css";
 
 const Info = ({ text }) => {
   return (

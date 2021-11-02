@@ -1,4 +1,7 @@
 import { useCallback } from "react";
+import { useHistory } from "react-router";
+
+// APIs
 import {
   signInWithGoogle,
   signOutWithGoogle,
@@ -6,9 +9,8 @@ import {
   updateData,
 } from "../API/firebase";
 
-import "../styles/Settings.css";
-
-import { useHistory } from "react-router";
+// styles
+import "../styles/Settings.min.css";
 
 // components
 import UserSettings from "./UserSettings";
@@ -22,8 +24,10 @@ const Settings = ({
   buttons,
   setButtons,
 }) => {
+  // history
   const history = useHistory();
 
+  // UPDATE DATABASE
   const updateFirebase = useCallback(
     async ({ type, data, setSubmitSuccess }) => {
       const dataCategory = type === "SETTINGS" ? "userSettings" : "userButtons";

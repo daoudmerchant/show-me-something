@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 // styles
-import "../styles/About.css";
+import "../styles/About.min.css";
 
 // constants
 import { ABOUT } from "../constants/sitetext";
