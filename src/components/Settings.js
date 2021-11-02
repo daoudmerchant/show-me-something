@@ -4,7 +4,7 @@ import {
   signOutWithGoogle,
   isSignedIn,
   updateData,
-} from "../API/firebase/firebase";
+} from "../API/firebase";
 
 import "../styles/Settings.css";
 

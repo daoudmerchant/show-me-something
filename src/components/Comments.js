@@ -76,7 +76,7 @@ const Comments = () => {
                   <ReactMarkdown>{comment.content}</ReactMarkdown>
                 </div>
                 <hr />
-                <p>{`- ${comment.author}`}</p>
+                <p className="author">{`- ${comment.author}`}</p>
               </div>
             );
           })

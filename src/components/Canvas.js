@@ -19,7 +19,7 @@ const Canvas = ({ welcomed, showContent }) => {
     useContext(RedditPostContext);
   const history = useHistory();
 
-  console.log("current post: " + currentPost);
+  console.log(currentPost);
   // media query
   const isTouchscreen = useMediaQuery({ query: "(hover: none)" });
   return (

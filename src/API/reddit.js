@@ -171,7 +171,7 @@ export const getRedditData = async ({
             },
           };
         }
-        alert(`Untreated case ${child.data.post_hint}!`);
+        console.log(`Untreated case ${child.data.post_hint}!`);
         console.log(child.data);
       })(),
     }));
@@ -185,7 +185,6 @@ export const getRedditData = async ({
 export const getCommentData = async (url) => {
   try {
     const data = await (await fetch(`${url}.json`)).json();
-    console.log(data);
     const comments = data[1].data.children;
     return comments
       .map((comment) => ({

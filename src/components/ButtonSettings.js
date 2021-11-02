@@ -262,7 +262,7 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
       className="settingsform"
     >
       <legend className="mainlegend">Button Settings</legend>
-      <p className="extradetails">{`${
+      <p className="extradetails bold clickinstruction">{`${
         isTouchscreen ? "Tap" : "Click"
       } a button to edit`}</p>
       <aside className="extradetails">

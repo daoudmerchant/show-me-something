@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 
 import { NavLink } from "react-router-dom";
-import { signInWithGoogle } from "../API/firebase/firebase";
+import { signInWithGoogle } from "../API/firebase";
 
 import "../styles/Navbar.css";
 

@@ -36,6 +36,10 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  font-size: 25px;
+  text-shadow: -2px 2px 2px grey;
+  color: white;
+  font-weight: bold;
 }
 
 #externallink {

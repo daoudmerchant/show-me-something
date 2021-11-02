@@ -20,10 +20,6 @@
   width: 100%;
 }
 
-.commentcontainer {
-  padding-top: 20px;
-}
-
 .commentbox > *:last-child {
   text-align: end;
 }
@@ -41,4 +37,8 @@
   font-size: larger;
   /* allow links to break */
   word-wrap: break-word;
+}
+
+.author {
+  font-style: italic;
 }

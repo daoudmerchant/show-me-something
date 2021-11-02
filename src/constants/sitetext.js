@@ -188,4 +188,13 @@ export const PROMPT = {
     confirmation: "Retry loading content",
     cancellation: "Edit settings",
   },
+  contentError: {
+    emoji: "😓",
+    header: "Oh no!",
+    body: "This content failed to load!",
+    help: {
+      answer: "Have you checked that your internet connection is working?",
+    },
+    confirmation: "Retry loading content",
+  },
 };

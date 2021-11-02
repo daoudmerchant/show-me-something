@@ -8,13 +8,16 @@ import "../../styles/Video.css";
 
 // components
 import Loading from "../Loading";
+import Prompt from "../Prompt";
 
 const Video = () => {
   const { currentPost } = useContext(RedditPostContext);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     currentPost.media.local ? setIsLoaded(false) : setIsLoaded(true);
+    setFailed(false);
   }, [currentPost]);
   // refs
   const vidRef = useRef();
@@ -52,6 +55,9 @@ const Video = () => {
     };
   })();
 
+  if (failed)
+    return <Prompt type="contentError" confirm={() => setFailed(false)} />;
+
   return (
     <div className="mediacontainer">
       {isLoaded || <Loading type="VIDEO" />}
@@ -62,6 +68,7 @@ const Video = () => {
             className="video"
             style={{ display: isLoaded ? undefined : "none" }}
             onLoadedData={() => setIsLoaded(true)}
+            onError={() => setFailed(true)}
           >
             <source
               src={currentPost.media.content.videourl}

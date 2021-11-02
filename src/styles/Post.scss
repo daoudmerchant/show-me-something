@@ -2,7 +2,6 @@
 
 #post {
   position: absolute;
-  // TODO: Fix!!
   overflow-y: hidden;
   width: 100%;
 }
@@ -23,6 +22,10 @@
 #likepercentage {
   height: 50px;
   @include flex-centred;
+  font-size: 25px;
+  text-shadow: -2px 2px 2px grey;
+  color: white;
+  font-weight: bold;
 }
 
 #externallink {

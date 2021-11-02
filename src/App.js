@@ -3,11 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 // APIs
 import { getRedditData } from "./API/reddit";
-import {
-  getData,
-  initFirebaseAuth,
-  getInitStatus,
-} from "./API/firebase/firebase";
+import { getData, initFirebaseAuth, getInitStatus } from "./API/firebase";
 
 // styles
 import "./styles/App.css";
