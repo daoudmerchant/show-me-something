@@ -44,8 +44,11 @@ const Canvas = ({ welcomed, showContent }) => {
           );
         }
         if (thisListFinished) return <Info text={FINISHED} />;
-        if (!welcomed)
-          return <Info text={WELCOME(isTouchscreen ? "tap" : "click")} />;
+        if (!welcomed) {
+          const selectEvent = isTouchscreen ? "tap" : "click";
+          const WELCOME_TEXT = WELCOME(selectEvent);
+          return <Info text={WELCOME_TEXT} />;
+        }
         if (currentPost === undefined)
           return (
             <div>{`${isTouchscreen ? "Tap" : "Click"} below to begin 👇`}</div>
