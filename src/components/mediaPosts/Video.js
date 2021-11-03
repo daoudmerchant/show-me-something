@@ -100,7 +100,7 @@ const Video = () => {
             and encoding them together before serving, but my current
             front-end solution is to try to download the audio file in an
             invisible audio component with both video and audio controlled
-            by the same buttons, the audio element sappearing if the GET
+            by the same buttons, the audio element disappearing if the GET
             throws an error(!) (Yes, the thrown error is visible in the
             console).
 
