@@ -7,12 +7,12 @@
   height: 100%;
   border: 5px outset;
   -webkit-box-shadow: -2px 2px white, -4px 4px 8px #686868;
-  box-shadow: -2px 2px white, -4px 4px 8px #686868;
+          box-shadow: -2px 2px white, -4px 4px 8px #686868;
   -webkit-tap-highlight-color: transparent;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   position: relative;
   font-size: 2em;
   line-height: 1em;
@@ -25,11 +25,11 @@
 .buttoncontainer button:active {
   right: 4px;
   bottom: -4px;
-  -webkit-box-shadow: -4px 4px 4px #cacaca;
-  box-shadow: -4px 4px 4px #cacaca;
+  -webkit-box-shadow: none;
+          box-shadow: none;
   border-style: inset;
 }
 
 .buttoncontainer button:disabled {
-  opacity: 0.5;
+  opacity: 0.8;
 }

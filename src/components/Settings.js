@@ -77,6 +77,16 @@ const Settings = ({
       </div>
       <UserSettings settings={settings} updateFirebase={updateFirebase} />
       <ButtonSettings buttons={buttons} updateFirebase={updateFirebase} />
+      <button
+        id="totop"
+        onClick={(e) => {
+          e.stopPropagation();
+          document.body.scrollTop = 0;
+          document.documentElement.scrollTop = 0;
+        }}
+      >
+        ▲
+      </button>
     </div>
   );
 };

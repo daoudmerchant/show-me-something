@@ -89,6 +89,30 @@ const Video = () => {
             />
             Sorry, your browser doesn't support embedded videos.
           </video>
+          {/* 
+            The below solution is far from perfect:
+
+            Basically, as referenced here:
+            https://www.reddit.com/r/redditdev/comments/ihgmv5/getting_audio_from_reddit_video/
+            Reddit now serves its hosted video as two separate files, one
+            video only and one audio. The solution in a production-quality
+            app would be some server-side operation downloading both files
+            and encoding them together before serving, but my current
+            front-end solution is to try to download the audio file in an
+            invisible audio component with both video and audio controlled
+            by the same buttons, the audio element sappearing if the GET
+            throws an error(!) (Yes, the thrown error is visible in the
+            console).
+
+            This is also why video controls are disabled, as scrubbing through
+            the video would completely desynchronise the audio... ;)
+
+            I've checked the endpoint and there's no 'is_gif'-like flag, as
+            some posts are literally silent mp4 videos (the video has enabled
+            audio controls but no actual sound).
+
+            Sorry!
+          */}
           {currentPost.media.content.audiourl && hasAudio && (
             <audio
               ref={audioRef}

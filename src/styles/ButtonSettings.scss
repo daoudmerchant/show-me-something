@@ -19,4 +19,6 @@
 
 .clickinstruction {
   background-color: $beige;
+  border: 2px solid red;
+  width: calc(100% - (#{$setting-margin} * 4));
 }

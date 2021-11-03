@@ -43,8 +43,8 @@
 .galleryleft:active {
   right: 4px;
   bottom: -4px;
-  -webkit-box-shadow: -4px 4px 4px #cacaca;
-          box-shadow: -4px 4px 4px #cacaca;
+  -webkit-box-shadow: none;
+          box-shadow: none;
   border-style: inset;
 }
 
@@ -68,8 +68,8 @@
 .galleryright:active {
   right: 4px;
   bottom: -4px;
-  -webkit-box-shadow: -4px 4px 4px #cacaca;
-          box-shadow: -4px 4px 4px #cacaca;
+  -webkit-box-shadow: none;
+          box-shadow: none;
   border-style: inset;
 }
 

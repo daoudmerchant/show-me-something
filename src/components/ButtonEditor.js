@@ -444,7 +444,7 @@ const ButtonEditor = ({
           disabled={!isValidEdit}
           className="submit"
         >
-          Confirm changes
+          Finish editing
         </button>
       </div>
     </div>

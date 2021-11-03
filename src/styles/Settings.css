@@ -159,3 +159,36 @@ legend {
   color: white;
   background-color: red;
 }
+
+#totop {
+  position: fixed;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  font-size: 1em;
+  background-color: #ffdcb4;
+  color: white;
+  border: 5px outset;
+  -webkit-box-shadow: -2px 2px white, -4px 4px 8px #686868;
+          box-shadow: -2px 2px white, -4px 4px 8px #686868;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  right: 20px;
+  bottom: 20px;
+}
+
+#totop:active {
+  right: 4px;
+  bottom: -4px;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  border-style: inset;
+}
+
+#totop:active {
+  right: 24px;
+  bottom: 16px;
+}

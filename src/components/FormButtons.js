@@ -29,7 +29,7 @@ const FormButtons = ({ submitSuccess, isDifferent, cancel }) => {
         Discard all changes
       </button>
       <button type="submit" className="submit" disabled={!isDifferent}>
-        Save changes
+        Save all changes
       </button>
     </div>
   );

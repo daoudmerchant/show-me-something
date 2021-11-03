@@ -93,7 +93,7 @@ $max-info-width: 1000px;
   &:active {
     right: $button-outset;
     bottom: -$button-outset;
-    box-shadow: -($button-outset) $button-outset $button-outset rgb(202, 202, 202);
+    box-shadow: none;
     border-style: inset;
   }
   user-select: none;

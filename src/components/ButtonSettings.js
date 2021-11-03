@@ -273,9 +273,14 @@ const ButtonSettings = ({ buttons, updateFirebase }) => {
       className="settingsform"
     >
       <legend className="mainlegend">Button Settings</legend>
-      <p className="extradetails bold clickinstruction">{`${
-        isTouchscreen ? "Tap" : "Click"
-      } a button to edit`}</p>
+      <p className="extradetails clickinstruction">
+        {`${isTouchscreen ? "Tap" : "Click"} a button to edit, hit '`}
+        <span className="bold">Finish editing</span>' when you're done and then{" "}
+        <span className="warning">
+          save your new buttons at the bottom of the page
+        </span>
+        !
+      </p>
       <aside className="extradetails">
         New to Reddit? Check{" "}
         <a

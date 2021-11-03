@@ -127,3 +127,20 @@ legend {
   color: white;
   background-color: $cancel-color;
 }
+
+#totop {
+  position: fixed;
+  height: $media-button-size / 1.5;
+  width: $media-button-size / 1.5;
+  border-radius: 50%;
+  font-size: 1em;
+  background-color: $gold;
+  color: white;
+  @include button-3d;
+  right: $media-button-margin;
+  bottom: $media-button-margin;
+  &:active {
+    right: $media-button-margin + $button-outset;
+    bottom: $media-button-margin - $button-outset;
+  }
+}

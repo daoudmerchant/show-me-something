@@ -30,6 +30,7 @@ export const getRedditData = async ({
           // Linked content
           if (child.data.url.includes("v.redd.it")) {
             // Reddit video crosspost
+            console.log(child.data);
             return {
               type: "video",
               local: true,
@@ -76,6 +77,7 @@ export const getRedditData = async ({
           };
         }
         if (child.data.post_hint === "hosted:video") {
+          console.log(child.data);
           const videoUrl = child.data.media.reddit_video.fallback_url.slice(
             0,
             -16

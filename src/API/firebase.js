@@ -11,6 +11,7 @@ import {
 import {
   getAuth,
   signInWithPopup,
+  signInWithRedirect,
   GoogleAuthProvider,
   signOut,
   onAuthStateChanged,
@@ -44,6 +45,14 @@ export const signInWithGoogle = async () => {
     // const token = credential.accessToken;
     // const user = result.user;
   } catch (error) {
+    if (error.code === "auth/popup-blocked") {
+      try {
+        await signInWithRedirect(getAuth(), provider);
+      } catch (error) {
+        console.log(error);
+      }
+      return;
+    }
     console.log(error);
     // const errorCode = error.code;
     // const errorMessage = error.message;

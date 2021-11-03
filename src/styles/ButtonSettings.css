@@ -26,4 +26,6 @@
 
 .clickinstruction {
   background-color: #f7eae0;
+  border: 2px solid red;
+  width: calc(100% - (1em * 4));
 }
