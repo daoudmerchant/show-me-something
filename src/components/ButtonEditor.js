@@ -433,7 +433,7 @@ const ButtonEditor = ({
           disabled={currentButton.text === DEFAULT_BUTTON.text}
           className="delete"
         >
-          Delete Button
+          Delete button
         </button>
         <button
           type="button"
