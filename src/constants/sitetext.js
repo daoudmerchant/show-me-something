@@ -54,33 +54,26 @@ export const ABOUT = [
         "currently requires a Google account to be customised.",
       [
         <span className="bold">Note:</span>,
-        " mobile browsers may disable pop-ups by default, which are " +
-          "necessary for signing in. You may need to enable them by following " +
-          "the instructions for Android (",
+        " mobile browsers may disable pop-ups and redirects by default, which are " +
+          "necessary for signing in. Chrome users can enable both by following " +
+          "the instructions for ",
         <a
           href="https://support.google.com/chrome/answer/95472?hl=en&co=GENIE.Platform%3DAndroid"
           target="_blank"
           rel="noreferrer"
         >
-          Chrome
+          Android
         </a>,
-        ") or iPhone (",
-        <a
-          href="https://support.apple.com/en-us/HT203987"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Safari
-        </a>,
-        ", ",
+        " or ",
         <a
           href="https://support.google.com/chrome/answer/95472?hl=en&co=GENIE.Platform%3DiOS"
           target="_blank"
           rel="noreferrer"
         >
-          Chrome
+          iOS
         </a>,
-        ").",
+        " (if an alternative browser encounters problems, please consult its help pages " +
+          "to enable pop-ups or redirects).",
       ],
       [
         "This app ",
