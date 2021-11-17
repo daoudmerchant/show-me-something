@@ -70,6 +70,7 @@ function App() {
   // FIREBASE
   // observer function
   const authStateObserver = (user) => {
+    console.log(user);
     user
       ? setUser(() => ({ ...user, displayName: user.displayName.split(" ") }))
       : setUser(undefined);
