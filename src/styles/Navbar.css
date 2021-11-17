@@ -34,11 +34,18 @@ nav a {
       -ms-flex-align: center;
           align-items: center;
   height: 100%;
+  font-size: large;
+}
+
+@media screen and (min-width: 380px) {
+  .about,
+  #home {
+    font-size: larger;
+  }
 }
 
 #home {
   font-weight: bold;
-  font-size: larger;
 }
 
 .userbar {

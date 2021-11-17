@@ -20,11 +20,14 @@ nav {
 #home {
   @include flex-centred;
   height: 100%;
+  font-size: large;
+  @media screen and (min-width: 380px) {
+    font-size: larger;
+  }
 }
 
 #home {
   font-weight: bold;
-  font-size: larger;
 }
 
 $user-margin: 5px;
